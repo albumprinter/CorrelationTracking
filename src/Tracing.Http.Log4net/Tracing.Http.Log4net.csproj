@@ -7,10 +7,11 @@
     <ProjectGuid>{5BDA796A-C6BC-4A0D-9746-56703D448B3B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Tracing.Http.Log4net</RootNamespace>
-    <AssemblyName>Tracing.Http.Log4net</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <RootNamespace>Albumprinter.CorrelationTracking.Tracing.Http.Log4net</RootNamespace>
+    <AssemblyName>Albumprinter.CorrelationTracking.Tracing.Http.Log4net</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

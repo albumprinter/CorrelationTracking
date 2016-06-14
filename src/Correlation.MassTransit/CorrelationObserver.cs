@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using MassTransit;
 using MassTransit.Pipeline;
 
-namespace Correlation.MassTransit
+namespace Albumprinter.CorrelationTracking.Correlation.MassTransit
 {
     public sealed class CorrelationObserver : IPublishObserver, IConsumeObserver
     {

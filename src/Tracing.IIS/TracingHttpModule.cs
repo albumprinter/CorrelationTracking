@@ -7,7 +7,7 @@ using System.Text;
 using System.Web;
 using log4net;
 
-namespace Tracing.IIS
+namespace Albumprinter.CorrelationTracking.Tracing.IIS
 {
     public sealed class TracingHttpModule : IHttpModule
     {

@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Correlation.Tests
+namespace Albumprinter.CorrelationTracking.Correlation.Tests
 {
     public sealed class CorrelationManagerTests
     {

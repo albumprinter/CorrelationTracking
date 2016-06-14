@@ -7,10 +7,11 @@
     <ProjectGuid>{5D390661-0D88-477C-B145-172CE1BB2D2E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Correlation.MassTransit</RootNamespace>
-    <AssemblyName>Correlation.MassTransit</AssemblyName>
+    <RootNamespace>Albumprinter.CorrelationTracking.Correlation.MassTransit</RootNamespace>
+    <AssemblyName>Albumprinter.CorrelationTracking.Correlation.MassTransit</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

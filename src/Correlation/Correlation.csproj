@@ -7,10 +7,11 @@
     <ProjectGuid>{E38F2832-573A-4DA1-8856-82DCC3F0F6FD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Correlation</RootNamespace>
-    <AssemblyName>Correlation</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <RootNamespace>Albumprinter.CorrelationTracking</RootNamespace>
+    <AssemblyName>Albumprinter.CorrelationTracking.Correlation</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using log4net;
 
-namespace Correlation.Log4net
+namespace Albumprinter.CorrelationTracking.Correlation.Log4net
 {
     public sealed class Log4NetCorrelationScopeInterceptor : ICorrelationScopeInterceptor
     {

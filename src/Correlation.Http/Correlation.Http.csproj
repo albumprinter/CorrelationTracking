@@ -7,10 +7,11 @@
     <ProjectGuid>{0F6FA333-AE48-4448-AF0D-5E9DFC3418D2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Correlation.Http</RootNamespace>
-    <AssemblyName>Correlation.Http</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <RootNamespace>Albumprinter.CorrelationTracking.Correlation.Http</RootNamespace>
+    <AssemblyName>Albumprinter.CorrelationTracking.Correlation.Http</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

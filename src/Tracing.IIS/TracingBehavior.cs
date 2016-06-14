@@ -7,7 +7,7 @@ using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
 using log4net;
 
-namespace Tracing.IIS
+namespace Albumprinter.CorrelationTracking.Tracing.IIS
 {
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class TracingBehavior : Attribute, IServiceBehavior, IDispatchMessageInspector, IErrorHandler

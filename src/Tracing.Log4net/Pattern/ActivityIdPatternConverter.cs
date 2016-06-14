@@ -4,7 +4,7 @@ using System.IO;
 using log4net.Core;
 using log4net.Layout.Pattern;
 
-namespace Tracing.Log4net.Pattern
+namespace Albumprinter.CorrelationTracking.Tracing.Log4net.Pattern
 {
     /// <summary>
     ///     <see cref="PatternLayoutConverter" /> for injecting Trace.CorrelationManger.ActivityId into log messages.

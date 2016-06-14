@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Net.Http;
 using System.Reflection;
-using Correlation;
-using Correlation.Http;
-using Correlation.Log4net;
+using Albumprinter.CorrelationTracking;
+using Albumprinter.CorrelationTracking.Correlation.Http;
+using Albumprinter.CorrelationTracking.Correlation.Log4net;
+using Albumprinter.CorrelationTracking.Tracing.Http.Log4net;
 using log4net;
 using log4net.Config;
-using Tracing.Http.Log4net;
 
 namespace WebClient
 {
@@ -29,9 +29,7 @@ namespace WebClient
                 Log.Info("correlationId: " + CorrelationScope.Current.CorrelationId);
                 Log.Info("start job");
 
-                var client = HttpClientFactory.Create(
-                    new CorrelationDelegatingHandler(),
-                    new Log4NetDelegatingHandler(true));
+                var client = HttpClientFactory.Create(new CorrelationDelegatingHandler(), new Log4NetDelegatingHandler(true));
                 client.BaseAddress = new Uri("http://localhost:60695/", UriKind.Absolute);
                 var request = new HttpRequestMessage(HttpMethod.Get, @"/api/correlation");
                 var response = client.SendAsync(request).GetAwaiter().GetResult();

@@ -2,10 +2,10 @@
 using System.Reflection;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
-using Correlation;
-using Correlation.IIS;
+using Albumprinter.CorrelationTracking;
+using Albumprinter.CorrelationTracking.Correlation.IIS;
+using Albumprinter.CorrelationTracking.Tracing.IIS;
 using log4net;
-using Tracing.IIS;
 
 namespace WebApp1
 {

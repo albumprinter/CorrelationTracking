@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web;
 
-namespace Correlation.IIS
+namespace Albumprinter.CorrelationTracking.Correlation.IIS
 {
     public sealed class CorrelationHttpModule : IHttpModule
     {
