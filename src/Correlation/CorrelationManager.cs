@@ -7,7 +7,7 @@ namespace Albumprinter.CorrelationTracking
     {
         public static readonly CorrelationManager Instance = new CorrelationManager();
 
-        public CorrelationManager()
+        internal CorrelationManager()
         {
             ScopeInterceptors = new List<ICorrelationScopeInterceptor>();
         }

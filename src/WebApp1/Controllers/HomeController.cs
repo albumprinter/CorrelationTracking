@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Web;
 using System.Web.Mvc;
 using Albumprinter.CorrelationTracking;
 using log4net;
@@ -15,6 +16,11 @@ namespace WebApp1.Controllers
             try
             {
                 Log.Info("MVC: on start");
+
+                var serviceProvider = (IServiceProvider)HttpContext;
+                var workerRequest = (HttpWorkerRequest)serviceProvider.GetService(typeof(HttpWorkerRequest));
+                var traceId = workerRequest.RequestTraceIdentifier;
+
                 return View(CorrelationScope.Current);
             }
             finally

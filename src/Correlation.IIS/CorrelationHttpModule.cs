@@ -19,15 +19,31 @@ namespace Albumprinter.CorrelationTracking.Correlation.IIS
             var response = context.Response;
 
             // NOTE: restore or create the correlation id
+            var correlationId = GetCorrelationId(request);
+            var requestId = GetRequestId(context);
+
+            response.Headers.Set(@"X-CorrelationId", correlationId.ToString());
+            response.Headers.Set(@"X-RequestId", requestId.ToString());
+
+            context.Items[typeof(CorrelationHttpModule).Name] = CorrelationManager.Instance.UseScope(correlationId, requestId);
+            context.Items[typeof(CorrelationScope).Name] = CorrelationScope.Current;
+        }
+
+        private static Guid GetCorrelationId(HttpRequest request)
+        {
             Guid correlationId;
             if (!Guid.TryParse(request.Headers[@"X-CorrelationId"], out correlationId))
             {
                 correlationId = Guid.NewGuid();
             }
-            response.Headers.Set(@"X-CorrelationId", correlationId.ToString());
+            return correlationId;
+        }
 
-            context.Items[typeof(CorrelationHttpModule).Name] = CorrelationManager.Instance.UseScope(correlationId);
-            context.Items[typeof(CorrelationScope).Name] = CorrelationScope.Current;
+        private static Guid GetRequestId(IServiceProvider serviceProvider)
+        {
+            var workerRequest = serviceProvider.GetService(typeof(HttpWorkerRequest)) as HttpWorkerRequest;
+            var requestId = workerRequest != null ? workerRequest.RequestTraceIdentifier : Guid.NewGuid();
+            return requestId;
         }
 
         private void Application_EndRequest(object sender, EventArgs eventArgs)
