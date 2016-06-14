@@ -1,7 +1,7 @@
 ﻿using System;
-using Correlation;
-using Correlation.Log4net;
-using Correlation.MassTransit;
+using Albumprinter.CorrelationTracking;
+using Albumprinter.CorrelationTracking.Correlation.Log4net;
+using Albumprinter.CorrelationTracking.Correlation.MassTransit;
 using log4net.Config;
 using MassTransit;
 using MassTransit.Log4NetIntegration;

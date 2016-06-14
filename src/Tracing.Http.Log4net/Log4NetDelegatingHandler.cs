@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 
-namespace Tracing.Http.Log4net
+namespace Albumprinter.CorrelationTracking.Tracing.Http.Log4net
 {
     public sealed class Log4NetDelegatingHandler : DelegatingHandler
     {

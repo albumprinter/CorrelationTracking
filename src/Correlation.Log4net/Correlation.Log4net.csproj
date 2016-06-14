@@ -7,9 +7,9 @@
     <ProjectGuid>{064C8DDA-15D0-40FB-B27D-3FF309ABA1A4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Correlation.Log4net</RootNamespace>
-    <AssemblyName>Correlation.Log4net</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <RootNamespace>Albumprinter.CorrelationTracking.Correlation.Log4net</RootNamespace>
+    <AssemblyName>Albumprinter.CorrelationTracking.Correlation.Log4net</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -39,6 +39,9 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Log4NetCorrelationScopeInterceptor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
