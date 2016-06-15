@@ -50,11 +50,11 @@ namespace Albumprinter.CorrelationTracking.Correlation.IIS
 
             if (
                 request.Headers.FindHeader(
-                    @"X-CorrelationId",
+                    CorrelationKeys.CorrelationId,
                     @"http://schemas.microsoft.com/2004/09/ServiceModel/Diagnostics") > -1)
             {
                 сorrelationId = request.Headers.GetHeader<Guid>(
-                    @"X-CorrelationId",
+                    CorrelationKeys.CorrelationId,
                     @"http://schemas.microsoft.com/2004/09/ServiceModel/Diagnostics");
             }
             else
@@ -85,8 +85,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.IIS
             if (wcfScope != CorrelationScope.Zero)
             {
                 reply.Headers.Add(
-                    MessageHeader.CreateHeader(
-                        @"X-CorrelationId",
+                    MessageHeader.CreateHeader(CorrelationKeys.CorrelationId,
                         @"http://schemas.microsoft.com/2004/09/ServiceModel/Diagnostics",
                         wcfScope.CorrelationId));
             }

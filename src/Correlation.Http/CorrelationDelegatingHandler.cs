@@ -10,7 +10,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.Http
         {
             if (request != null)
             {
-                request.Headers.Add(@"X-CorrelationId", CorrelationScope.Current.CorrelationId.ToString());
+                request.Headers.Add(CorrelationKeys.CorrelationId, CorrelationScope.Current.CorrelationId.ToString());
             }
             return base.SendAsync(request, cancellationToken);
         }

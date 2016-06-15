@@ -22,8 +22,8 @@ namespace Albumprinter.CorrelationTracking.Correlation.IIS
             var correlationId = GetCorrelationId(request);
             var requestId = GetRequestId(context);
 
-            response.Headers.Set(@"X-CorrelationId", correlationId.ToString());
-            response.Headers.Set(@"X-RequestId", requestId.ToString());
+            response.Headers.Set(CorrelationKeys.CorrelationId, correlationId.ToString());
+            response.Headers.Set(CorrelationKeys.RequestId, requestId.ToString());
 
             context.Items[typeof(CorrelationHttpModule).Name] = CorrelationManager.Instance.UseScope(correlationId, requestId);
             context.Items[typeof(CorrelationScope).Name] = CorrelationScope.Current;
@@ -32,7 +32,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.IIS
         private static Guid GetCorrelationId(HttpRequest request)
         {
             Guid correlationId;
-            Guid.TryParse(request.Headers[@"X-CorrelationId"], out correlationId);
+            Guid.TryParse(request.Headers[CorrelationKeys.CorrelationId], out correlationId);
             if (correlationId != Guid.Empty)
             {
                 correlationId = Guid.NewGuid();

@@ -7,19 +7,21 @@ namespace Albumprinter.CorrelationTracking.Correlation.Log4net
     {
         public void Enter(CorrelationManager manager, CorrelationScope scope)
         {
-            LogicalThreadContext.Properties[@"X-ProcessId"] = scope.ProcessId;
-            LogicalThreadContext.Properties[@"X-CorrelationId"] = scope.CorrelationId;
-            LogicalThreadContext.Properties[@"X-RequestId"] = scope.RequestId;
-            LogicalThreadContext.Properties[@"X-ActivityId"] = Trace.CorrelationManager.ActivityId;
+            SetLogicalProperties(scope);
         }
 
         public void Exit(CorrelationManager manager, CorrelationScope scope)
         {
             // NOTE: to restore WCF flow tracing context on end-request in IIS
-            LogicalThreadContext.Properties[@"X-ProcessId"] = scope.ProcessId;
-            LogicalThreadContext.Properties[@"X-CorrelationId"] = scope.CorrelationId;
-            LogicalThreadContext.Properties[@"X-RequestId"] = scope.RequestId;
-            LogicalThreadContext.Properties[@"X-ActivityId"] = Trace.CorrelationManager.ActivityId;
+            SetLogicalProperties(scope);
+        }
+
+        private static void SetLogicalProperties(CorrelationScope scope)
+        {
+            LogicalThreadContext.Properties[CorrelationKeys.ProcessId] = scope.ProcessId;
+            LogicalThreadContext.Properties[CorrelationKeys.CorrelationId] = scope.CorrelationId;
+            LogicalThreadContext.Properties[CorrelationKeys.RequestId] = scope.RequestId;
+            LogicalThreadContext.Properties[CorrelationKeys.ActivityId] = Trace.CorrelationManager.ActivityId;
         }
     }
 }
