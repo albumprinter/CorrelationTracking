@@ -46,33 +46,32 @@ namespace Albumprinter.CorrelationTracking.Correlation.IIS
 
         public object AfterReceiveRequest(ref Message request, IClientChannel channel, InstanceContext instanceContext)
         {
-            var сorrelationId = Guid.Empty;
-
-            if (
-                request.Headers.FindHeader(CorrelationKeys.CorrelationId, CorrelationKeys.Namespace) > -1)
+            var correlationId = Guid.Empty;
+            if (request.Headers.FindHeader(CorrelationKeys.CorrelationId, CorrelationKeys.Namespace) > -1)
             {
-                сorrelationId = request.Headers.GetHeader<Guid>(CorrelationKeys.CorrelationId, CorrelationKeys.Namespace);
+                correlationId = request.Headers.GetHeader<Guid>(CorrelationKeys.CorrelationId, CorrelationKeys.Namespace);
             }
-            else
+            if (ReuseAspNetScope)
             {
-                if (ReuseAspNetScope)
+                var context = HttpContext.Current;
+                if (context != null && context.Items.Contains(typeof(CorrelationScope).Name))
                 {
-                    var context = HttpContext.Current;
-                    if (context != null && context.Items.Contains(typeof (CorrelationScope).Name))
+                    var iisScope = context.Items[typeof(CorrelationScope).Name] as CorrelationScope ?? CorrelationScope.Zero;
+                    if (iisScope != CorrelationScope.Zero)
                     {
-                        var iisScope = context.Items[typeof (CorrelationScope).Name] as CorrelationScope;
-                        if (iisScope != CorrelationScope.Zero)
+                        if (correlationId == Guid.Empty)
                         {
-                            return CorrelationManager.Instance.UseScope(iisScope);
+                            correlationId = iisScope.CorrelationId;
                         }
+                        return CorrelationManager.Instance.UseScope(correlationId, iisScope.RequestId);
                     }
                 }
             }
-            if (сorrelationId == Guid.Empty)
+            if (correlationId == Guid.Empty)
             {
-                сorrelationId = Guid.NewGuid();
+                correlationId = Guid.NewGuid();
             }
-            return CorrelationManager.Instance.UseScope(сorrelationId);
+            return CorrelationManager.Instance.UseScope(correlationId);
         }
 
         public void BeforeSendReply(ref Message reply, object correlationState)
