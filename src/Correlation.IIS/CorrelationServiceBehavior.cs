@@ -78,7 +78,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.IIS
         public void BeforeSendReply(ref Message reply, object correlationState)
         {
             var wcfScope = CorrelationScope.Current;
-            if (wcfScope != CorrelationScope.Zero)
+            if (wcfScope != CorrelationScope.Zero && reply.Version != MessageVersion.None)
             {
                 var header = MessageHeader.CreateHeader(CorrelationKeys.CorrelationId, CorrelationKeys.Namespace, wcfScope.CorrelationId);
                 reply.Headers.Add(header);

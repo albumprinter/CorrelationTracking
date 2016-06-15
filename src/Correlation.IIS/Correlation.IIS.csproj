@@ -32,6 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
@@ -44,6 +45,7 @@
     </Compile>
     <Compile Include="CorrelationServiceBehavior.cs" />
     <Compile Include="CorrelationHttpModule.cs" />
+    <Compile Include="CorrelationServiceBehaviorExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
