@@ -9,7 +9,7 @@ using log4net;
 
 namespace Albumprinter.CorrelationTracking.Tracing.IIS
 {
-    public sealed class TracingHttpModule : IHttpModule
+    public sealed class Log4NetHttpModule : IHttpModule
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -46,9 +46,6 @@ namespace Albumprinter.CorrelationTracking.Tracing.IIS
             var context = application.Context;
             var request = context.Request;
 
-            //var content = request.InputStream != null ? new StreamReader(request.InputStream).ReadToEnd() : null;
-            //Log.Info($"{request.HttpMethod} {request.Url.OriginalString} {content}");
-
             var state = TrackingHttpModuleState.AttachTo(context);
             var headers = state.GetInputHeaders();
             var content = state.GetInputContent();
@@ -68,8 +65,6 @@ namespace Albumprinter.CorrelationTracking.Tracing.IIS
             var context = application.Context;
             var request = context.Request;
             var response = context.Response;
-
-            //Log.Info($"{response.Status} {request.Url.OriginalString}");
 
             var state = TrackingHttpModuleState.DetachFrom(context);
             if (state != null)

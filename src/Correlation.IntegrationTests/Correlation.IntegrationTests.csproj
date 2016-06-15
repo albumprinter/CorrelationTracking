@@ -34,8 +34,28 @@
       <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="MassTransit, Version=3.3.1.0, Culture=neutral, PublicKeyToken=b8e0e9f2f1e657fa, processorArchitecture=MSIL">
+      <HintPath>..\packages\MassTransit.3.3.5\lib\net452\MassTransit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MassTransit.Log4NetIntegration, Version=3.3.1.0, Culture=neutral, PublicKeyToken=b8e0e9f2f1e657fa, processorArchitecture=MSIL">
+      <HintPath>..\packages\MassTransit.Log4Net.3.3.5\lib\net452\MassTransit.Log4NetIntegration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MassTransit.RabbitMqTransport, Version=3.3.1.0, Culture=neutral, PublicKeyToken=b8e0e9f2f1e657fa, processorArchitecture=MSIL">
+      <HintPath>..\packages\MassTransit.RabbitMQ.3.3.5\lib\net452\MassTransit.RabbitMqTransport.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NewId, Version=2.1.3.0, Culture=neutral, PublicKeyToken=b8e0e9f2f1e657fa, processorArchitecture=MSIL">
+      <HintPath>..\packages\NewId.2.1.3\lib\net45\NewId.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="RabbitMQ.Client, Version=3.6.2.0, Culture=neutral, PublicKeyToken=89e7d7c5feba84ce, processorArchitecture=MSIL">
+      <HintPath>..\packages\RabbitMQ.Client.3.6.2\lib\net45\RabbitMQ.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -75,6 +95,8 @@
     </Compile>
     <Compile Include="CorrelationClientBehaviorTests.cs" />
     <Compile Include="CorrelationDelegatingHandlerTests.cs" />
+    <Compile Include="Log4NetTest.cs" />
+    <Compile Include="MassTransitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service References\CorrelationServices\Reference.cs">
       <AutoGen>True</AutoGen>
@@ -103,6 +125,10 @@
       <Project>{064c8dda-15d0-40fb-b27d-3ff309aba1a4}</Project>
       <Name>Correlation.Log4net</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Correlation.MassTransit\Correlation.MassTransit.csproj">
+      <Project>{5d390661-0d88-477c-b145-172ce1bb2d2e}</Project>
+      <Name>Correlation.MassTransit</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Correlation.WCF\Correlation.WCF.csproj">
       <Project>{56649180-dba9-452e-8ae6-2a3fb430e5cb}</Project>
       <Name>Correlation.WCF</Name>
@@ -114,6 +140,10 @@
     <ProjectReference Include="..\Tracing.Http.Log4net\Tracing.Http.Log4net.csproj">
       <Project>{5bda796a-c6bc-4a0d-9746-56703d448b3b}</Project>
       <Name>Tracing.Http.Log4net</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tracing.MassTransit\Tracing.MassTransit.csproj">
+      <Project>{36be3840-c7da-4308-a688-dd195fbc9d23}</Project>
+      <Name>Tracing.MassTransit</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tracing.WCF.Log4net\Tracing.WCF.Log4net.csproj">
       <Project>{5349bf26-7f07-4158-b969-979df3bd14a3}</Project>

@@ -3,28 +3,17 @@ using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Threading.Tasks;
 using Albumprinter.CorrelationTracking;
-using Albumprinter.CorrelationTracking.Correlation.Log4net;
 using Albumprinter.CorrelationTracking.Correlation.WCF;
 using Albumprinter.CorrelationTracking.Tracing.WCF.Log4net;
-using log4net;
-using log4net.Config;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace Correlation.IntegrationTests
 {
-    public class CorrelationClientBehaviorTests
+    public class CorrelationClientBehaviorTests : Log4NetTest
     {
-        static CorrelationClientBehaviorTests()
+        public CorrelationClientBehaviorTests(ITestOutputHelper output) : base(output)
         {
-            XmlConfigurator.Configure();
-            CorrelationManager.Instance.ScopeInterceptors.Add(new Log4NetCorrelationScopeInterceptor());
-        }
-
-        public CorrelationClientBehaviorTests(ITestOutputHelper output)
-        {
-            var h = (log4net.Repository.Hierarchy.Hierarchy)LogManager.GetRepository();
-            h.Root.AddAppender(new ActionAppender(output.WriteLine));
         }
 
         [Fact, Trait("Category", "Integration")]

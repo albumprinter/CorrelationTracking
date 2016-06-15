@@ -40,13 +40,13 @@ namespace Albumprinter.CorrelationTracking.Tracing.IIS
 
         object IDispatchMessageInspector.AfterReceiveRequest(ref Message request, IClientChannel channel, InstanceContext instanceContext)
         {
-            Log.Info(request);
+            Log.Info(@"AfterReceiveRequest: " + request);
             return null;
         }
 
         void IDispatchMessageInspector.BeforeSendReply(ref Message reply, object correlationState)
         {
-            Log.Info(reply);
+            Log.Info(@"BeforeSendReply: " + reply);
         }
 
         bool IErrorHandler.HandleError(Exception error)
@@ -56,7 +56,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.IIS
 
         void IErrorHandler.ProvideFault(Exception error, MessageVersion version, ref Message fault)
         {
-            Log.Error(fault, error);
+            Log.Error(@"ProvideFault: " + fault, error);
         }
     }
 }

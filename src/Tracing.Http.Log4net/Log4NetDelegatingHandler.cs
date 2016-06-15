@@ -25,7 +25,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.Http.Log4net
         {
             if (LogRequest)
             {
-                var output = request.ToString();
+                var output = @"BeforeSendRequest: " + request;
                 if (LogRequestContent && request.Content != null)
                 {
                     output = string.Concat(output, Environment.NewLine, await request.Content.ReadAsStringAsync().ConfigureAwait(false));
@@ -35,7 +35,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.Http.Log4net
             var response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
             if (LogResponse)
             {
-                var output = response.ToString();
+                var output = @"AfterReceiveResponse: " + response;
                 if (LogResponseContent && response.Content != null)
                 {
                     output = string.Concat(output, Environment.NewLine, await response.Content.ReadAsStringAsync().ConfigureAwait(false));

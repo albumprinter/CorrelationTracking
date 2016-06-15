@@ -4,28 +4,16 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Albumprinter.CorrelationTracking;
 using Albumprinter.CorrelationTracking.Correlation.Http;
-using Albumprinter.CorrelationTracking.Correlation.Log4net;
 using Albumprinter.CorrelationTracking.Tracing.Http.Log4net;
-using log4net;
-using log4net.Config;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace Correlation.IntegrationTests
 {
-    public class CorrelationDelegatingHandlerTests
+    public class CorrelationDelegatingHandlerTests : Log4NetTest
     {
-        static CorrelationDelegatingHandlerTests()
+        public CorrelationDelegatingHandlerTests(ITestOutputHelper output) : base(output)
         {
-            XmlConfigurator.Configure();
-            CorrelationManager.Instance.ScopeInterceptors.Add(new Log4NetCorrelationScopeInterceptor());
-        }
-
-        public CorrelationDelegatingHandlerTests(ITestOutputHelper output)
-        {
-            var h = (log4net.Repository.Hierarchy.Hierarchy)LogManager.GetRepository();
-            h.Root.AddAppender(new ActionAppender(output.WriteLine));
-
             Client = HttpClientFactory.Create(new CorrelationDelegatingHandler(), new Log4NetDelegatingHandler(true));
             Client.BaseAddress = new Uri("http://localhost:60695/", UriKind.Absolute);
         }
