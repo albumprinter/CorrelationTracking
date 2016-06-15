@@ -4,7 +4,7 @@ using System.Reflection;
 using Albumprinter.CorrelationTracking;
 using Albumprinter.CorrelationTracking.Correlation.Http;
 using Albumprinter.CorrelationTracking.Correlation.Log4net;
-using Albumprinter.CorrelationTracking.Tracing.Http.Log4net;
+using Albumprinter.CorrelationTracking.Tracing.Http;
 using log4net;
 using log4net.Config;
 

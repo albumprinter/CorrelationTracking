@@ -23,7 +23,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebClient", "WebClient\WebC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correlation.Http", "Correlation.Http\Correlation.Http.csproj", "{0F6FA333-AE48-4448-AF0D-5E9DFC3418D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tracing.Http.Log4net", "Tracing.Http.Log4net\Tracing.Http.Log4net.csproj", "{5BDA796A-C6BC-4A0D-9746-56703D448B3B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tracing.Http", "Tracing.Http\Tracing.Http.csproj", "{5BDA796A-C6BC-4A0D-9746-56703D448B3B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MQClient", "MQClient\MQClient.csproj", "{5377C081-8A3D-4C3B-AD76-CC5CC6425E37}"
 EndProject
@@ -47,7 +47,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correlation.IntegrationTest
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correlation.WCF", "Correlation.WCF\Correlation.WCF.csproj", "{56649180-DBA9-452E-8AE6-2A3FB430E5CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tracing.WCF.Log4net", "Tracing.WCF.Log4net\Tracing.WCF.Log4net.csproj", "{5349BF26-7F07-4158-B969-979DF3BD14A3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tracing.WCF", "Tracing.WCF\Tracing.WCF.csproj", "{5349BF26-7F07-4158-B969-979DF3BD14A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

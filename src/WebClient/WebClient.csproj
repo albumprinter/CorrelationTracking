@@ -75,9 +75,9 @@
       <Project>{e38f2832-573a-4da1-8856-82dcc3f0f6fd}</Project>
       <Name>Correlation</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Tracing.Http.Log4net\Tracing.Http.Log4net.csproj">
+    <ProjectReference Include="..\Tracing.Http\Tracing.Http.csproj">
       <Project>{5bda796a-c6bc-4a0d-9746-56703d448b3b}</Project>
-      <Name>Tracing.Http.Log4net</Name>
+      <Name>Tracing.Http</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tracing.Log4net\Tracing.Log4net.csproj">
       <Project>{adc97529-88a6-4385-a863-2c43c0c12d11}</Project>

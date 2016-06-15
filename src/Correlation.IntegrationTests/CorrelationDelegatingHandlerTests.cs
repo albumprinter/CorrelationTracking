@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Albumprinter.CorrelationTracking;
 using Albumprinter.CorrelationTracking.Correlation.Http;
-using Albumprinter.CorrelationTracking.Tracing.Http.Log4net;
+using Albumprinter.CorrelationTracking.Tracing.Http;
 using Xunit;
 using Xunit.Abstractions;
 

@@ -137,17 +137,17 @@
       <Project>{e38f2832-573a-4da1-8856-82dcc3f0f6fd}</Project>
       <Name>Correlation</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Tracing.Http.Log4net\Tracing.Http.Log4net.csproj">
+    <ProjectReference Include="..\Tracing.Http\Tracing.Http.csproj">
       <Project>{5bda796a-c6bc-4a0d-9746-56703d448b3b}</Project>
-      <Name>Tracing.Http.Log4net</Name>
+      <Name>Tracing.Http</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tracing.MassTransit\Tracing.MassTransit.csproj">
       <Project>{36be3840-c7da-4308-a688-dd195fbc9d23}</Project>
       <Name>Tracing.MassTransit</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Tracing.WCF.Log4net\Tracing.WCF.Log4net.csproj">
+    <ProjectReference Include="..\Tracing.WCF\Tracing.WCF.csproj">
       <Project>{5349bf26-7f07-4158-b969-979df3bd14a3}</Project>
-      <Name>Tracing.WCF.Log4net</Name>
+      <Name>Tracing.WCF</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
