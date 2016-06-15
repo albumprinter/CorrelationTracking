@@ -67,7 +67,7 @@ namespace Correlation.IntegrationTests
             {
                 using (CorrelationManager.Instance.UseScope(expect))
                 {
-                    bus.Publish(new TestMessage { Text = "Hi" });
+                    await bus.Publish(new TestMessage { Text = "Hi" }).ConfigureAwait(false);
                 }
 
                 await tsc.Task.ConfigureAwait(false);
