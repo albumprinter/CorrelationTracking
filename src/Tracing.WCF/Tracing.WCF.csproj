@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{DF540FB4-FA20-41E2-B1A4-5721D3FC04CE}</ProjectGuid>
+    <ProjectGuid>{5349BF26-7F07-4158-B969-979DF3BD14A3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Albumprinter.CorrelationTracking.Tracing.IIS</RootNamespace>
-    <AssemblyName>Albumprinter.CorrelationTracking.Tracing.IIS</AssemblyName>
+    <RootNamespace>Albumprinter.CorrelationTracking.Tracing.WCF</RootNamespace>
+    <AssemblyName>Albumprinter.CorrelationTracking.Tracing.WCF</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -36,10 +36,8 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -51,9 +49,7 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Log4NetServiceBehavior.cs" />
-    <Compile Include="ServiceLog4NetBehaviorExtension.cs" />
-    <Compile Include="Log4NetHttpModule.cs" />
+    <Compile Include="Log4NetClientBehavior.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

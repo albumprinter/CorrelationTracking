@@ -11,7 +11,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.MassTransit
 
         public Task PrePublish<T>(PublishContext<T> context) where T : class
         {
-            context.Headers.Set(@"X-CorrelationId", CorrelationScope.Current.CorrelationId.ToString());
+            context.Headers.Set(CorrelationKeys.CorrelationId, CorrelationScope.Current.CorrelationId.ToString());
             return Done;
         }
 
@@ -28,7 +28,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.MassTransit
         public Task PreConsume<T>(ConsumeContext<T> context) where T : class
         {
             object value;
-            var correlationId = context.Headers.TryGetHeader(@"X-CorrelationId", out value)
+            var correlationId = context.Headers.TryGetHeader(CorrelationKeys.CorrelationId, out value)
                 ? Guid.Parse((string) value)
                 : Guid.NewGuid();
             CorrelationManager.Instance.UseScope(correlationId);

@@ -12,7 +12,7 @@ using System.Web;
 namespace Albumprinter.CorrelationTracking.Correlation.IIS
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public sealed class CorrelationBehavior : Attribute, IServiceBehavior, IDispatchMessageInspector
+    public sealed class CorrelationServiceBehavior : Attribute, IServiceBehavior, IDispatchMessageInspector
     {
         [DefaultValue(false)]
         public bool ReuseAspNetScope { get; set; }
@@ -46,50 +46,41 @@ namespace Albumprinter.CorrelationTracking.Correlation.IIS
 
         public object AfterReceiveRequest(ref Message request, IClientChannel channel, InstanceContext instanceContext)
         {
-            var сorrelationId = Guid.Empty;
-
-            if (
-                request.Headers.FindHeader(
-                    @"X-CorrelationId",
-                    @"http://schemas.microsoft.com/2004/09/ServiceModel/Diagnostics") > -1)
+            var correlationId = Guid.Empty;
+            if (request.Headers.FindHeader(CorrelationKeys.CorrelationId, CorrelationKeys.Namespace) > -1)
             {
-                сorrelationId = request.Headers.GetHeader<Guid>(
-                    @"X-CorrelationId",
-                    @"http://schemas.microsoft.com/2004/09/ServiceModel/Diagnostics");
+                correlationId = request.Headers.GetHeader<Guid>(CorrelationKeys.CorrelationId, CorrelationKeys.Namespace);
             }
-            else
+            if (ReuseAspNetScope)
             {
-                if (ReuseAspNetScope)
+                var context = HttpContext.Current;
+                if (context != null && context.Items.Contains(typeof(CorrelationScope).Name))
                 {
-                    var context = HttpContext.Current;
-                    if (context != null && context.Items.Contains(typeof (CorrelationScope).Name))
+                    var iisScope = context.Items[typeof(CorrelationScope).Name] as CorrelationScope ?? CorrelationScope.Zero;
+                    if (iisScope != CorrelationScope.Zero)
                     {
-                        var iisScope = context.Items[typeof (CorrelationScope).Name] as CorrelationScope;
-                        if (iisScope != CorrelationScope.Zero)
+                        if (correlationId == Guid.Empty)
                         {
-                            сorrelationId = iisScope.CorrelationId;
+                            correlationId = iisScope.CorrelationId;
                         }
+                        return CorrelationManager.Instance.UseScope(correlationId, iisScope.RequestId);
                     }
                 }
-                if (сorrelationId == Guid.Empty)
-                {
-                    сorrelationId = Guid.NewGuid();
-                }
             }
-
-            return CorrelationManager.Instance.UseScope(сorrelationId);
+            if (correlationId == Guid.Empty)
+            {
+                correlationId = Guid.NewGuid();
+            }
+            return CorrelationManager.Instance.UseScope(correlationId);
         }
 
         public void BeforeSendReply(ref Message reply, object correlationState)
         {
             var wcfScope = CorrelationScope.Current;
-            if (wcfScope != CorrelationScope.Zero)
+            if (wcfScope != CorrelationScope.Zero && reply.Version != MessageVersion.None)
             {
-                reply.Headers.Add(
-                    MessageHeader.CreateHeader(
-                        @"X-CorrelationId",
-                        @"http://schemas.microsoft.com/2004/09/ServiceModel/Diagnostics",
-                        wcfScope.CorrelationId));
+                var header = MessageHeader.CreateHeader(CorrelationKeys.CorrelationId, CorrelationKeys.Namespace, wcfScope.CorrelationId);
+                reply.Headers.Add(header);
             }
 
             var disposable = correlationState as IDisposable;

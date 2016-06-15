@@ -9,7 +9,7 @@ using log4net;
 
 namespace WebApp1
 {
-    [ServiceBehavior, CorrelationBehavior, TracingBehavior]
+    [ServiceBehavior/*, CorrelationServiceBehavior, Log4NetServiceBehavior*/]
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     public sealed class CorrelationService : ICorrelationService
     {

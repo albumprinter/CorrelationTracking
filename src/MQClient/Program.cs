@@ -2,10 +2,10 @@
 using Albumprinter.CorrelationTracking;
 using Albumprinter.CorrelationTracking.Correlation.Log4net;
 using Albumprinter.CorrelationTracking.Correlation.MassTransit;
+using Albumprinter.CorrelationTracking.Tracing.MassTransit;
 using log4net.Config;
 using MassTransit;
 using MassTransit.Log4NetIntegration;
-using Tracing.MassTransit;
 
 namespace MQClient
 {
@@ -42,7 +42,7 @@ namespace MQClient
                 });
 
             var correlationObserver = new CorrelationObserver();
-            var tracingObserver = new TracingObserver();
+            var tracingObserver = new Log4NetObserver();
             bus.ConnectPublishObserver(correlationObserver);
             bus.ConnectPublishObserver(tracingObserver);
             bus.ConnectConsumeObserver(correlationObserver);
