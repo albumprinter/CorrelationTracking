@@ -4,14 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9025186A-4E38-4B15-8638-4A2DE0DB4E86}</ProjectGuid>
+    <ProjectGuid>{56649180-DBA9-452E-8AE6-2A3FB430E5CB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Albumprinter.CorrelationTracking.Correlation.IIS</RootNamespace>
-    <AssemblyName>Albumprinter.CorrelationTracking.Correlation.IIS</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <RootNamespace>Albumprinter.CorrelationTracking.Correlation.WCF</RootNamespace>
+    <AssemblyName>Albumprinter.CorrelationTracking.Correlation.WCF</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -35,15 +34,15 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="CorrelationServiceBehavior.cs" />
-    <Compile Include="CorrelationHttpModule.cs" />
+    <Compile Include="ClientMessageInspectorBehavior.cs" />
+    <Compile Include="CorrelationClientBehavior.cs" />
+    <Compile Include="MessageInspectorClientBehavior.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

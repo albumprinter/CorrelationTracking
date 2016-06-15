@@ -33,7 +33,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.IIS
         {
             Guid correlationId;
             Guid.TryParse(request.Headers[CorrelationKeys.CorrelationId], out correlationId);
-            if (correlationId != Guid.Empty)
+            if (correlationId == Guid.Empty)
             {
                 correlationId = Guid.NewGuid();
             }
@@ -44,7 +44,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.IIS
         {
             var workerRequest = serviceProvider.GetService(typeof(HttpWorkerRequest)) as HttpWorkerRequest;
             var requestId = workerRequest != null ? workerRequest.RequestTraceIdentifier : Guid.NewGuid();
-            if (requestId != Guid.Empty)
+            if (requestId == Guid.Empty)
             {
                 requestId = Guid.NewGuid();
             }

@@ -36,7 +36,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.Tests
             public void Should_create_the_new_scope_and_restore_the_previous_one_on_dispose()
             {
                 // assert
-                Assert.Null(CorrelationScope.Current);
+                Assert.Equal(CorrelationScope.Zero, CorrelationScope.Current);
 
                 // act
                 var scopeId1 = Guid.NewGuid();
@@ -58,7 +58,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.Tests
                 }
 
                 // assert
-                Assert.Null(CorrelationScope.Current);
+                Assert.Equal(CorrelationScope.Zero, CorrelationScope.Current);
             }
         }
 

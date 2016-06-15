@@ -10,7 +10,7 @@ using log4net;
 namespace Albumprinter.CorrelationTracking.Tracing.IIS
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public sealed class TracingBehavior : Attribute, IServiceBehavior, IDispatchMessageInspector, IErrorHandler
+    public sealed class Log4NetServiceBehavior : Attribute, IServiceBehavior, IDispatchMessageInspector, IErrorHandler
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 

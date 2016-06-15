@@ -12,7 +12,7 @@ using System.Web;
 namespace Albumprinter.CorrelationTracking.Correlation.IIS
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public sealed class CorrelationBehavior : Attribute, IServiceBehavior, IDispatchMessageInspector
+    public sealed class CorrelationServiceBehavior : Attribute, IServiceBehavior, IDispatchMessageInspector
     {
         [DefaultValue(false)]
         public bool ReuseAspNetScope { get; set; }
@@ -49,13 +49,9 @@ namespace Albumprinter.CorrelationTracking.Correlation.IIS
             var сorrelationId = Guid.Empty;
 
             if (
-                request.Headers.FindHeader(
-                    CorrelationKeys.CorrelationId,
-                    @"http://schemas.microsoft.com/2004/09/ServiceModel/Diagnostics") > -1)
+                request.Headers.FindHeader(CorrelationKeys.CorrelationId, CorrelationKeys.Namespace) > -1)
             {
-                сorrelationId = request.Headers.GetHeader<Guid>(
-                    CorrelationKeys.CorrelationId,
-                    @"http://schemas.microsoft.com/2004/09/ServiceModel/Diagnostics");
+                сorrelationId = request.Headers.GetHeader<Guid>(CorrelationKeys.CorrelationId, CorrelationKeys.Namespace);
             }
             else
             {
@@ -84,10 +80,8 @@ namespace Albumprinter.CorrelationTracking.Correlation.IIS
             var wcfScope = CorrelationScope.Current;
             if (wcfScope != CorrelationScope.Zero)
             {
-                reply.Headers.Add(
-                    MessageHeader.CreateHeader(CorrelationKeys.CorrelationId,
-                        @"http://schemas.microsoft.com/2004/09/ServiceModel/Diagnostics",
-                        wcfScope.CorrelationId));
+                var header = MessageHeader.CreateHeader(CorrelationKeys.CorrelationId, CorrelationKeys.Namespace, wcfScope.CorrelationId);
+                reply.Headers.Add(header);
             }
 
             var disposable = correlationState as IDisposable;
