@@ -67,16 +67,15 @@ namespace Albumprinter.CorrelationTracking.Correlation.IIS
                         var iisScope = context.Items[typeof (CorrelationScope).Name] as CorrelationScope;
                         if (iisScope != CorrelationScope.Zero)
                         {
-                            сorrelationId = iisScope.CorrelationId;
+                            return CorrelationManager.Instance.UseScope(iisScope);
                         }
                     }
                 }
-                if (сorrelationId == Guid.Empty)
-                {
-                    сorrelationId = Guid.NewGuid();
-                }
             }
-
+            if (сorrelationId == Guid.Empty)
+            {
+                сorrelationId = Guid.NewGuid();
+            }
             return CorrelationManager.Instance.UseScope(сorrelationId);
         }
 

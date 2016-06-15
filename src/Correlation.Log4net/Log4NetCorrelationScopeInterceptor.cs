@@ -7,6 +7,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.Log4net
     {
         public void Enter(CorrelationManager manager, CorrelationScope scope)
         {
+            LogicalThreadContext.Properties[@"X-ProcessId"] = scope.ProcessId;
             LogicalThreadContext.Properties[@"X-CorrelationId"] = scope.CorrelationId;
             LogicalThreadContext.Properties[@"X-RequestId"] = scope.RequestId;
             LogicalThreadContext.Properties[@"X-ActivityId"] = Trace.CorrelationManager.ActivityId;
@@ -15,6 +16,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.Log4net
         public void Exit(CorrelationManager manager, CorrelationScope scope)
         {
             // NOTE: to restore WCF flow tracing context on end-request in IIS
+            LogicalThreadContext.Properties[@"X-ProcessId"] = scope.ProcessId;
             LogicalThreadContext.Properties[@"X-CorrelationId"] = scope.CorrelationId;
             LogicalThreadContext.Properties[@"X-RequestId"] = scope.RequestId;
             LogicalThreadContext.Properties[@"X-ActivityId"] = Trace.CorrelationManager.ActivityId;
