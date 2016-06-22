@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp2", "WebApp2\WebApp2.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorrelationTracking", "CorrelationTracking\CorrelationTracking.csproj", "{E38F2832-573A-4DA1-8856-82DCC3F0F6FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correlation.Core.Tests", "Correlation.Tests\Correlation.Core.Tests.csproj", "{D0B44B2F-2661-46EE-A9E2-D821295EEECC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correlation.Core.Tests", "Correlation.Core.Tests\Correlation.Core.Tests.csproj", "{D0B44B2F-2661-46EE-A9E2-D821295EEECC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correlation.IIS", "Correlation.IIS\Correlation.IIS.csproj", "{9025186A-4E38-4B15-8638-4A2DE0DB4E86}"
 EndProject
