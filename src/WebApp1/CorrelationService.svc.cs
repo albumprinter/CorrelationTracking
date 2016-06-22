@@ -3,8 +3,8 @@ using System.Reflection;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
 using Albumprinter.CorrelationTracking;
-using Albumprinter.CorrelationTracking.Correlation.IIS;
-using Albumprinter.CorrelationTracking.Tracing.IIS;
+using Albumprinter.CorrelationTracking.Correlation.WCF;
+using Albumprinter.CorrelationTracking.Tracing.WCF;
 using log4net;
 
 namespace WebApp1

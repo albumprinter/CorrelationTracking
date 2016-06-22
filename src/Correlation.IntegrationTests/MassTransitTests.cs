@@ -4,7 +4,6 @@ using Albumprinter.CorrelationTracking;
 using Albumprinter.CorrelationTracking.Correlation.MassTransit;
 using Albumprinter.CorrelationTracking.Tracing.MassTransit;
 using MassTransit;
-using MassTransit.Log4NetIntegration;
 using Xunit;
 using Xunit.Abstractions;
 

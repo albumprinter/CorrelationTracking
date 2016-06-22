@@ -51,8 +51,6 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Log4NetServiceBehavior.cs" />
-    <Compile Include="ServiceLog4NetBehaviorExtension.cs" />
     <Compile Include="Log4NetHttpModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -5,7 +5,7 @@ using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
 using log4net;
 
-namespace Albumprinter.CorrelationTracking.Tracing.WCF.Log4net
+namespace Albumprinter.CorrelationTracking.Tracing.WCF
 {
     public sealed class Log4NetClientBehavior : IEndpointBehavior, IClientMessageInspector
     {

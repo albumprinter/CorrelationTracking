@@ -1,7 +1,7 @@
 using System;
 using System.ServiceModel.Configuration;
 
-namespace Albumprinter.CorrelationTracking.Correlation.IIS
+namespace Albumprinter.CorrelationTracking.Correlation.WCF
 {
     public sealed class ServiceCorrelationBehaviorExtension : BehaviorExtensionElement
     {
