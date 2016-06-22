@@ -8,6 +8,7 @@ using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
 using System.Web;
+using Albumprinter.CorrelationTracking.Correlation.Core;
 
 namespace Albumprinter.CorrelationTracking.Correlation.WCF
 {

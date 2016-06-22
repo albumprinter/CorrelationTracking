@@ -2,7 +2,7 @@
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Threading.Tasks;
-using Albumprinter.CorrelationTracking;
+using Albumprinter.CorrelationTracking.Correlation.Core;
 using Albumprinter.CorrelationTracking.Correlation.WCF;
 using Albumprinter.CorrelationTracking.Tracing.WCF;
 using Xunit;

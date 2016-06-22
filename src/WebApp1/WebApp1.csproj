@@ -185,6 +185,10 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Correlation.Core\Correlation.Core.csproj">
+      <Project>{ddf69c1c-ecc1-46a5-b0b5-657b0dbba330}</Project>
+      <Name>Correlation.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Correlation.IIS\Correlation.IIS.csproj">
       <Project>{9025186a-4e38-4b15-8638-4a2de0db4e86}</Project>
       <Name>Correlation.IIS</Name>

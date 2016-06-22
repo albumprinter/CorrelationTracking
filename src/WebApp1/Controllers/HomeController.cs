@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Web.Mvc;
-using Albumprinter.CorrelationTracking;
+using Albumprinter.CorrelationTracking.Correlation.Core;
 using log4net;
 
 namespace WebApp1.Controllers

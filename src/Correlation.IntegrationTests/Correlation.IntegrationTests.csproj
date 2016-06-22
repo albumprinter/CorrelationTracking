@@ -117,6 +117,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Correlation.Core\Correlation.Core.csproj">
+      <Project>{ddf69c1c-ecc1-46a5-b0b5-657b0dbba330}</Project>
+      <Name>Correlation.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Correlation.Http\Correlation.Http.csproj">
       <Project>{0f6fa333-ae48-4448-af0d-5e9dfc3418d2}</Project>
       <Name>Correlation.Http</Name>

@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
@@ -38,11 +42,21 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="CorrelationKeys.cs" />
-    <Compile Include="CorrelationManager.cs" />
-    <Compile Include="CorrelationScope.cs" />
-    <Compile Include="ICorrelationScopeInterceptor.cs" />
+    <Compile Include="CorrelationTrackingConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Correlation.Core\Correlation.Core.csproj">
+      <Project>{ddf69c1c-ecc1-46a5-b0b5-657b0dbba330}</Project>
+      <Name>Correlation.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Correlation.Log4net\Correlation.Log4net.csproj">
+      <Project>{064c8dda-15d0-40fb-b27d-3ff309aba1a4}</Project>
+      <Name>Correlation.Log4net</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

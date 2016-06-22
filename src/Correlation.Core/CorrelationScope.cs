@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.Remoting.Messaging;
 
-namespace Albumprinter.CorrelationTracking
+namespace Albumprinter.CorrelationTracking.Correlation.Core
 {
     public sealed class CorrelationScope
     {
