@@ -2,6 +2,7 @@ using System;
 using Albumprinter.CorrelationTracking;
 using log4net;
 using log4net.Appender;
+using log4net.Config;
 using Xunit.Abstractions;
 
 namespace Correlation.IntegrationTests
@@ -14,6 +15,7 @@ namespace Correlation.IntegrationTests
 
         static Log4NetTest()
         {
+            XmlConfigurator.Configure();
             CorrelationTrackingConfiguration.Initialize();
         }
 

@@ -6,6 +6,7 @@ using Albumprinter.CorrelationTracking.Correlation.Core;
 using Albumprinter.CorrelationTracking.Correlation.Http;
 using Albumprinter.CorrelationTracking.Tracing.Http;
 using log4net;
+using log4net.Config;
 
 namespace WebClient
 {
@@ -15,6 +16,7 @@ namespace WebClient
 
         static void Main(string[] args)
         {
+            XmlConfigurator.Configure();
             CorrelationTrackingConfiguration.Initialize();
 
             Console.WriteLine(@"Press any key to start...");

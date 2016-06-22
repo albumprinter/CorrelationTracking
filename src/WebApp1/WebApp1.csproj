@@ -201,9 +201,9 @@
       <Project>{56649180-dba9-452e-8ae6-2a3fb430e5cb}</Project>
       <Name>Correlation.WCF</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Correlation\Correlation.csproj">
+    <ProjectReference Include="..\CorrelationTracking\CorrelationTracking.csproj">
       <Project>{e38f2832-573a-4da1-8856-82dcc3f0f6fd}</Project>
-      <Name>Correlation</Name>
+      <Name>CorrelationTracking</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tracing.IIS\Tracing.IIS.csproj">
       <Project>{df540fb4-fa20-41e2-b1a4-5721d3fc04ce}</Project>

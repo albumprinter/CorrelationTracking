@@ -3,6 +3,7 @@ using Albumprinter.CorrelationTracking;
 using Albumprinter.CorrelationTracking.Correlation.Core;
 using Albumprinter.CorrelationTracking.Correlation.MassTransit;
 using Albumprinter.CorrelationTracking.Tracing.MassTransit;
+using log4net.Config;
 using MassTransit;
 using MassTransit.Log4NetIntegration;
 
@@ -12,6 +13,7 @@ namespace MQClient
     {
         static void Main(string[] args)
         {
+            XmlConfigurator.Configure();
             CorrelationTrackingConfiguration.Initialize();
 
             var bus = Bus.Factory.CreateUsingRabbitMq(

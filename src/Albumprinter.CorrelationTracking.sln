@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp1", "WebApp1\WebApp1.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp2", "WebApp2\WebApp2.csproj", "{E8DFD0D2-4AA6-4D22-9A4E-C142E4283116}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correlation", "Correlation\Correlation.csproj", "{E38F2832-573A-4DA1-8856-82DCC3F0F6FD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorrelationTracking", "CorrelationTracking\CorrelationTracking.csproj", "{E38F2832-573A-4DA1-8856-82DCC3F0F6FD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correlation.Core.Tests", "Correlation.Tests\Correlation.Core.Tests.csproj", "{D0B44B2F-2661-46EE-A9E2-D821295EEECC}"
 EndProject
