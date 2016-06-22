@@ -8,6 +8,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.MassTransit
     public sealed class CorrelationObserver : IPublishObserver, IConsumeObserver
     {
         private static readonly Task Done = Task.FromResult(true);
+        public static readonly CorrelationObserver Instance = new CorrelationObserver();
 
         public Task PrePublish<T>(PublishContext<T> context) where T : class
         {
@@ -28,9 +29,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.MassTransit
         public Task PreConsume<T>(ConsumeContext<T> context) where T : class
         {
             object value;
-            var correlationId = context.Headers.TryGetHeader(CorrelationKeys.CorrelationId, out value)
-                ? Guid.Parse((string) value)
-                : Guid.NewGuid();
+            var correlationId = context.Headers.TryGetHeader(CorrelationKeys.CorrelationId, out value) ? Guid.Parse((string) value) : Guid.NewGuid();
             CorrelationManager.Instance.UseScope(correlationId);
             return Done;
         }

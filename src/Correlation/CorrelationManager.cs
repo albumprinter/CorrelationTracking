@@ -5,7 +5,6 @@ namespace Albumprinter.CorrelationTracking
 {
     public sealed class CorrelationManager
     {
-        public static readonly Guid ProcessId = Guid.NewGuid();
         public static readonly CorrelationManager Instance = new CorrelationManager();
 
         internal CorrelationManager()
@@ -17,17 +16,20 @@ namespace Albumprinter.CorrelationTracking
 
         public IDisposable UseScope(Guid correlationId)
         {
-            return UseScope(new CorrelationScope(ProcessId, correlationId, Guid.NewGuid()));
+            return UseScope(new CorrelationScope(CorrelationScope.Initial.ProcessId, correlationId, Guid.NewGuid()));
         }
 
         public IDisposable UseScope(Guid correlationId, Guid requestId)
         {
-            return UseScope(new CorrelationScope(ProcessId, correlationId, requestId));
+            return UseScope(new CorrelationScope(CorrelationScope.Initial.ProcessId, correlationId, requestId));
         }
 
         public IDisposable UseScope(CorrelationScope newScope)
         {
-            if (newScope == null) throw new ArgumentNullException("newScope");
+            if (newScope == null)
+            {
+                throw new ArgumentNullException("newScope");
+            }
             var oldScope = CorrelationScope.Current;
 
             ScopeInterceptors.ForEach(x => x.Enter(this, newScope));

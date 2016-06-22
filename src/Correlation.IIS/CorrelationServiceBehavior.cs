@@ -56,8 +56,8 @@ namespace Albumprinter.CorrelationTracking.Correlation.IIS
                 var context = HttpContext.Current;
                 if (context != null && context.Items.Contains(typeof(CorrelationScope).Name))
                 {
-                    var iisScope = context.Items[typeof(CorrelationScope).Name] as CorrelationScope ?? CorrelationScope.Zero;
-                    if (iisScope != CorrelationScope.Zero)
+                    var iisScope = context.Items[typeof(CorrelationScope).Name] as CorrelationScope ?? CorrelationScope.Initial;
+                    if (iisScope != CorrelationScope.Initial)
                     {
                         if (correlationId == Guid.Empty)
                         {
@@ -77,7 +77,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.IIS
         public void BeforeSendReply(ref Message reply, object correlationState)
         {
             var wcfScope = CorrelationScope.Current;
-            if (wcfScope != CorrelationScope.Zero && reply.Version != MessageVersion.None)
+            if (wcfScope != CorrelationScope.Initial && reply.Version != MessageVersion.None)
             {
                 var header = MessageHeader.CreateHeader(CorrelationKeys.CorrelationId, CorrelationKeys.Namespace, wcfScope.CorrelationId);
                 reply.Headers.Add(header);

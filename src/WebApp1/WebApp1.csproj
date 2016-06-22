@@ -201,10 +201,6 @@
       <Project>{df540fb4-fa20-41e2-b1a4-5721d3fc04ce}</Project>
       <Name>Tracing.IIS</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Tracing.Log4net\Tracing.Log4net.csproj">
-      <Project>{adc97529-88a6-4385-a863-2c43c0c12d11}</Project>
-      <Name>Tracing.Log4net</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

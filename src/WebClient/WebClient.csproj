@@ -79,10 +79,6 @@
       <Project>{5bda796a-c6bc-4a0d-9746-56703d448b3b}</Project>
       <Name>Tracing.Http</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Tracing.Log4net\Tracing.Log4net.csproj">
-      <Project>{adc97529-88a6-4385-a863-2c43c0c12d11}</Project>
-      <Name>Tracing.Log4net</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

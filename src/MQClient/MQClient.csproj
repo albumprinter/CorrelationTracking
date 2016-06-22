@@ -91,10 +91,6 @@
       <Project>{e38f2832-573a-4da1-8856-82dcc3f0f6fd}</Project>
       <Name>Correlation</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Tracing.Log4net\Tracing.Log4net.csproj">
-      <Project>{adc97529-88a6-4385-a863-2c43c0c12d11}</Project>
-      <Name>Tracing.Log4net</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Tracing.MassTransit\Tracing.MassTransit.csproj">
       <Project>{36be3840-c7da-4308-a688-dd195fbc9d23}</Project>
       <Name>Tracing.MassTransit</Name>

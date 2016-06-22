@@ -12,6 +12,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.MassTransit
     {
         private static readonly Task Done = Task.FromResult(true);
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        public static readonly Log4NetObserver Instance = new Log4NetObserver();
 
         public Task PrePublish<T>(PublishContext<T> context) where T : class
         {

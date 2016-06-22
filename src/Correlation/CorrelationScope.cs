@@ -6,8 +6,8 @@ namespace Albumprinter.CorrelationTracking
 {
     public sealed class CorrelationScope
     {
-        private static readonly string CorrelationScopeSlotName = typeof(CorrelationScope).FullName;
-        public static readonly CorrelationScope Zero = new CorrelationScope(Guid.Empty, Guid.Empty, Guid.Empty);
+        private static readonly string CorrelationScopeSlotName = typeof (CorrelationScope).FullName;
+        public static readonly CorrelationScope Initial = new CorrelationScope(Guid.NewGuid(), Guid.Empty, Guid.Empty);
 
         internal CorrelationScope(Guid processId, Guid correlationId, Guid requestId)
         {
@@ -19,32 +19,31 @@ namespace Albumprinter.CorrelationTracking
 
         public static CorrelationScope Current
         {
-            get { return CallContext.LogicalGetData(CorrelationScopeSlotName) as CorrelationScope ?? Zero; }
+            get { return CallContext.LogicalGetData(CorrelationScopeSlotName) as CorrelationScope ?? Initial; }
             internal set { CallContext.LogicalSetData(CorrelationScopeSlotName, value); }
         }
 
         /// <summary>
-        /// Gets the process identifier. The process is created once during the application lifecycle.
+        ///     Gets the process identifier. The process is created once during the application lifecycle.
         /// </summary>
         /// <value>
-        /// The process identifier.
+        ///     The process identifier.
         /// </value>
         public Guid ProcessId { get; private set; }
 
         /// <summary>
-        /// Gets the correlation identifier. An explicit correlation identifier for the business transaction.
+        ///     Gets the correlation identifier. An explicit correlation identifier for the business transaction.
         /// </summary>
         /// <value>
-        /// The correlation identifier.
+        ///     The correlation identifier.
         /// </value>
         public Guid CorrelationId { get; private set; }
 
-
         /// <summary>
-        /// Gets the request identifier. An explicit correlation identifier for the request.
+        ///     Gets the request identifier. An explicit correlation identifier for the request.
         /// </summary>
         /// <value>
-        /// The request identifier.
+        ///     The request identifier.
         /// </value>
         public Guid RequestId { get; private set; }
 
