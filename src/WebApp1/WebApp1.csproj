@@ -193,6 +193,10 @@
       <Project>{064c8dda-15d0-40fb-b27d-3ff309aba1a4}</Project>
       <Name>Correlation.Log4net</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Correlation.WCF\Correlation.WCF.csproj">
+      <Project>{56649180-dba9-452e-8ae6-2a3fb430e5cb}</Project>
+      <Name>Correlation.WCF</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Correlation\Correlation.csproj">
       <Project>{e38f2832-573a-4da1-8856-82dcc3f0f6fd}</Project>
       <Name>Correlation</Name>
@@ -200,6 +204,10 @@
     <ProjectReference Include="..\Tracing.IIS\Tracing.IIS.csproj">
       <Project>{df540fb4-fa20-41e2-b1a4-5721d3fc04ce}</Project>
       <Name>Tracing.IIS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tracing.WCF\Tracing.WCF.csproj">
+      <Project>{5349bf26-7f07-4158-b969-979df3bd14a3}</Project>
+      <Name>Tracing.WCF</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

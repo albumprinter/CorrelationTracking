@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reflection;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
@@ -7,7 +8,7 @@ using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
 using log4net;
 
-namespace Albumprinter.CorrelationTracking.Tracing.IIS
+namespace Albumprinter.CorrelationTracking.Tracing.WCF
 {
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class Log4NetServiceBehavior : Attribute, IServiceBehavior, IDispatchMessageInspector, IErrorHandler
@@ -28,7 +29,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.IIS
 
         public void ApplyDispatchBehavior(ServiceDescription serviceDescription, ServiceHostBase serviceHostBase)
         {
-            foreach (ChannelDispatcher chDisp in serviceHostBase.ChannelDispatchers)
+            foreach (var chDisp in serviceHostBase.ChannelDispatchers.OfType<ChannelDispatcher>())
             {
                 chDisp.ErrorHandlers.Add(this);
                 foreach (var epDisp in chDisp.Endpoints)

@@ -9,7 +9,7 @@ using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
 using System.Web;
 
-namespace Albumprinter.CorrelationTracking.Correlation.IIS
+namespace Albumprinter.CorrelationTracking.Correlation.WCF
 {
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class CorrelationServiceBehavior : Attribute, IServiceBehavior, IDispatchMessageInspector

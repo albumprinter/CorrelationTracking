@@ -4,7 +4,7 @@ using System.ServiceModel.Channels;
 using System.Threading.Tasks;
 using Albumprinter.CorrelationTracking;
 using Albumprinter.CorrelationTracking.Correlation.WCF;
-using Albumprinter.CorrelationTracking.Tracing.WCF.Log4net;
+using Albumprinter.CorrelationTracking.Tracing.WCF;
 using Xunit;
 using Xunit.Abstractions;
 

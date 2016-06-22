@@ -31,9 +31,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -42,6 +44,8 @@
     </Compile>
     <Compile Include="ClientMessageInspectorBehavior.cs" />
     <Compile Include="CorrelationClientBehavior.cs" />
+    <Compile Include="CorrelationServiceBehavior.cs" />
+    <Compile Include="CorrelationServiceBehaviorExtension.cs" />
     <Compile Include="MessageInspectorClientBehavior.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
