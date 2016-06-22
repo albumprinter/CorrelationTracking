@@ -185,6 +185,10 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Correlation.Core\Correlation.Core.csproj">
+      <Project>{ddf69c1c-ecc1-46a5-b0b5-657b0dbba330}</Project>
+      <Name>Correlation.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Correlation.IIS\Correlation.IIS.csproj">
       <Project>{9025186a-4e38-4b15-8638-4a2de0db4e86}</Project>
       <Name>Correlation.IIS</Name>
@@ -197,9 +201,9 @@
       <Project>{56649180-dba9-452e-8ae6-2a3fb430e5cb}</Project>
       <Name>Correlation.WCF</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Correlation\Correlation.csproj">
+    <ProjectReference Include="..\CorrelationTracking\CorrelationTracking.csproj">
       <Project>{e38f2832-573a-4da1-8856-82dcc3f0f6fd}</Project>
-      <Name>Correlation</Name>
+      <Name>CorrelationTracking</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tracing.IIS\Tracing.IIS.csproj">
       <Project>{df540fb4-fa20-41e2-b1a4-5721d3fc04ce}</Project>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web;
+using Albumprinter.CorrelationTracking.Correlation.Core;
 
 namespace Albumprinter.CorrelationTracking.Correlation.IIS
 {

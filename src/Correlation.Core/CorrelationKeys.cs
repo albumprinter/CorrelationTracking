@@ -1,4 +1,4 @@
-﻿namespace Albumprinter.CorrelationTracking
+﻿namespace Albumprinter.CorrelationTracking.Correlation.Core
 {
     public static class CorrelationKeys
     {

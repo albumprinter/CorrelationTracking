@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Albumprinter.CorrelationTracking.Correlation.Core;
 using MassTransit;
 using MassTransit.Pipeline;
 

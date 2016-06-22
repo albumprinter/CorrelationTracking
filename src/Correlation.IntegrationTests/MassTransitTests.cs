@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Albumprinter.CorrelationTracking;
+using Albumprinter.CorrelationTracking.Correlation.Core;
 using Albumprinter.CorrelationTracking.Correlation.MassTransit;
 using Albumprinter.CorrelationTracking.Tracing.MassTransit;
 using MassTransit;

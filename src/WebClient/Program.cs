@@ -2,8 +2,8 @@
 using System.Net.Http;
 using System.Reflection;
 using Albumprinter.CorrelationTracking;
+using Albumprinter.CorrelationTracking.Correlation.Core;
 using Albumprinter.CorrelationTracking.Correlation.Http;
-using Albumprinter.CorrelationTracking.Correlation.Log4net;
 using Albumprinter.CorrelationTracking.Tracing.Http;
 using log4net;
 using log4net.Config;
@@ -17,12 +17,12 @@ namespace WebClient
         static void Main(string[] args)
         {
             XmlConfigurator.Configure();
-
-            var correlationManager = CorrelationManager.Instance;
-            correlationManager.ScopeInterceptors.Add(new Log4NetCorrelationScopeInterceptor());
+            CorrelationTrackingConfiguration.Initialize();
 
             Console.WriteLine(@"Press any key to start...");
             Console.ReadKey(true);
+
+            var correlationManager = CorrelationManager.Instance;
 
             using (correlationManager.UseScope(Guid.NewGuid()))
             {

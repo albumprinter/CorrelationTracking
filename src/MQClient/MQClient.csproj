@@ -79,6 +79,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Correlation.Core\Correlation.Core.csproj">
+      <Project>{ddf69c1c-ecc1-46a5-b0b5-657b0dbba330}</Project>
+      <Name>Correlation.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Correlation.Log4net\Correlation.Log4net.csproj">
       <Project>{064c8dda-15d0-40fb-b27d-3ff309aba1a4}</Project>
       <Name>Correlation.Log4net</Name>
@@ -87,9 +91,9 @@
       <Project>{5d390661-0d88-477c-b145-172ce1bb2d2e}</Project>
       <Name>Correlation.MassTransit</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Correlation\Correlation.csproj">
+    <ProjectReference Include="..\CorrelationTracking\CorrelationTracking.csproj">
       <Project>{e38f2832-573a-4da1-8856-82dcc3f0f6fd}</Project>
-      <Name>Correlation</Name>
+      <Name>CorrelationTracking</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tracing.MassTransit\Tracing.MassTransit.csproj">
       <Project>{36be3840-c7da-4308-a688-dd195fbc9d23}</Project>

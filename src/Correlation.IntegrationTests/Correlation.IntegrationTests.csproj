@@ -117,6 +117,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Correlation.Core\Correlation.Core.csproj">
+      <Project>{ddf69c1c-ecc1-46a5-b0b5-657b0dbba330}</Project>
+      <Name>Correlation.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Correlation.Http\Correlation.Http.csproj">
       <Project>{0f6fa333-ae48-4448-af0d-5e9dfc3418d2}</Project>
       <Name>Correlation.Http</Name>
@@ -133,9 +137,9 @@
       <Project>{56649180-dba9-452e-8ae6-2a3fb430e5cb}</Project>
       <Name>Correlation.WCF</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Correlation\Correlation.csproj">
+    <ProjectReference Include="..\CorrelationTracking\CorrelationTracking.csproj">
       <Project>{e38f2832-573a-4da1-8856-82dcc3f0f6fd}</Project>
-      <Name>Correlation</Name>
+      <Name>CorrelationTracking</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tracing.Http\Tracing.Http.csproj">
       <Project>{5bda796a-c6bc-4a0d-9746-56703d448b3b}</Project>

@@ -1,6 +1,5 @@
 using System;
 using Albumprinter.CorrelationTracking;
-using Albumprinter.CorrelationTracking.Correlation.Log4net;
 using log4net;
 using log4net.Appender;
 using log4net.Config;
@@ -17,7 +16,7 @@ namespace Correlation.IntegrationTests
         static Log4NetTest()
         {
             XmlConfigurator.Configure();
-            CorrelationManager.Instance.ScopeInterceptors.Add(new Log4NetCorrelationScopeInterceptor());
+            CorrelationTrackingConfiguration.Initialize();
         }
 
         protected Log4NetTest(ITestOutputHelper output)

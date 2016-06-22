@@ -7,9 +7,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp1", "WebApp1\WebApp1.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp2", "WebApp2\WebApp2.csproj", "{E8DFD0D2-4AA6-4D22-9A4E-C142E4283116}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correlation", "Correlation\Correlation.csproj", "{E38F2832-573A-4DA1-8856-82DCC3F0F6FD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorrelationTracking", "CorrelationTracking\CorrelationTracking.csproj", "{E38F2832-573A-4DA1-8856-82DCC3F0F6FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correlation.Tests", "Correlation.Tests\Correlation.Tests.csproj", "{D0B44B2F-2661-46EE-A9E2-D821295EEECC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correlation.Core.Tests", "Correlation.Core.Tests\Correlation.Core.Tests.csproj", "{D0B44B2F-2661-46EE-A9E2-D821295EEECC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correlation.IIS", "Correlation.IIS\Correlation.IIS.csproj", "{9025186A-4E38-4B15-8638-4A2DE0DB4E86}"
 EndProject
@@ -46,6 +46,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correlation.WCF", "Correlation.WCF\Correlation.WCF.csproj", "{56649180-DBA9-452E-8AE6-2A3FB430E5CB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tracing.WCF", "Tracing.WCF\Tracing.WCF.csproj", "{5349BF26-7F07-4158-B969-979DF3BD14A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correlation.Core", "Correlation.Core\Correlation.Core.csproj", "{DDF69C1C-ECC1-46A5-B0B5-657B0DBBA330}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -117,6 +119,10 @@ Global
 		{5349BF26-7F07-4158-B969-979DF3BD14A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5349BF26-7F07-4158-B969-979DF3BD14A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5349BF26-7F07-4158-B969-979DF3BD14A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDF69C1C-ECC1-46A5-B0B5-657B0DBBA330}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDF69C1C-ECC1-46A5-B0B5-657B0DBBA330}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDF69C1C-ECC1-46A5-B0B5-657B0DBBA330}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDF69C1C-ECC1-46A5-B0B5-657B0DBBA330}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
