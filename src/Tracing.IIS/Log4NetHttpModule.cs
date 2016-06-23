@@ -36,7 +36,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.IIS
             {
                 var state = TrackingHttpModuleState.AttachTo(context, configuration);
                 var message = $"{request.HttpMethod} {request.Url.OriginalString}{Environment.NewLine}{state.GetInputHeaders()}{Environment.NewLine}{state.GetInputContent()}";
-                Log.Info(message);
+                Log.Debug(message);
             }
         }
 
@@ -51,7 +51,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.IIS
             if (state != null)
             {
                 var message = $"{response.Status} {request.Url.OriginalString} {state.Stopwatch.Elapsed.TotalMilliseconds:N1}ms{Environment.NewLine}{state.GetOutputHeaders()}{Environment.NewLine}{state.GetOutputContent()}";
-                Log.Info(message);
+                Log.Debug(message);
             }
         }
 

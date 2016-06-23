@@ -32,13 +32,13 @@ namespace Albumprinter.CorrelationTracking.Tracing.WCF
 
         object IClientMessageInspector.BeforeSendRequest(ref Message request, IClientChannel channel)
         {
-            Log.Info(@"BeforeSendRequest: " + request);
+            Log.Debug(@"BeforeSendRequest: " + request);
             return null;
         }
 
         void IClientMessageInspector.AfterReceiveReply(ref Message reply, object correlationState)
         {
-            Log.Info(@"AfterReceiveReply: " + reply);
+            Log.Debug(@"AfterReceiveReply: " + reply);
         }
     }
 }

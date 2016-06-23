@@ -44,7 +44,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.Http
                     output.Append(", Content: ");
                     output.Append(request.Content == null ? "<null>" : await request.Content.ReadAsStringAsync().ConfigureAwait(false));
                 }
-                Log.Info(output.ToString());
+                Log.Debug(output.ToString());
             }
             var response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
             if (LogResponse)
@@ -62,7 +62,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.Http
                     output.Append(", Content: ");
                     output.Append(response.Content == null ? "<null>" : await response.Content.ReadAsStringAsync().ConfigureAwait(false));
                 }
-                Log.Info(output.ToString());
+                Log.Debug(output.ToString());
             }
             return response;
         }
