@@ -18,10 +18,16 @@ namespace Albumprinter.CorrelationTracking.Tracing.Http
         public Log4NetDelegatingHandler(bool logAll)
         {
             LogRequest = LogRequestContent = LogResponse = LogResponseContent = logAll;
-            AllowedHeaders = new List<string> { "Accept", "Content-Type", "X-CorrelationId", "X-RequestId" };
+            AllowedHeaders = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            {
+                "Accept",
+                "Content-Type",
+                "X-CorrelationId",
+                "X-RequestId"
+            };
         }
 
-        public List<string> AllowedHeaders { get; private set; }
+        public HashSet<string> AllowedHeaders { get; private set; }
         public bool LogRequest { get; set; }
         public bool LogRequestContent { get; set; }
         public bool LogResponse { get; set; }

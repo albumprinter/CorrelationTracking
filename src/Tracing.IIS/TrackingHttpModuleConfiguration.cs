@@ -9,13 +9,16 @@ namespace Albumprinter.CorrelationTracking.Tracing.IIS
     internal sealed class TrackingHttpModuleConfiguration
     {
         public Regex AllowedUrls { get; private set; }
-        public List<string> AllowedHeaders { get; private set; }
+        public HashSet<string> AllowedHeaders { get; private set; }
 
         public TrackingHttpModuleConfiguration(string allowedUrls, IEnumerable<string> allowedHeaders)
         {
-            AllowedUrls = new Regex(allowedUrls ?? @"/api/|(\.asmx|\.svc)(\?|$)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
-            AllowedHeaders = new List<string> { "Accept", "Content-Type", "X-CorrelationId", "X-RequestId" };
-            AllowedHeaders.AddRange(allowedHeaders ?? Enumerable.Empty<string>());
+            AllowedUrls = new Regex(
+                string.IsNullOrWhiteSpace(allowedUrls) ? @"/api/|(\.asmx|\.svc)(\?|$)" : allowedUrls,
+                RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
+            AllowedHeaders = new HashSet<string>(
+                allowedHeaders ?? Enumerable.Empty<string>(),
+                StringComparer.OrdinalIgnoreCase) { "Accept", "Content-Type", "X-CorrelationId", "X-RequestId" };
         }
 
         public static TrackingHttpModuleConfiguration FromConfig(string moduleName)

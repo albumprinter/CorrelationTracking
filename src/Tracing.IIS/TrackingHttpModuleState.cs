@@ -76,7 +76,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.IIS
             return GetStreamContent(OutputStream, Context.Response.ContentEncoding);
         }
 
-        public static string GetHeaders(NameValueCollection headers, List<string> allowedHeaders)
+        public static string GetHeaders(NameValueCollection headers, HashSet<string> allowedHeaders)
         {
             var allowed = headers.AllKeys.Where(allowedHeaders.Contains);
             return string.Join(Environment.NewLine, allowed.Select(key => $"{key}: {headers[key]}"));
