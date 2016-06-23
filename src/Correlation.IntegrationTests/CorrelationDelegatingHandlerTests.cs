@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Albumprinter.CorrelationTracking;
 using Albumprinter.CorrelationTracking.Correlation.Core;
 using Albumprinter.CorrelationTracking.Correlation.Http;
 using Albumprinter.CorrelationTracking.Tracing.Http;

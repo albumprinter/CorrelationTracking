@@ -16,7 +16,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.MassTransit
 
         public Task PrePublish<T>(PublishContext<T> context) where T : class
         {
-            Log.Info(@"PrePublish: " + JsonConvert.SerializeObject(context.Message));
+            Log.Debug(@"PrePublish: " + JsonConvert.SerializeObject(context.Message));
             return Done;
         }
 
@@ -33,7 +33,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.MassTransit
 
         public Task PreConsume<T>(ConsumeContext<T> context) where T : class
         {
-            Log.Info(@"PreConsume: " + JsonConvert.SerializeObject(context.Message));
+            Log.Debug(@"PreConsume: " + JsonConvert.SerializeObject(context.Message));
             return Done;
         }
 

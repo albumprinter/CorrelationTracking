@@ -44,7 +44,9 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Log4NetHttpModule.cs" />
+    <Compile Include="TrackingHttpModuleConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TrackingHttpModuleState.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

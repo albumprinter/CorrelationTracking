@@ -41,13 +41,13 @@ namespace Albumprinter.CorrelationTracking.Tracing.WCF
 
         object IDispatchMessageInspector.AfterReceiveRequest(ref Message request, IClientChannel channel, InstanceContext instanceContext)
         {
-            Log.Info(@"AfterReceiveRequest: " + request);
+            Log.Debug(@"AfterReceiveRequest: " + request);
             return null;
         }
 
         void IDispatchMessageInspector.BeforeSendReply(ref Message reply, object correlationState)
         {
-            Log.Info(@"BeforeSendReply: " + reply);
+            Log.Debug(@"BeforeSendReply: " + reply);
         }
 
         bool IErrorHandler.HandleError(Exception error)
