@@ -182,9 +182,6 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Correlation.Core\Correlation.Core.csproj">
       <Project>{ddf69c1c-ecc1-46a5-b0b5-657b0dbba330}</Project>
       <Name>Correlation.Core</Name>
@@ -218,6 +215,9 @@
     <Content Include="log4net.config">
       <SubType>Designer</SubType>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
