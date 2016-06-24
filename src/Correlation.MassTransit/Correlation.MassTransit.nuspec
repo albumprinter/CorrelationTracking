@@ -1,0 +1,17 @@
+﻿<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>$title$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <description>$title$</description>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <tags>CorrelationTracking</tags>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <dependencies>
+      <dependency id="Albumprinter.CorrelationTracking.Correlation.Core" version="$version$" />
+      <dependency id="MassTransit" version="3.3.5" />
+    </dependencies>
+  </metadata>
+</package>

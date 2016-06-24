@@ -1,0 +1,16 @@
+﻿<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>$title$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <description>$title$</description>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <tags>CorrelationTracking</tags>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <dependencies>
+      <dependency id="log4net" version="2.0.5" />
+    </dependencies>
+  </metadata>
+</package>
