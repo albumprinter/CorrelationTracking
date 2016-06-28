@@ -49,9 +49,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Correlation.IIS.nuspec">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <None Include="Correlation.IIS.nuspec" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
