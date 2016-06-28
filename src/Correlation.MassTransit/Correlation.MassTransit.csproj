@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Correlation.MassTransit.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

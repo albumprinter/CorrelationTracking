@@ -1,0 +1,17 @@
+﻿<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <description>$title$</description>
+    <tags>CorrelationTracking</tags>
+    <projectUrl>https://github.com/albumprinter/CorrelationTracking</projectUrl>
+    <owners>$author$</owners>
+    <authors>$author$</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <dependencies>
+      <dependency id="Albumprinter.CorrelationTracking.Correlation.Core" version="$version$" />
+    </dependencies>
+  </metadata>
+</package>
