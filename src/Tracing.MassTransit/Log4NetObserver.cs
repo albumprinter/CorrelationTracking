@@ -12,11 +12,16 @@ namespace Albumprinter.CorrelationTracking.Tracing.MassTransit
     {
         private static readonly Task Done = Task.FromResult(true);
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
+        {
+            TypeNameHandling = TypeNameHandling.Objects
+        };
         public static readonly Log4NetObserver Instance = new Log4NetObserver();
 
         public Task PrePublish<T>(PublishContext<T> context) where T : class
         {
-            Log.Debug(@"PrePublish: " + JsonConvert.SerializeObject(context.Message));
+            var snapshot = JsonConvert.SerializeObject(context.Message, JsonSerializerSettings);
+            Log.Debug(@"PrePublish: " + snapshot);
             return Done;
         }
 
@@ -27,13 +32,15 @@ namespace Albumprinter.CorrelationTracking.Tracing.MassTransit
 
         public Task PublishFault<T>(PublishContext<T> context, Exception exception) where T : class
         {
-            Log.Error(@"PublishFault: " + JsonConvert.SerializeObject(context.Message), exception);
+            var snapshot = JsonConvert.SerializeObject(context.Message, JsonSerializerSettings);
+            Log.Error(@"PublishFault: " + snapshot, exception);
             return Done;
         }
 
         public Task PreConsume<T>(ConsumeContext<T> context) where T : class
         {
-            Log.Debug(@"PreConsume: " + JsonConvert.SerializeObject(context.Message));
+            var snapshot = JsonConvert.SerializeObject(context.Message, JsonSerializerSettings);
+            Log.Debug(@"PreConsume: " + snapshot);
             return Done;
         }
 
@@ -44,7 +51,8 @@ namespace Albumprinter.CorrelationTracking.Tracing.MassTransit
 
         public Task ConsumeFault<T>(ConsumeContext<T> context, Exception exception) where T : class
         {
-            Log.Error(@"ConsumeFault: " + JsonConvert.SerializeObject(context.Message), exception);
+            var snapshot = JsonConvert.SerializeObject(context.Message, JsonSerializerSettings);
+            Log.Error(@"ConsumeFault: " + snapshot, exception);
             return Done;
         }
     }

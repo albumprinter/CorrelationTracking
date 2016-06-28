@@ -27,13 +27,12 @@ namespace MQClient
                             h.Password("d3vr4bb1t");
                         });
 
-                    sbc.ReceiveEndpoint(host, "FulfillmentTestTracing", ep =>
+                    sbc.ReceiveEndpoint(host, "CorrelationTrackingTest", ep =>
                         {
-                            ep.UseRetry(Retry.Incremental(3, TimeSpan.FromSeconds(2), TimeSpan.Zero));
+                            ep.AutoDelete = true;
                             ep.Handler<TestMessage>(
                                 context =>
                                 {
-                                    //throw new NotSupportedException("TEST_EXCEPTION");
                                     return Console.Out.WriteLineAsync($"Received: {context.Message.Text}");
                                 });
                         });
@@ -41,12 +40,10 @@ namespace MQClient
                     sbc.UseLog4Net();
                 });
 
-            var correlationObserver = new CorrelationObserver();
-            var tracingObserver = new Log4NetObserver();
-            bus.ConnectPublishObserver(correlationObserver);
-            bus.ConnectPublishObserver(tracingObserver);
-            bus.ConnectConsumeObserver(correlationObserver);
-            bus.ConnectConsumeObserver(tracingObserver);
+            bus.ConnectPublishObserver(CorrelationObserver.Instance);
+            bus.ConnectPublishObserver(Log4NetObserver.Instance);
+            bus.ConnectConsumeObserver(CorrelationObserver.Instance);
+            bus.ConnectConsumeObserver(Log4NetObserver.Instance);
             bus.Start();
 
             using (CorrelationManager.Instance.UseScope(Guid.NewGuid()))

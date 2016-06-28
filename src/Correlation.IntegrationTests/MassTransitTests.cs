@@ -56,10 +56,10 @@ namespace Correlation.IntegrationTests
                     // NOTE: FYI sbc.UseLog4Net();
                 });
 
-            bus.ConnectPublishObserver(new CorrelationObserver());
-            bus.ConnectPublishObserver(new Log4NetObserver());
-            bus.ConnectConsumeObserver(new CorrelationObserver());
-            bus.ConnectConsumeObserver(new Log4NetObserver());
+            bus.ConnectPublishObserver(CorrelationObserver.Instance);
+            bus.ConnectPublishObserver(Log4NetObserver.Instance);
+            bus.ConnectConsumeObserver(CorrelationObserver.Instance);
+            bus.ConnectConsumeObserver(Log4NetObserver.Instance);
 
             bus.Start();
 
