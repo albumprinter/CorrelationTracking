@@ -52,15 +52,11 @@ namespace Correlation.IntegrationTests
                                 return Task.FromResult(true);
                             });
                     });
-
                     // NOTE: FYI sbc.UseLog4Net();
                 });
 
-            bus.ConnectPublishObserver(CorrelationObserver.Instance);
-            bus.ConnectPublishObserver(Log4NetObserver.Instance);
-            bus.ConnectConsumeObserver(CorrelationObserver.Instance);
-            bus.ConnectConsumeObserver(Log4NetObserver.Instance);
-
+            bus.UseCorrelationObserver();
+            bus.UseLog4NetObserver();
             bus.Start();
 
             try
