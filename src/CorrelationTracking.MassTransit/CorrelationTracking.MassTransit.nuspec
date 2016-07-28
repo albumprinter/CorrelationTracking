@@ -11,6 +11,7 @@
     <authors>$author$</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <dependencies>
+      <dependency id="Albumprinter.CorrelationTracking" version="$version$" />
       <dependency id="Albumprinter.CorrelationTracking.Correlation.MassTransit" version="$version$" />
       <dependency id="Albumprinter.CorrelationTracking.Tracing.MassTransit" version="$version$" />
     </dependencies>
