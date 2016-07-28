@@ -1,2 +1,4 @@
-# RnD-CorrelationTracking
-Proof of concept for business flow tracking with correlation ids
+# CorrelationTracking
+Used for tracking business transactions with correlation ids
+
+see the [Wiki](https://github.com/albumprinter/CorrelationTracking/wiki) for more info
