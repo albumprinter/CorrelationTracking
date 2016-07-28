@@ -27,6 +27,8 @@ namespace Albumprinter.CorrelationTracking.Tracing.MassTransit
 
         public Task PostPublish<T>(PublishContext<T> context) where T : class
         {
+            var snapshot = JsonConvert.SerializeObject(context.Message, JsonSerializerSettings);
+            Log.Debug(@"PostPublish: " + snapshot);
             return Done;
         }
 
@@ -46,6 +48,8 @@ namespace Albumprinter.CorrelationTracking.Tracing.MassTransit
 
         public Task PostConsume<T>(ConsumeContext<T> context) where T : class
         {
+            var snapshot = JsonConvert.SerializeObject(context.Message, JsonSerializerSettings);
+            Log.Debug(@"PostConsume: " + snapshot);
             return Done;
         }
 

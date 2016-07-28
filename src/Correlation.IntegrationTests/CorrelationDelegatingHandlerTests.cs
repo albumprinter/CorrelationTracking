@@ -3,22 +3,21 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Albumprinter.CorrelationTracking.Correlation.Core;
-using Albumprinter.CorrelationTracking.Correlation.Http;
-using Albumprinter.CorrelationTracking.Tracing.Http;
+using Albumprinter.CorrelationTracking.Http;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace Correlation.IntegrationTests
 {
-    public class CorrelationDelegatingHandlerTests : Log4NetTest
+    public sealed class HttpClientTests : Log4NetTest
     {
-        public CorrelationDelegatingHandlerTests(ITestOutputHelper output) : base(output)
+        public HttpClientTests(ITestOutputHelper output) : base(output)
         {
-            Client = HttpClientFactory.Create(new CorrelationDelegatingHandler(), new Log4NetDelegatingHandler(true));
+            Client = new HttpClient().UseCorrelationTracking();
             Client.BaseAddress = new Uri("http://localhost:60695/", UriKind.Absolute);
         }
 
-        public HttpClient Client { get; set; }
+        public HttpClient Client { get; }
 
         [Fact, Trait("Category", "Integration")]
         public async Task Should_propagate_the_correlation_id_to_Mvc()

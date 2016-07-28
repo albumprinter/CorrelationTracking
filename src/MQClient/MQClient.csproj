@@ -91,6 +91,10 @@
       <Project>{5d390661-0d88-477c-b145-172ce1bb2d2e}</Project>
       <Name>Correlation.MassTransit</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CorrelationTracking.MassTransit\CorrelationTracking.MassTransit.csproj">
+      <Project>{9f3af3ab-eb3b-400b-b02f-6d7172f63a1b}</Project>
+      <Name>CorrelationTracking.MassTransit</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CorrelationTracking\CorrelationTracking.csproj">
       <Project>{e38f2832-573a-4da1-8856-82dcc3f0f6fd}</Project>
       <Name>CorrelationTracking</Name>

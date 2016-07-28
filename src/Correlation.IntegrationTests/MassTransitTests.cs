@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Albumprinter.CorrelationTracking;
 using Albumprinter.CorrelationTracking.Correlation.Core;
-using Albumprinter.CorrelationTracking.Correlation.MassTransit;
-using Albumprinter.CorrelationTracking.Tracing.MassTransit;
+using Albumprinter.CorrelationTracking.MassTransit;
 using MassTransit;
 using Xunit;
 using Xunit.Abstractions;
@@ -52,16 +50,10 @@ namespace Correlation.IntegrationTests
                                 return Task.FromResult(true);
                             });
                     });
-
                     // NOTE: FYI sbc.UseLog4Net();
                 });
 
-            bus.ConnectPublishObserver(CorrelationObserver.Instance);
-            bus.ConnectPublishObserver(Log4NetObserver.Instance);
-            bus.ConnectConsumeObserver(CorrelationObserver.Instance);
-            bus.ConnectConsumeObserver(Log4NetObserver.Instance);
-
-            bus.Start();
+            bus.UseCorrelationTracking().Start();
 
             try
             {
@@ -81,7 +73,7 @@ namespace Correlation.IntegrationTests
             }
         }
 
-        public class TestMessage
+        public sealed class TestMessage
         {
             public string Text { get; set; }
         }

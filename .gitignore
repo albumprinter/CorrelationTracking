@@ -113,6 +113,8 @@ _TeamCity*
 _NCrunch_*
 .*crunch*.local.xml
 nCrunchTemp_*
+*.v2.ncrunchproject
+*.v2.ncrunchsolution
 
 # MightyMoose
 *.mm.*

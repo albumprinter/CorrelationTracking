@@ -15,7 +15,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.Http
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public Log4NetDelegatingHandler(bool logAll)
+        public Log4NetDelegatingHandler(bool logAll = true)
         {
             LogRequest = LogRequestContent = LogResponse = LogResponseContent = logAll;
             AllowedHeaders = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
