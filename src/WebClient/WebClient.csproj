@@ -70,6 +70,10 @@
       <Project>{064c8dda-15d0-40fb-b27d-3ff309aba1a4}</Project>
       <Name>Correlation.Log4net</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CorrelationTracking.Http\CorrelationTracking.Http.csproj">
+      <Project>{685c5ef6-4966-4358-814b-ee518452b1d6}</Project>
+      <Name>CorrelationTracking.Http</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CorrelationTracking\CorrelationTracking.csproj">
       <Project>{e38f2832-573a-4da1-8856-82dcc3f0f6fd}</Project>
       <Name>CorrelationTracking</Name>

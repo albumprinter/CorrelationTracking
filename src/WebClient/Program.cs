@@ -3,8 +3,7 @@ using System.Net.Http;
 using System.Reflection;
 using Albumprinter.CorrelationTracking;
 using Albumprinter.CorrelationTracking.Correlation.Core;
-using Albumprinter.CorrelationTracking.Correlation.Http;
-using Albumprinter.CorrelationTracking.Tracing.Http;
+using Albumprinter.CorrelationTracking.Http;
 using log4net;
 using log4net.Config;
 
@@ -29,7 +28,7 @@ namespace WebClient
                 Log.Info("correlationId: " + CorrelationScope.Current.CorrelationId);
                 Log.Info("start job");
 
-                var client = HttpClientFactory.Create(new CorrelationDelegatingHandler(), new Log4NetDelegatingHandler(true));
+                var client = new HttpClient().UseCorrelationTracking();
                 client.BaseAddress = new Uri("http://localhost:60695/", UriKind.Absolute);
                 client.SendAsync(new HttpRequestMessage(HttpMethod.Get, @"/api/correlation")).GetAwaiter().GetResult();
 
@@ -41,12 +40,13 @@ namespace WebClient
                 Log.Info("correlationId: " + CorrelationScope.Current.CorrelationId);
                 Log.Info("start job");
 
-                var client = HttpClientFactory.Create(new CorrelationDelegatingHandler(), new Log4NetDelegatingHandler(true));
+                var client = new HttpClient().UseCorrelationTracking();
                 client.BaseAddress = new Uri("http://localhost:60695/", UriKind.Absolute);
                 client.SendAsync(new HttpRequestMessage(HttpMethod.Get, @"/api/correlation")).GetAwaiter().GetResult();
 
                 Log.Info("end job");
             }
+
             Console.WriteLine(@"Press any key to exit...");
             Console.ReadKey(true);
         }

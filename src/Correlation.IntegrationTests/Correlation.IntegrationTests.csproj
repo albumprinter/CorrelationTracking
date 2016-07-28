@@ -137,6 +137,14 @@
       <Project>{56649180-dba9-452e-8ae6-2a3fb430e5cb}</Project>
       <Name>Correlation.WCF</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CorrelationTracking.Http\CorrelationTracking.Http.csproj">
+      <Project>{685C5EF6-4966-4358-814B-EE518452B1D6}</Project>
+      <Name>CorrelationTracking.Http</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CorrelationTracking.MassTransit\CorrelationTracking.MassTransit.csproj">
+      <Project>{9f3af3ab-eb3b-400b-b02f-6d7172f63a1b}</Project>
+      <Name>CorrelationTracking.MassTransit</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CorrelationTracking\CorrelationTracking.csproj">
       <Project>{e38f2832-573a-4da1-8856-82dcc3f0f6fd}</Project>
       <Name>CorrelationTracking</Name>

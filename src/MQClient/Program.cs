@@ -1,8 +1,7 @@
 ﻿using System;
 using Albumprinter.CorrelationTracking;
 using Albumprinter.CorrelationTracking.Correlation.Core;
-using Albumprinter.CorrelationTracking.Correlation.MassTransit;
-using Albumprinter.CorrelationTracking.Tracing.MassTransit;
+using Albumprinter.CorrelationTracking.MassTransit;
 using log4net.Config;
 using MassTransit;
 using MassTransit.Log4NetIntegration;
@@ -40,8 +39,7 @@ namespace MQClient
                     sbc.UseLog4Net();
                 });
 
-            bus.UseCorrelationObserver();
-            bus.UseLog4NetObserver();
+            bus.UseCorrelationTracking();
             bus.Start();
 
             using (CorrelationManager.Instance.UseScope(Guid.NewGuid()))
