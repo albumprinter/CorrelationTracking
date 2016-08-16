@@ -32,10 +32,12 @@ namespace Albumprinter.CorrelationTracking.Tracing.IIS
             var context = application.Context;
             var request = context.Request;
 
-            if (configuration.AllowedUrls.IsMatch(request.Url.OriginalString))
+            var requestUrl = request.Url.OriginalString;
+            if ( configuration.AllowedUrls.IsMatch(requestUrl) &&
+                !configuration.DeniedUrls.IsMatch(requestUrl))
             {
                 var state = TrackingHttpModuleState.AttachTo(context, configuration);
-                var message = $"{request.HttpMethod} {request.Url.OriginalString}{Environment.NewLine}{state.GetInputHeaders()}{Environment.NewLine}{state.GetInputContent()}";
+                var message = $"{request.HttpMethod} {requestUrl}{Environment.NewLine}{state.GetInputHeaders()}{Environment.NewLine}{state.GetInputContent()}";
                 Log.Debug(message);
             }
         }
