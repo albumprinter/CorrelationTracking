@@ -24,7 +24,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.IIS
             deniedUrls = string.IsNullOrWhiteSpace(deniedUrls) ? null : deniedUrls;
 
             // NOTE: extend with defaults
-            allowedUrls = allowedUrls ?? @"/api/|(\.asmx|\.svc)(\?|$)";
+            allowedUrls = allowedUrls ?? @"/(api|v\d+)/|\.(asmx|svc)(\?|$)";
             allowedHeaders = allowedHeaders ?? Enumerable.Empty<string>();
             deniedUrls = deniedUrls ?? @"^[^:]+$";
 

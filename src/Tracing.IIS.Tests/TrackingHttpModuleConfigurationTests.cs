@@ -16,7 +16,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.IIS.Tests
             var actual = TrackingHttpModuleConfiguration.FromConfig(moduleName);
 
             // assert
-            Assert.Equal(@"/api/|(\.asmx|\.svc)(\?|$)", actual.AllowedUrls.ToString());
+            Assert.Equal(@"/(api|v\d+)/|\.(asmx|svc)(\?|$)", actual.AllowedUrls.ToString());
             Assert.Contains("Accept", actual.AllowedHeaders);
             Assert.Contains("Content-Type", actual.AllowedHeaders);
             Assert.Equal(@"^[^:]+$", actual.DeniedUrls.ToString());
