@@ -10,9 +10,15 @@ namespace Albumprinter.CorrelationTracking.Tracing.IIS
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly TrackingHttpModuleConfiguration configuration;
 
-        public Log4NetHttpModule()
+        public Log4NetHttpModule() : this(TrackingHttpModuleConfiguration.FromConfig("Log4NetHttpModule"))
         {
-            configuration = TrackingHttpModuleConfiguration.FromConfig("Log4NetHttpModule");
+        }
+
+        internal Log4NetHttpModule(TrackingHttpModuleConfiguration configuration)
+        {
+            if (configuration == null)
+                throw new ArgumentNullException(nameof(configuration));
+            this.configuration = configuration;
         }
 
         public void Init(HttpApplication application)
@@ -29,23 +35,38 @@ namespace Albumprinter.CorrelationTracking.Tracing.IIS
         private void Application_BeginRequest(object sender, EventArgs args)
         {
             var application = (HttpApplication) sender;
-            var context = application.Context;
-            var request = context.Request;
 
-            var requestUrl = request.Url.OriginalString;
-            if ( configuration.AllowedUrls.IsMatch(requestUrl) &&
-                !configuration.DeniedUrls.IsMatch(requestUrl))
-            {
-                var state = TrackingHttpModuleState.AttachTo(context, configuration);
-                var message = $"{request.HttpMethod} {requestUrl}{Environment.NewLine}{state.GetInputHeaders()}{Environment.NewLine}{state.GetInputContent()}";
-                Log.Debug(message);
-            }
+            OnBeginRequest(new HttpContextWrapper(application.Context));
         }
 
         private void Application_EndRequest(object sender, EventArgs args)
         {
             var application = (HttpApplication) sender;
-            var context = application.Context;
+
+            OnEndRequest(new HttpContextWrapper(application.Context));
+        }
+
+        private void Application_Error(object sender, EventArgs args)
+        {
+            var application = (HttpApplication) sender;
+
+            OnError(new HttpContextWrapper(application.Context));
+        }
+
+        public void OnBeginRequest(HttpContextBase context)
+        {
+            var request = context.Request;
+
+            if (TrackingHttpModuleState.IsTrackable(context, configuration))
+            {
+                var state = TrackingHttpModuleState.AttachTo(context, configuration);
+                var message = $"{request.HttpMethod} {request.Url.OriginalString}{Environment.NewLine}{state.GetInputHeaders()}{Environment.NewLine}{state.GetInputContent()}";
+                Log.Debug(message);
+            }
+        }
+
+        public void OnEndRequest(HttpContextBase context)
+        {
             var request = context.Request;
             var response = context.Response;
 
@@ -57,10 +78,8 @@ namespace Albumprinter.CorrelationTracking.Tracing.IIS
             }
         }
 
-        private void Application_Error(object sender, EventArgs args)
+        public void OnError(HttpContextBase context)
         {
-            var application = (HttpApplication) sender;
-            var context = application.Context;
             var request = context.Request;
             var response = context.Response;
 

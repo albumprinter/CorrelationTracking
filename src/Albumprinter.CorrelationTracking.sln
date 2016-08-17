@@ -58,6 +58,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorrelationTracking.Http.Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorrelationTracking.IIS", "CorrelationTracking.IIS\CorrelationTracking.IIS.csproj", "{BC44700A-9EF9-499C-B004-46121AE28BAA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tracing.IIS.Tests", "Tracing.IIS.Tests\Tracing.IIS.Tests.csproj", "{E169E116-E8AA-44E6-88AD-310A9C488D80}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -148,6 +150,10 @@ Global
 		{BC44700A-9EF9-499C-B004-46121AE28BAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC44700A-9EF9-499C-B004-46121AE28BAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC44700A-9EF9-499C-B004-46121AE28BAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E169E116-E8AA-44E6-88AD-310A9C488D80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E169E116-E8AA-44E6-88AD-310A9C488D80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E169E116-E8AA-44E6-88AD-310A9C488D80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E169E116-E8AA-44E6-88AD-310A9C488D80}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -160,5 +166,6 @@ Global
 		{5377C081-8A3D-4C3B-AD76-CC5CC6425E37} = {19464445-805F-40C8-9AA9-BEEADECD1F2D}
 		{029EDD43-987C-4C6C-ABA7-0B8AB48722DF} = {169A40CA-05B5-40E3-A0B8-688BF2350962}
 		{C451BE76-AF43-4EFC-9421-659D3F34FF85} = {169A40CA-05B5-40E3-A0B8-688BF2350962}
+		{E169E116-E8AA-44E6-88AD-310A9C488D80} = {169A40CA-05B5-40E3-A0B8-688BF2350962}
 	EndGlobalSection
 EndGlobal
