@@ -34,9 +34,10 @@ namespace Albumprinter.CorrelationTracking.Tracing.IIS
         public Stream OutputStream { get; }
         public Stopwatch Stopwatch { get; }
 
-        public static TrackingHttpModuleState AttachTo(HttpContext context, TrackingHttpModuleConfiguration configuration)
+        public static bool IsTrackable(HttpContextBase context,  TrackingHttpModuleConfiguration configuration)
         {
-            return AttachTo(new HttpContextWrapper(context), configuration);
+            var requestUrl = context.Request.Url?.OriginalString;
+            return configuration.AllowedUrls.IsMatch(requestUrl) && !configuration.DeniedUrls.IsMatch(requestUrl);
         }
 
         public static TrackingHttpModuleState AttachTo(HttpContextBase context, TrackingHttpModuleConfiguration configuration)
@@ -44,11 +45,6 @@ namespace Albumprinter.CorrelationTracking.Tracing.IIS
             var state = new TrackingHttpModuleState(context, configuration);
             context.Items[typeof(TrackingHttpModuleState).FullName] = state;
             return state;
-        }
-
-        public static TrackingHttpModuleState DetachFrom(HttpContext context)
-        {
-            return DetachFrom(new HttpContextWrapper(context));
         }
 
         public static TrackingHttpModuleState DetachFrom(HttpContextBase context)
