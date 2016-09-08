@@ -3,16 +3,10 @@ using System.ServiceModel.Configuration;
 
 namespace Albumprinter.CorrelationTracking.Correlation.WCF
 {
-    public sealed class ServiceCorrelationBehaviorExtension : BehaviorExtensionElement
+    public sealed class CorrelationServiceBehaviorExtension : BehaviorExtensionElement
     {
-        public override Type BehaviorType
-        {
-            get { return typeof(CorrelationServiceBehavior); }
-        }
+        public override Type BehaviorType => typeof(CorrelationServiceBehavior);
 
-        protected override object CreateBehavior()
-        {
-            return new CorrelationServiceBehavior();
-        }
+        protected override object CreateBehavior() => new CorrelationServiceBehavior();
     }
 }

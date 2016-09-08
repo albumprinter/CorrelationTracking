@@ -45,6 +45,7 @@
     </Compile>
     <Compile Include="ClientMessageInspectorBehavior.cs" />
     <Compile Include="CorrelationClientBehavior.cs" />
+    <Compile Include="CorrelationClientBehaviorExtension.cs" />
     <Compile Include="CorrelationServiceBehavior.cs" />
     <Compile Include="CorrelationServiceBehaviorExtension.cs" />
     <Compile Include="MessageInspectorClientBehavior.cs" />
