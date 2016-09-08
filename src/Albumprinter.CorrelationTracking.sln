@@ -18,6 +18,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correlation.Log4net", "Correlation.Log4net\Correlation.Log4net.csproj", "{064C8DDA-15D0-40FB-B27D-3FF309ABA1A4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebClient", "WebClient\WebClient.csproj", "{D5ACDF1A-FC3B-41AE-8259-A78338E87411}"
+	ProjectSection(ProjectDependencies) = postProject
+		{ED712D31-A542-4850-AD4E-50EC00D50CC2} = {ED712D31-A542-4850-AD4E-50EC00D50CC2}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correlation.Http", "Correlation.Http\Correlation.Http.csproj", "{0F6FA333-AE48-4448-AF0D-5E9DFC3418D2}"
 EndProject
@@ -59,6 +62,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorrelationTracking.IIS", "CorrelationTracking.IIS\CorrelationTracking.IIS.csproj", "{BC44700A-9EF9-499C-B004-46121AE28BAA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tracing.IIS.Tests", "Tracing.IIS.Tests\Tracing.IIS.Tests.csproj", "{E169E116-E8AA-44E6-88AD-310A9C488D80}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correlation.Asmx", "Correlation.Asmx\Correlation.Asmx.csproj", "{F12DCA3D-84C7-4C7A-8D3F-80BFD314382D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tracing.Asmx", "Tracing.Asmx\Tracing.Asmx.csproj", "{2AE91CF7-D286-49BA-BBB4-EEB05BBC7B9B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -154,6 +161,14 @@ Global
 		{E169E116-E8AA-44E6-88AD-310A9C488D80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E169E116-E8AA-44E6-88AD-310A9C488D80}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E169E116-E8AA-44E6-88AD-310A9C488D80}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F12DCA3D-84C7-4C7A-8D3F-80BFD314382D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F12DCA3D-84C7-4C7A-8D3F-80BFD314382D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F12DCA3D-84C7-4C7A-8D3F-80BFD314382D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F12DCA3D-84C7-4C7A-8D3F-80BFD314382D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AE91CF7-D286-49BA-BBB4-EEB05BBC7B9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AE91CF7-D286-49BA-BBB4-EEB05BBC7B9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AE91CF7-D286-49BA-BBB4-EEB05BBC7B9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AE91CF7-D286-49BA-BBB4-EEB05BBC7B9B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
