@@ -45,9 +45,10 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Log4NetClientBehavior.cs" />
+    <Compile Include="Log4NetClientBehaviorExtension.cs" />
     <Compile Include="Log4NetServiceBehavior.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServiceLog4NetBehaviorExtension.cs" />
+    <Compile Include="Log4NetServiceBehaviorExtension.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

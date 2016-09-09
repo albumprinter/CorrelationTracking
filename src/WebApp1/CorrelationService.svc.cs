@@ -3,13 +3,11 @@ using System.Reflection;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
 using Albumprinter.CorrelationTracking.Correlation.Core;
-using Albumprinter.CorrelationTracking.Correlation.WCF;
-using Albumprinter.CorrelationTracking.Tracing.WCF;
 using log4net;
 
 namespace WebApp1
 {
-    [ServiceBehavior/*, CorrelationServiceBehavior, Log4NetServiceBehavior*/]
+    [ServiceBehavior /*, CorrelationServiceBehavior, Log4NetServiceBehavior*/]
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     public sealed class CorrelationService : ICorrelationService
     {
@@ -30,7 +28,7 @@ namespace WebApp1
 
         public void ThrowError()
         {
-            throw new NotSupportedException("TEST_ERROR!");
+            throw new NotSupportedException("WCF: TEST_ERROR!");
         }
     }
 }

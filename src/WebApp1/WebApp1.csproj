@@ -120,6 +120,7 @@
       <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
       <Private>True</Private>
@@ -153,6 +154,10 @@
     <Compile Include="CorrelationService.svc.cs">
       <DependentUpon>CorrelationService.svc</DependentUpon>
     </Compile>
+    <Compile Include="CorrelationWebService.asmx.cs">
+      <DependentUpon>CorrelationWebService.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -162,6 +167,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="CorrelationService.svc" />
+    <Content Include="CorrelationWebService.asmx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="log4net.Ext.Json.LICENSE.txt" />
@@ -182,6 +188,10 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Correlation.Asmx\Correlation.Asmx.csproj">
+      <Project>{f12dca3d-84c7-4c7a-8d3f-80bfd314382d}</Project>
+      <Name>Correlation.Asmx</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Correlation.Core\Correlation.Core.csproj">
       <Project>{ddf69c1c-ecc1-46a5-b0b5-657b0dbba330}</Project>
       <Name>Correlation.Core</Name>
@@ -201,6 +211,10 @@
     <ProjectReference Include="..\CorrelationTracking\CorrelationTracking.csproj">
       <Project>{e38f2832-573a-4da1-8856-82dcc3f0f6fd}</Project>
       <Name>CorrelationTracking</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tracing.Asmx\Tracing.Asmx.csproj">
+      <Project>{2ae91cf7-d286-49ba-bbb4-eeb05bbc7b9b}</Project>
+      <Name>Tracing.Asmx</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tracing.IIS\Tracing.IIS.csproj">
       <Project>{df540fb4-fa20-41e2-b1a4-5721d3fc04ce}</Project>

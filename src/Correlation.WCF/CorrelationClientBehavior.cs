@@ -8,6 +8,19 @@ namespace Albumprinter.CorrelationTracking.Correlation.WCF
 {
     public sealed class CorrelationClientBehavior : IEndpointBehavior, IClientMessageInspector
     {
+        public bool AddWcfHeader { get; set; }
+        public bool AddHttpHeader { get; set; }
+
+        public CorrelationClientBehavior() : this(true, true)
+        {
+        }
+
+        public CorrelationClientBehavior(bool addWcfHeader, bool addHttpHeader)
+        {
+            AddWcfHeader = addWcfHeader;
+            AddHttpHeader = addHttpHeader;
+        }
+
         void IEndpointBehavior.AddBindingParameters(
             ServiceEndpoint endpoint,
             BindingParameterCollection bindingParameters)
@@ -29,8 +42,32 @@ namespace Albumprinter.CorrelationTracking.Correlation.WCF
 
         object IClientMessageInspector.BeforeSendRequest(ref Message request, IClientChannel channel)
         {
-            var header = MessageHeader.CreateHeader(CorrelationKeys.CorrelationId, CorrelationKeys.Namespace, CorrelationScope.Current.CorrelationId);
-            request.Headers.Add(header);
+            if (AddWcfHeader)
+            {
+                var header = MessageHeader.CreateHeader(CorrelationKeys.CorrelationId, CorrelationKeys.Namespace, CorrelationScope.Current.CorrelationId);
+                request.Headers.Add(header);
+            }
+
+            if (AddHttpHeader)
+            {
+                // Add HTTP header
+                HttpRequestMessageProperty httpRequestMessage;
+                object httpRequestMessageObject;
+                if (request.Properties.TryGetValue(HttpRequestMessageProperty.Name, out httpRequestMessageObject))
+                {
+                    httpRequestMessage = (HttpRequestMessageProperty) httpRequestMessageObject;
+                }
+                else
+                {
+                    httpRequestMessage = new HttpRequestMessageProperty();
+                    request.Properties.Add(HttpRequestMessageProperty.Name, httpRequestMessage);
+                }
+                if (string.IsNullOrEmpty(httpRequestMessage.Headers[CorrelationKeys.CorrelationId]))
+                {
+                    httpRequestMessage.Headers[CorrelationKeys.CorrelationId] = CorrelationScope.Current.CorrelationId.ToString();
+                }
+            }
+
             return null;
         }
 

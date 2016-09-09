@@ -104,6 +104,11 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="ActionAppender.cs" />
+    <Compile Include="Service References\CorrelationWebServices\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -115,6 +120,7 @@
     <None Include="Service References\CorrelationServices\CorrelationService1.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\CorrelationWebServices\CorrelationWebService.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Correlation.Core\Correlation.Core.csproj">
@@ -167,6 +173,7 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\CorrelationServices\" />
+    <WCFMetadataStorage Include="Service References\CorrelationWebServices\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\CorrelationServices\CorrelationService.disco" />
@@ -179,6 +186,21 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\CorrelationServices\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\CorrelationWebServices\CorrelationWebService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\CorrelationWebServices\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\CorrelationWebServices\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\CorrelationWebServices\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
