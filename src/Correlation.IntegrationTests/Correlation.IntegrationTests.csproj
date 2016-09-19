@@ -30,6 +30,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AWSSDK.Core, Version=3.1.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
+      <HintPath>..\packages\AWSSDK.Core.3.1.9.0\lib\net45\AWSSDK.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AWSSDK.SQS, Version=3.1.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
+      <HintPath>..\packages\AWSSDK.SQS.3.1.0.12\lib\net45\AWSSDK.SQS.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
@@ -93,6 +101,7 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AmazonSqsTests.cs" />
     <Compile Include="CorrelationClientBehaviorTests.cs" />
     <Compile Include="CorrelationDelegatingHandlerTests.cs" />
     <Compile Include="Log4NetTest.cs" />
@@ -123,6 +132,10 @@
     <None Include="Service References\CorrelationWebServices\CorrelationWebService.wsdl" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Correlation.AmazonSqs\Correlation.AmazonSqs.csproj">
+      <Project>{095EA02D-2DA9-4DEC-BE88-EF8BB0F74DC5}</Project>
+      <Name>Correlation.AmazonSqs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Correlation.Core\Correlation.Core.csproj">
       <Project>{ddf69c1c-ecc1-46a5-b0b5-657b0dbba330}</Project>
       <Name>Correlation.Core</Name>
@@ -143,6 +156,10 @@
       <Project>{56649180-dba9-452e-8ae6-2a3fb430e5cb}</Project>
       <Name>Correlation.WCF</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CorrelationTracking.AmazonSqs\CorrelationTracking.AmazonSqs.csproj">
+      <Project>{F9F4BE37-10BE-42C1-87FA-AD573807739C}</Project>
+      <Name>CorrelationTracking.AmazonSqs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CorrelationTracking.Http\CorrelationTracking.Http.csproj">
       <Project>{685C5EF6-4966-4358-814B-EE518452B1D6}</Project>
       <Name>CorrelationTracking.Http</Name>
@@ -154,6 +171,10 @@
     <ProjectReference Include="..\CorrelationTracking\CorrelationTracking.csproj">
       <Project>{e38f2832-573a-4da1-8856-82dcc3f0f6fd}</Project>
       <Name>CorrelationTracking</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tracing.AmazonSqs\Tracing.AmazonSqs.csproj">
+      <Project>{D82E6AA6-E45C-4133-8331-0406D45F9819}</Project>
+      <Name>Tracing.AmazonSqs</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tracing.Http\Tracing.Http.csproj">
       <Project>{5bda796a-c6bc-4a0d-9746-56703d448b3b}</Project>
@@ -204,6 +225,9 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\AWSSDK.SQS.3.1.0.12\analyzers\dotnet\cs\AWSSDK.SQS.CodeAnalysis.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
