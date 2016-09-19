@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Tracing.AmazonSqs.nuspec" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\AWSSDK.SQS.3.1.0.12\analyzers\dotnet\cs\AWSSDK.SQS.CodeAnalysis.dll" />

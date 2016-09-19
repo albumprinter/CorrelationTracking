@@ -65,6 +65,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="CorrelationTracking.AmazonSqs.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
