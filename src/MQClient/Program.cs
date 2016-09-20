@@ -23,7 +23,7 @@ namespace MQClient
             XmlConfigurator.Configure();
             CorrelationTrackingConfiguration.Initialize();
 
-            //TriggerRabbitMq();
+            TriggerRabbitMq();
             TriggerAmazonSqs();
         }
 
@@ -91,8 +91,11 @@ namespace MQClient
             var receiveResponse = client.ReceiveMessage(queueUrl);
             foreach (var message in receiveResponse.Messages)
             {
-                message.SetCorrelationScopeAndLog();
-                client.DeleteMessage(queueUrl, message.ReceiptHandle);
+                using (message.SetCorrelationScopeAndLog())
+                {
+                    // process the message here
+                    client.DeleteMessage(queueUrl, message.ReceiptHandle);
+                }
             }
         }
     }

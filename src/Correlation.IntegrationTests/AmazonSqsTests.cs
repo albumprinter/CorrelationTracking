@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using Albumprinter.CorrelationTracking.AmazonSqs;
 using Albumprinter.CorrelationTracking.Correlation.AmazonSqs;
 using Albumprinter.CorrelationTracking.Correlation.Core;
@@ -142,108 +141,9 @@ namespace Correlation.IntegrationTests
             }
         }
 
-        private static void TestReceiveMessageWithOtherAttributes(IAmazonSQS client, string queueURL, Guid expectedCorrelationId)
-        {
-            var receiveResponse = client.ReceiveMessage(new ReceiveMessageRequest {QueueUrl = queueURL, MessageAttributeNames = new List<string> {"All"}});
-            var messages = receiveResponse.Messages;
-            foreach (var message in messages)
-            {
-                ValidateMD5(message.Body, message.MD5OfBody);
-                Assert.Equal(expectedCorrelationId, message.ExtractCorrelationId());
-                foreach (var messageAttributeValue in messageAttributes)
-                {
-                    Assert.True(message.MessageAttributes.ContainsKey(messageAttributeValue.Key));
-                    Assert.Equal(messageAttributeValue.Value.StringValue, message.MessageAttributes[messageAttributeValue.Key].StringValue);
-                }
-                client.DeleteMessage(new DeleteMessageRequest {QueueUrl = queueURL, ReceiptHandle = message.ReceiptHandle});
-            }
-        }
-
         private static void ValidateMD5(string message, string md5)
         {
             ValidationResponseHandler.ValidateMD5(message, md5);
-        }
-
-        //public bool QueueExists(string queueName)
-        //{
-        //    string queueUrl;
-        //    return this.TryGetQueueUrl(queueName, out queueUrl);
-        //}
-
-        //private bool TryGetQueueUrl(string queueName, out string queueUrl)
-        //{
-        //    this.client.ListQueues(new ListQueuesRequest()
-        //    {
-        //        QueueNamePrefix = queueName
-        //    });
-        //}
-
-
-        [Fact, Trait("Category", "Integration")]
-        public async Task Should_propagate_the_correlation_id_to_AmazonSqs_consumer()
-        {
-            //client = GetConfiguredAmazonSqs(this.settings);
-
-
-            // arrange
-            //var expect = Guid.NewGuid();
-
-            //var tsc = new TaskCompletionSource<bool>();
-            //var bus = Bus.Factory.CreateUsingRabbitMq(
-            //    sbc =>
-            //    {
-            //        var host = sbc.Host(
-            //            new Uri("rabbitmq://devrabbit.dtap.dcinfra.it/vhost"),
-            //            h =>
-            //            {
-            //                h.Username("D_DEV_Rabbit");
-            //                h.Password("d3vr4bb1t");
-            //            });
-
-            //        sbc.ReceiveEndpoint(host, @"CorrelationTrackingTest" + Guid.NewGuid().ToString("N"), ep =>
-            //        {
-            //            ep.AutoDelete = true;
-            //            ep.Handler<TestMessage>(
-            //                context =>
-            //                {
-            //                    try
-            //                    {
-            //                        Assert.Equal(expect, context.Headers.Get(CorrelationKeys.CorrelationId, (Guid?)Guid.Empty));
-            //                        tsc.SetResult(true);
-            //                    }
-            //                    catch (Exception ex)
-            //                    {
-            //                        tsc.SetException(ex);
-            //                    }
-            //                    return Task.FromResult(true);
-            //                });
-            //        });
-            //        // NOTE: FYI sbc.UseLog4Net();
-            //    });
-
-            //bus.UseCorrelationTracking().Start();
-
-            //try
-            //{
-            //    using (CorrelationManager.Instance.UseScope(expect))
-            //    {
-            //        await bus.Publish(new TestMessage { Text = "Hi" }).ConfigureAwait(false);
-            //    }
-
-            //    await tsc.Task.ConfigureAwait(false);
-            //}
-            //finally
-            //{
-            //    // NOTE: wait untill the consumer will send the ank request to rabbitmq
-            //    await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(false);
-
-            //    bus.Stop();
-            //}
-        }
-
-        public sealed class TestMessage
-        {
-            public string Text { get; set; }
         }
     }
 }
