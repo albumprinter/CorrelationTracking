@@ -33,6 +33,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AWSSDK.Core">
+      <HintPath>..\packages\AWSSDK.Core.3.1.9.0\lib\net45\AWSSDK.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="AWSSDK.SQS">
+      <HintPath>..\packages\AWSSDK.SQS.3.1.0.12\lib\net45\AWSSDK.SQS.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
@@ -90,6 +96,10 @@
     <ProjectReference Include="..\Correlation.MassTransit\Correlation.MassTransit.csproj">
       <Project>{5d390661-0d88-477c-b145-172ce1bb2d2e}</Project>
       <Name>Correlation.MassTransit</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CorrelationTracking.AmazonSqs\CorrelationTracking.AmazonSqs.csproj">
+      <Project>{F9F4BE37-10BE-42C1-87FA-AD573807739C}</Project>
+      <Name>CorrelationTracking.AmazonSqs</Name>
     </ProjectReference>
     <ProjectReference Include="..\CorrelationTracking.MassTransit\CorrelationTracking.MassTransit.csproj">
       <Project>{9f3af3ab-eb3b-400b-b02f-6d7172f63a1b}</Project>
