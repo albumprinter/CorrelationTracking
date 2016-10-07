@@ -6,7 +6,7 @@ using MassTransit.Pipeline;
 
 namespace Albumprinter.CorrelationTracking.Correlation.MassTransit
 {
-    public sealed class CorrelationObserver : IPublishObserver, IConsumeObserver
+    public sealed class CorrelationObserver : IPublishObserver, ISendObserver, IConsumeObserver
     {
         private static readonly Task Done = Task.FromResult(true);
         public static readonly CorrelationObserver Instance = new CorrelationObserver();
@@ -23,6 +23,22 @@ namespace Albumprinter.CorrelationTracking.Correlation.MassTransit
         }
 
         public Task PublishFault<T>(PublishContext<T> context, Exception exception) where T : class
+        {
+            return Done;
+        }
+
+        public Task PreSend<T>(SendContext<T> context) where T : class
+        {
+            context.Headers.Set(CorrelationKeys.CorrelationId, CorrelationScope.Current.CorrelationId.ToString());
+            return Done;
+        }
+
+        public Task PostSend<T>(SendContext<T> context) where T : class
+        {
+            return Done;
+        }
+
+        public Task SendFault<T>(SendContext<T> context, Exception exception) where T : class
         {
             return Done;
         }
