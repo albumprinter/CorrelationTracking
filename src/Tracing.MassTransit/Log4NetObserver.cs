@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using log4net;
 using MassTransit;
@@ -9,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace Albumprinter.CorrelationTracking.Tracing.MassTransit
 {
-    public sealed class Log4NetObserver : IPublishObserver, ISendObserver, IConsumeObserver
+    public sealed class Log4NetObserver : IPublishObserver, ISendObserver, IReceiveObserver, IConsumeObserver
     {
         private static readonly Task Done = Task.FromResult(true);
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
@@ -35,8 +37,15 @@ namespace Albumprinter.CorrelationTracking.Tracing.MassTransit
         {
             if (LogMessage)
             {
-                var snapshot = JsonConvert.SerializeObject(context.Message, JsonSerializerSettings);
-                Log.Debug(@"PrePublish: " + snapshot);
+                try
+                {
+                    var snapshot = JsonConvert.SerializeObject(context.Message, JsonSerializerSettings);
+                    Log.Debug(@"PrePublish: " + snapshot);
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError(ex.ToString());
+                }
             }
             return Done;
         }
@@ -45,8 +54,15 @@ namespace Albumprinter.CorrelationTracking.Tracing.MassTransit
         {
             if (LogMessage)
             {
-                var snapshot = JsonConvert.SerializeObject(context.Message, JsonSerializerSettings);
-                Log.Debug(@"PostPublish: " + snapshot);
+                try
+                {
+                    var snapshot = GetTransportMessage(context);
+                    Log.Debug(@"PostPublish: " + snapshot);
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError(ex.ToString());
+                }
             }
             return Done;
         }
@@ -55,8 +71,15 @@ namespace Albumprinter.CorrelationTracking.Tracing.MassTransit
         {
             if (LogMessage)
             {
-                var snapshot = JsonConvert.SerializeObject(context.Message, JsonSerializerSettings);
-                Log.Error(@"PublishFault: " + snapshot, exception);
+                try
+                {
+                    var snapshot = JsonConvert.SerializeObject(context.Message, JsonSerializerSettings);
+                    Log.Error(@"PublishFault: " + snapshot, exception);
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError(ex.ToString());
+                }
             }
             return Done;
         }
@@ -65,8 +88,15 @@ namespace Albumprinter.CorrelationTracking.Tracing.MassTransit
         {
             if (LogMessage)
             {
-                var snapshot = JsonConvert.SerializeObject(context.Message, JsonSerializerSettings);
-                Log.Debug(@"PreSend: " + snapshot);
+                try
+                {
+                    var snapshot = JsonConvert.SerializeObject(context.Message, JsonSerializerSettings);
+                    Log.Debug(@"PreSend: " + snapshot);
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError(ex.ToString());
+                }
             }
             return Done;
         }
@@ -75,8 +105,15 @@ namespace Albumprinter.CorrelationTracking.Tracing.MassTransit
         {
             if (LogMessage)
             {
-                var snapshot = JsonConvert.SerializeObject(context.Message, JsonSerializerSettings);
-                Log.Debug(@"PostSend: " + snapshot);
+                try
+                {
+                    var snapshot = GetTransportMessage(context);
+                    Log.Debug(@"PostSend: " + snapshot);
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError(ex.ToString());
+                }
             }
             return Done;
         }
@@ -85,44 +122,115 @@ namespace Albumprinter.CorrelationTracking.Tracing.MassTransit
         {
             if (LogMessage)
             {
-                var snapshot = JsonConvert.SerializeObject(context.Message, JsonSerializerSettings);
-                Log.Error(@"SendFault: " + snapshot, exception);
+                try
+                {
+                    var snapshot = JsonConvert.SerializeObject(context.Message, JsonSerializerSettings);
+                    Log.Error(@"SendFault: " + snapshot, exception);
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError(ex.ToString());
+                }
             }
             return Done;
         }
 
-        public Task PreConsume<T>(ConsumeContext<T> context) where T : class
+        Task IReceiveObserver.PreReceive(ReceiveContext context)
         {
             if (LogEnvelope)
             {
-                Log.Debug(new StreamReader(context.ReceiveContext.GetBody()).ReadToEnd());
+                try
+                {
+                    var message = new StreamReader(context.GetBody()).ReadToEnd();
+                    Log.Debug(message);
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError(ex.ToString());
+                }
             }
+            return context.CompleteTask;
+        }
+
+        Task IReceiveObserver.PostConsume<T>(ConsumeContext<T> context, TimeSpan duration, string consumerType)
+        {
+            return context.CompleteTask;
+        }
+
+        Task IReceiveObserver.PostReceive(ReceiveContext context)
+        {
+            return context.CompleteTask;
+        }
+
+        Task IReceiveObserver.ConsumeFault<T>(ConsumeContext<T> context, TimeSpan duration, string consumerType, Exception exception)
+        {
+            return context.CompleteTask;
+        }
+
+        Task IReceiveObserver.ReceiveFault(ReceiveContext context, Exception exception)
+        {
+            return context.CompleteTask;
+        }
+
+        Task IConsumeObserver.PreConsume<T>(ConsumeContext<T> context)
+        {
             if (LogMessage)
             {
-                var snapshot = JsonConvert.SerializeObject(context.Message, JsonSerializerSettings);
-                Log.Debug(@"PreConsume: " + snapshot);
+                try
+                {
+                    var snapshot = JsonConvert.SerializeObject(context.Message, JsonSerializerSettings);
+                    Log.Debug(@"PreConsume: " + snapshot);
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError(ex.ToString());
+                }
             }
             return Done;
         }
 
-        public Task PostConsume<T>(ConsumeContext<T> context) where T : class
+        Task IConsumeObserver.PostConsume<T>(ConsumeContext<T> context)
         {
             if (LogMessage)
             {
-                var snapshot = JsonConvert.SerializeObject(context.Message, JsonSerializerSettings);
-                Log.Debug(@"PostConsume: " + snapshot);
+                try
+                {
+                    var snapshot = JsonConvert.SerializeObject(context.Message, JsonSerializerSettings);
+                    Log.Debug(@"PostConsume: " + snapshot);
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError(ex.ToString());
+                }
             }
             return Done;
         }
 
-        public Task ConsumeFault<T>(ConsumeContext<T> context, Exception exception) where T : class
+        Task IConsumeObserver.ConsumeFault<T>(ConsumeContext<T> context, Exception exception)
         {
             if (LogMessage)
             {
-                var snapshot = JsonConvert.SerializeObject(context.Message, JsonSerializerSettings);
-                Log.Error(@"ConsumeFault: " + snapshot, exception);
+                try
+                {
+                    var snapshot = JsonConvert.SerializeObject(context.Message, JsonSerializerSettings);
+                    Log.Error(@"ConsumeFault: " + snapshot, exception);
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError(ex.ToString());
+                }
             }
             return Done;
+        }
+
+        private static string GetTransportMessage<T>(SendContext<T> context) where T : class
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                context.Serializer.Serialize(memoryStream, context);
+                var snapshot = Encoding.UTF8.GetString(memoryStream.ToArray());
+                return snapshot;
+            }
         }
     }
 }
