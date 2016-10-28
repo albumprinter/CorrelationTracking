@@ -101,6 +101,7 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="ActionAppender.cs" />
     <Compile Include="AmazonSqsTests.cs" />
     <Compile Include="CorrelationClientBehaviorTests.cs" />
     <Compile Include="CorrelationDelegatingHandlerTests.cs" />
@@ -112,7 +113,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="ActionAppender.cs" />
+    <Compile Include="InterceptAppender.cs" />
     <Compile Include="Service References\CorrelationWebServices\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

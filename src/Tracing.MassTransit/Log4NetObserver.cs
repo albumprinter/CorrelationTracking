@@ -14,7 +14,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.MassTransit
     public sealed class Log4NetObserver : IPublishObserver, ISendObserver, IReceiveObserver, IConsumeObserver
     {
         private static readonly Task Done = Task.FromResult(true);
-        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog DefaultLog = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public static readonly Log4NetObserver Instance;
         public static readonly JsonSerializerSettings JsonSerializerSettings;
@@ -28,8 +28,10 @@ namespace Albumprinter.CorrelationTracking.Tracing.MassTransit
         public Log4NetObserver()
         {
             LogEnvelope = LogMessage = true;
+            Log = DefaultLog;
         }
 
+        public ILog Log { get; set; }
         public bool LogEnvelope { get; set; }
         public bool LogMessage { get; set; }
 
@@ -154,6 +156,18 @@ namespace Albumprinter.CorrelationTracking.Tracing.MassTransit
 
         Task IReceiveObserver.PostConsume<T>(ConsumeContext<T> context, TimeSpan duration, string consumerType)
         {
+            if (LogMessage)
+            {
+                try
+                {
+                    Log.Debug($@"PostConsume: duration={duration}, consumerType={consumerType}");
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError(ex.ToString());
+                }
+            }
+
             return context.CompleteTask;
         }
 
@@ -191,18 +205,6 @@ namespace Albumprinter.CorrelationTracking.Tracing.MassTransit
 
         Task IConsumeObserver.PostConsume<T>(ConsumeContext<T> context)
         {
-            if (LogMessage)
-            {
-                try
-                {
-                    var snapshot = JsonConvert.SerializeObject(context.Message, JsonSerializerSettings);
-                    Log.Debug(@"PostConsume: " + snapshot);
-                }
-                catch (Exception ex)
-                {
-                    Trace.TraceError(ex.ToString());
-                }
-            }
             return Done;
         }
 

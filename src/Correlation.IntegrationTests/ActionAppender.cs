@@ -1,29 +1,20 @@
 ﻿using System;
-using log4net.Appender;
-using log4net.Core;
 using log4net.Layout;
 
 namespace Correlation.IntegrationTests
 {
-    internal sealed class ActionAppender : IAppender
+    public sealed class ActionAppender : InterceptAppender
     {
-        private readonly Action<string> output;
 
-        public ActionAppender(Action<string> output)
+        public ActionAppender(Action<string> output, string pattern)
         {
-            this.output = output;
+            Layout = new PatternLayout(pattern);
+            OnAppend += (sender, loggingEvent) =>
+            {
+                output.Invoke(Layout.Format(loggingEvent));
+            };
         }
 
-        public void Close()
-        {
-        }
-
-        public void DoAppend(LoggingEvent loggingEvent)
-        {
-            var layout = new PatternLayout("[PI:%property{X-ProcessId}]%n[CI:%property{X-CorrelationId}]%n[RI:%property{X-RequestId}]%n%date %-5level %m%n%n");
-            output.Invoke(layout.Format(loggingEvent));
-        }
-
-        public string Name { get; set; }
+        public PatternLayout Layout { get; set; }
     }
 }
