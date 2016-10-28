@@ -31,7 +31,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.MassTransit
         {
             context.Headers.Set(CorrelationKeys.CorrelationId, CorrelationScope.Current.CorrelationId.ToString());
 
-            // BUG: Masstransit.Rabbitmq copies context.headers to transport.headers before calling PreSend method :(
+            // BUG: Masstransit.Rabbitmq v3.3.5 copies context.headers to transport.headers before calling PreSend method :(
             if (context.GetType().Name.StartsWith("RabbitMq", StringComparison.OrdinalIgnoreCase))
             {
                 var headers = ((dynamic) context).BasicProperties?.Headers as IDictionary<string, object>;
