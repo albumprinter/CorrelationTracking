@@ -1,19 +1,46 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Albumprinter.CorrelationTracking;
 using Albumprinter.CorrelationTracking.Correlation.Core;
 using Albumprinter.CorrelationTracking.MassTransit;
+using Albumprinter.CorrelationTracking.Tracing.MassTransit;
+using log4net;
+using log4net.Config;
+using log4net.Core;
+using log4net.Repository.Hierarchy;
 using MassTransit;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace Correlation.IntegrationTests
 {
-    public sealed class MassTransitTests : Log4NetTest
+    public sealed class MassTransitTests
     {
-        public MassTransitTests(ITestOutputHelper output) : base(output)
+        private readonly ActionAppender TestAppender;
+        private readonly RootLogger TestLogger;
+        private readonly ILog TestLog;
+        private readonly ITestOutputHelper Output;
+
+        static MassTransitTests()
         {
+            XmlConfigurator.Configure();
+            CorrelationTrackingConfiguration.Initialize();
         }
+
+        public MassTransitTests(ITestOutputHelper output)
+        {
+            Output = output;
+            TestAppender = new ActionAppender(Output.WriteLine, @"[PI:%property{X-ProcessId}]%n[CI:%property{X-CorrelationId}]%n[RI:%property{X-RequestId}]%n%date %-5level %m%n%n");
+            TestLogger = new RootLogger(Level.All) { Hierarchy = new Hierarchy { Configured = true, Threshold = Level.All } };
+            TestLogger.AddAppender(TestAppender);
+            TestLog = new LogImpl(TestLogger);
+
+            CorrelationIds = new List<string>();
+            TestLogger.AddAppender(new ActionAppender(text => CorrelationIds.Add(text), "%property{X-CorrelationId}"));
+        }
+
+        private List<string> CorrelationIds { get; set; }
 
         [Fact, Trait("Category", "Integration")]
         public async Task Publish_should_propagate_the_correlation_id_to_RabbitMQ_consumer()
@@ -54,7 +81,7 @@ namespace Correlation.IntegrationTests
                     // NOTE: FYI sbc.UseLog4Net();
                 });
 
-            bus.UseCorrelationTracking().Start();
+            bus.UseCorrelationTracking().UseLog4NetObserver(new Log4NetObserver { Log = TestLog }).Start();
 
             try
             {
@@ -71,6 +98,8 @@ namespace Correlation.IntegrationTests
 
                 bus.Stop();
             }
+
+            Assert.All(CorrelationIds, actual => Assert.Equal(expect.ToString(), actual));
         }
 
         [Fact, Trait("Category", "Integration")]
@@ -114,7 +143,7 @@ namespace Correlation.IntegrationTests
                     // NOTE: FYI sbc.UseLog4Net();
                 });
 
-            bus.UseCorrelationTracking().Start();
+            bus.UseCorrelationTracking().UseLog4NetObserver(new Log4NetObserver { Log = TestLog }).Start();
 
             try
             {
@@ -134,6 +163,8 @@ namespace Correlation.IntegrationTests
 
                 bus.Stop();
             }
+
+            Assert.All(CorrelationIds, actual => Assert.Equal(expect.ToString(), actual));
         }
 
         public sealed class TestMessage

@@ -1,12 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Albumprinter.CorrelationTracking.Correlation.Core;
 using MassTransit;
-using MassTransit.Pipeline;
 
 namespace Albumprinter.CorrelationTracking.Correlation.MassTransit
 {
-    public sealed class CorrelationObserver : IPublishObserver, ISendObserver, IConsumeObserver
+    public sealed class CorrelationObserver : IPublishObserver, ISendObserver, IReceiveObserver
     {
         private static readonly Task Done = Task.FromResult(true);
         public static readonly CorrelationObserver Instance = new CorrelationObserver();
@@ -30,6 +30,14 @@ namespace Albumprinter.CorrelationTracking.Correlation.MassTransit
         public Task PreSend<T>(SendContext<T> context) where T : class
         {
             context.Headers.Set(CorrelationKeys.CorrelationId, CorrelationScope.Current.CorrelationId.ToString());
+
+            // BUG: Masstransit.Rabbitmq v3.3.5 copies context.headers to transport.headers before calling PreSend method :(
+            if (context.GetType().Name.StartsWith("RabbitMq", StringComparison.OrdinalIgnoreCase))
+            {
+                var headers = ((dynamic) context).BasicProperties?.Headers as IDictionary<string, object>;
+                headers?.Add(CorrelationKeys.CorrelationId, CorrelationScope.Current.CorrelationId.ToString());
+            }
+
             return Done;
         }
 
@@ -43,20 +51,30 @@ namespace Albumprinter.CorrelationTracking.Correlation.MassTransit
             return Done;
         }
 
-        public Task PreConsume<T>(ConsumeContext<T> context) where T : class
+        Task IReceiveObserver.PreReceive(ReceiveContext context)
         {
             object value;
-            var correlationId = context.Headers.TryGetHeader(CorrelationKeys.CorrelationId, out value) ? Guid.Parse((string) value) : Guid.NewGuid();
+            var correlationId = context.TransportHeaders.TryGetHeader(CorrelationKeys.CorrelationId, out value) ? Guid.Parse((string)value) : Guid.NewGuid();
             CorrelationManager.Instance.UseScope(correlationId);
             return Done;
         }
 
-        public Task PostConsume<T>(ConsumeContext<T> context) where T : class
+        Task IReceiveObserver.PostReceive(ReceiveContext context)
         {
             return Done;
         }
 
-        public Task ConsumeFault<T>(ConsumeContext<T> context, Exception exception) where T : class
+        Task IReceiveObserver.PostConsume<T>(ConsumeContext<T> context, TimeSpan duration, string consumerType)
+        {
+            return Done;
+        }
+
+        Task IReceiveObserver.ConsumeFault<T>(ConsumeContext<T> context, TimeSpan duration, string consumerType, Exception exception)
+        {
+            return Done;
+        }
+
+        Task IReceiveObserver.ReceiveFault(ReceiveContext context, Exception exception)
         {
             return Done;
         }

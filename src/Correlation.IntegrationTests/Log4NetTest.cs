@@ -22,7 +22,9 @@ namespace Correlation.IntegrationTests
         protected Log4NetTest(ITestOutputHelper output)
         {
             Output = output;
-            xUnitAppender = new ActionAppender(Output.WriteLine);
+            xUnitAppender = new ActionAppender(
+                x => Output.WriteLine(x),
+                "[PI:%property{X-ProcessId}]%n[CI:%property{X-CorrelationId}]%n[RI:%property{X-RequestId}]%n%date %-5level %m%n%n");
             hierarchy = (log4net.Repository.Hierarchy.Hierarchy) LogManager.GetRepository();
             hierarchy.Root.AddAppender(xUnitAppender);
         }
