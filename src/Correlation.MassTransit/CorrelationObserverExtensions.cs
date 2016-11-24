@@ -9,6 +9,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.MassTransit
             bus.ConnectSendObserver(CorrelationObserver.Instance);
             bus.ConnectPublishObserver(CorrelationObserver.Instance);
             bus.ConnectReceiveObserver(CorrelationObserver.Instance);
+            bus.ConnectConsumeObserver(CorrelationObserver.Instance);
             return bus;
         }
     }

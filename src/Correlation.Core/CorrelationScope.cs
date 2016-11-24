@@ -53,9 +53,9 @@ namespace Albumprinter.CorrelationTracking.Correlation.Core
         /// </value>
         public Guid RequestId { get; private set; }
 
-        public Dictionary<string, object> Properties
-        {
-            get { return properties; }
-        }
+        /// <summary>
+        ///     Gets the scope properties.
+        /// </summary>
+        public Dictionary<string, object> Properties => properties;
     }
 }
