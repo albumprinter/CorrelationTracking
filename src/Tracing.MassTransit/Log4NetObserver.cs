@@ -43,7 +43,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.MassTransit
         private string TruncateMessage(string original)
         {
             if (MaxMessageSize > 0 && MaxMessageSize < original.Length)
-                return original.Remove(MaxMessageSize) + $"// LOG TRUNCATED from {original.Length} to {MaxMessageSize} characters";
+                return original.Remove(MaxMessageSize) + $" //LOG TRUNCATED from {original.Length} to {MaxMessageSize} characters";
             return original;
         }
 

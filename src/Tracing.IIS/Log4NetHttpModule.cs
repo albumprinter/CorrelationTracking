@@ -91,7 +91,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.IIS
         {
             var maxMessageSize = configuration.MaxMessageSize;
             if (maxMessageSize > 0 && maxMessageSize < original.Length)
-                return original.Remove(maxMessageSize) + $"// LOG TRUNCATED from {original.Length} to {maxMessageSize} characters";
+                return original.Remove(maxMessageSize) + $" //LOG TRUNCATED from {original.Length} to {maxMessageSize} characters";
             return original;
         }
     }

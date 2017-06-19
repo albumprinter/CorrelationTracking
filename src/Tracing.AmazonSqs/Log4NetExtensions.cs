@@ -52,7 +52,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.AmazonSqs
         private static string TruncateMessage(string original, int maxMessageSize)
         {
             if (maxMessageSize > 0 && maxMessageSize < original.Length)
-                return original.Remove(maxMessageSize) + $"// LOG TRUNCATED from {original.Length} to {maxMessageSize} characters";
+                return original.Remove(maxMessageSize) + $" //LOG TRUNCATED from {original.Length} to {maxMessageSize} characters";
             return original;
         }
     }
