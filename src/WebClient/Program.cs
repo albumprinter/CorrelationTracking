@@ -46,7 +46,7 @@ namespace WebClient
 
                 var client = new CorrelationServiceClient();
                 client.Endpoint.Behaviors.Add(new CorrelationClientBehavior());
-                client.Endpoint.Behaviors.Add(new Log4NetClientBehavior());
+                client.Endpoint.Behaviors.Add(new Log4NetClientBehavior(0));
 
                 var result = client.GetCorrelationIdAsync().GetAwaiter().GetResult();
 
@@ -60,7 +60,7 @@ namespace WebClient
 
                 var client = new CorrelationWebServiceSoapClient();
                 client.Endpoint.Behaviors.Add(new CorrelationClientBehavior());
-                client.Endpoint.Behaviors.Add(new Log4NetClientBehavior());
+                client.Endpoint.Behaviors.Add(new Log4NetClientBehavior(0));
 
                 var result = client.GetCorrelationIdAsync().GetAwaiter().GetResult();
 

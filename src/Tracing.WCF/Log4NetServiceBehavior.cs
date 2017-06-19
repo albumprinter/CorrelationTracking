@@ -15,6 +15,23 @@ namespace Albumprinter.CorrelationTracking.Tracing.WCF
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
+        /// <summary>
+        /// 0 is no limit, positive value is amount of characters logged in the message (exception and other objects are not truncated)
+        /// </summary>
+        public int MaxMessageSize { get; }
+
+        private string TruncateMessage(string original)
+        {
+            if (MaxMessageSize > 0 && MaxMessageSize < original.Length)
+                return original.Remove(MaxMessageSize) + $"// LOG TRUNCATED from {original.Length} to {MaxMessageSize} characters";
+            return original;
+        }
+
+        public Log4NetServiceBehavior(int maxMessageSize)
+        {
+            MaxMessageSize = maxMessageSize;
+        }
+
         void IServiceBehavior.Validate(ServiceDescription serviceDescription, ServiceHostBase serviceHostBase)
         {
         }
@@ -41,13 +58,13 @@ namespace Albumprinter.CorrelationTracking.Tracing.WCF
 
         object IDispatchMessageInspector.AfterReceiveRequest(ref Message request, IClientChannel channel, InstanceContext instanceContext)
         {
-            Log.Debug(@"AfterReceiveRequest: " + request);
+            Log.Debug(TruncateMessage(@"AfterReceiveRequest: " + request));
             return null;
         }
 
         void IDispatchMessageInspector.BeforeSendReply(ref Message reply, object correlationState)
         {
-            Log.Debug(@"BeforeSendReply: " + reply);
+            Log.Debug(TruncateMessage(@"BeforeSendReply: " + reply));
         }
 
         bool IErrorHandler.HandleError(Exception error)
@@ -57,7 +74,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.WCF
 
         void IErrorHandler.ProvideFault(Exception error, MessageVersion version, ref Message fault)
         {
-            Log.Error(@"ProvideFault: " + fault, error);
+            Log.Error(TruncateMessage(@"ProvideFault: " + fault), error);
         }
     }
 }

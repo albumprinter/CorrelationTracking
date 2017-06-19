@@ -12,41 +12,48 @@ namespace Albumprinter.CorrelationTracking.Tracing.AmazonSqs
 
         private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings();
 
-        public static void Log(this SendMessageRequest request)
+        public static void Log(this SendMessageRequest request, int maxMessageSize)
         {
             var snapshot = JsonConvert.SerializeObject(request, JsonSerializerSettings);
-            Logger.Debug(@"PostPublish: " + snapshot);
+            Logger.Debug(TruncateMessage(@"PostPublish: " + snapshot, maxMessageSize));
         }
 
-        public static void Log(this SendMessageBatchRequestEntry request)
+        public static void Log(this SendMessageBatchRequestEntry request, int maxMessageSize)
         {
             var snapshot = JsonConvert.SerializeObject(request, JsonSerializerSettings);
-            Logger.Debug(@"PostPublish: " + snapshot);
+            Logger.Debug(TruncateMessage(@"PostPublish: " + snapshot, maxMessageSize));
         }
 
-        public static void Log(this SendMessageBatchRequest request)
+        public static void Log(this SendMessageBatchRequest request, int maxMessageSize)
         {
-            Log(request.Entries);
+            Log(request.Entries, maxMessageSize);
         }
 
-        public static void Log(this IEnumerable<SendMessageBatchRequestEntry> entries)
+        public static void Log(this IEnumerable<SendMessageBatchRequestEntry> entries, int maxMessageSize)
         {
             foreach (var entry in entries)
             {
-                Log(entry);
+                Log(entry, maxMessageSize);
             }
         }
 
-        public static void Log(this ReceiveMessageResponse response)
+        public static void Log(this ReceiveMessageResponse response, int maxMessageSize)
         {
             var snapshot = JsonConvert.SerializeObject(response, JsonSerializerSettings);
-            Logger.Debug(@"PreConsume: " + snapshot);
+            Logger.Debug(TruncateMessage(@"PreConsume: " + snapshot, maxMessageSize));
         }
 
-        public static Message Log(this Message message)
+        public static Message Log(this Message message, int maxMessageSize)
         {
-            Logger.Debug(@"PreConsume: " + message.Body);
+            Logger.Debug(TruncateMessage(@"PreConsume: " + message.Body, maxMessageSize));
             return message;
+        }
+
+        private static string TruncateMessage(string original, int maxMessageSize)
+        {
+            if (maxMessageSize > 0 && maxMessageSize < original.Length)
+                return original.Remove(maxMessageSize) + $"// LOG TRUNCATED from {original.Length} to {maxMessageSize} characters";
+            return original;
         }
     }
 }

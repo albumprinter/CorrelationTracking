@@ -12,10 +12,16 @@ namespace Albumprinter.CorrelationTracking.Tracing.AmazonSqs
 
         public bool LogReceiveMessageResponse { get; }
 
-        public Log4NetDecorator(IAmazonSQS client, bool logReceiveMessageResponse)
+        /// <summary>
+        /// 0 is no limit, positive value is amount of characters logged in the message (exception and other objects are not truncated)
+        /// </summary>
+        public int MaxMessageSize { get; set; }
+
+        public Log4NetDecorator(IAmazonSQS client, bool logReceiveMessageResponse, int maxMessageSize = 0)
         {
             _client = client;
             LogReceiveMessageResponse = logReceiveMessageResponse;
+            MaxMessageSize = maxMessageSize;
         }
 
         public SendMessageResponse SendMessage(string queueUrl, string messageBody)
@@ -25,13 +31,13 @@ namespace Albumprinter.CorrelationTracking.Tracing.AmazonSqs
                 QueueUrl = queueUrl,
                 MessageBody = messageBody
             };
-            request.Log();
+            request.Log(MaxMessageSize);
             return _client.SendMessage(request);
         }
 
         public SendMessageResponse SendMessage(SendMessageRequest request)
         {
-            request.Log();
+            request.Log(MaxMessageSize);
             return _client.SendMessage(request);
         }
 
@@ -42,39 +48,39 @@ namespace Albumprinter.CorrelationTracking.Tracing.AmazonSqs
                 QueueUrl = queueUrl,
                 MessageBody = messageBody
             };
-            request.Log();
+            request.Log(MaxMessageSize);
             return _client.SendMessageAsync(request, cancellationToken);
         }
 
         public Task<SendMessageResponse> SendMessageAsync(SendMessageRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            request.Log();
+            request.Log(MaxMessageSize);
             return _client.SendMessageAsync(request, cancellationToken);
         }
 
         public SendMessageBatchResponse SendMessageBatch(string queueUrl, List<SendMessageBatchRequestEntry> entries)
         {
-            entries.Log();
+            entries.Log(MaxMessageSize);
             return _client.SendMessageBatch(queueUrl, entries);
         }
 
         public SendMessageBatchResponse SendMessageBatch(SendMessageBatchRequest request)
         {
-            request.Log();
+            request.Log(MaxMessageSize);
             return _client.SendMessageBatch(request);
         }
 
         public Task<SendMessageBatchResponse> SendMessageBatchAsync(string queueUrl, List<SendMessageBatchRequestEntry> entries,
             CancellationToken cancellationToken = new CancellationToken())
         {
-            entries.Log();
+            entries.Log(MaxMessageSize);
             return _client.SendMessageBatchAsync(queueUrl, entries, cancellationToken);
         }
 
         public Task<SendMessageBatchResponse> SendMessageBatchAsync(SendMessageBatchRequest request,
             CancellationToken cancellationToken = new CancellationToken())
         {
-            request.Log();
+            request.Log(MaxMessageSize);
             return _client.SendMessageBatchAsync(request, cancellationToken);
         }
 
@@ -111,7 +117,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.AmazonSqs
         {
             if (LogReceiveMessageResponse)
             {
-                receiveMessageResponse.Log();
+                receiveMessageResponse.Log(MaxMessageSize);
             }
         }
 

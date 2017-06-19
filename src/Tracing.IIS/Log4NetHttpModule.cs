@@ -61,7 +61,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.IIS
             {
                 var state = TrackingHttpModuleState.AttachTo(context, configuration);
                 var message = $"{request.HttpMethod} {request.Url.OriginalString}{Environment.NewLine}{state.GetInputHeaders()}{Environment.NewLine}{state.GetInputContent()}";
-                Log.Debug(message);
+                Log.Debug(TruncateMessage(message));
             }
         }
 
@@ -74,7 +74,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.IIS
             if (state != null)
             {
                 var message = $"{response.Status} {request.Url.OriginalString} {state.Stopwatch.Elapsed.TotalMilliseconds:N1}ms{Environment.NewLine}{state.GetOutputHeaders()}{Environment.NewLine}{state.GetOutputContent()}";
-                Log.Debug(message);
+                Log.Debug(TruncateMessage(message));
             }
         }
 
@@ -84,7 +84,15 @@ namespace Albumprinter.CorrelationTracking.Tracing.IIS
             var response = context.Response;
 
             var exception = context.Server.GetLastError();
-            Log.Error($"{response.Status} {request.Url.OriginalString}", exception);
+            Log.Error(TruncateMessage($"{response.Status} {request.Url.OriginalString}"), exception);
+        }
+
+        private string TruncateMessage(string original)
+        {
+            var maxMessageSize = configuration.MaxMessageSize;
+            if (maxMessageSize > 0 && maxMessageSize < original.Length)
+                return original.Remove(maxMessageSize) + $"// LOG TRUNCATED from {original.Length} to {maxMessageSize} characters";
+            return original;
         }
     }
 }

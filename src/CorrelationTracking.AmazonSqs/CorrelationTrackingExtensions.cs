@@ -8,15 +8,15 @@ namespace Albumprinter.CorrelationTracking.AmazonSqs
 {
     public static class CorrelationTrackingExtensions
     {
-        public static IAmazonSQS UseCorrelationTracking(this IAmazonSQS client, bool logReceiveMessageResponse = false)
+        public static IAmazonSQS UseCorrelationTracking(this IAmazonSQS client, bool logReceiveMessageResponse = false, int maxMessageSize = 0)
         {
-            return new Log4NetDecorator(new CorrelationDecorator(client), logReceiveMessageResponse);
+            return new Log4NetDecorator(new CorrelationDecorator(client), logReceiveMessageResponse, maxMessageSize);
         }
 
-        public static IDisposable SetCorrelationScopeAndLog(this Message message)
+        public static IDisposable SetCorrelationScopeAndLog(this Message message, int maxMessageSize = 0)
         {
             var disposable = message.SetCorrelationScopeFromMessage();
-            message.Log();
+            message.Log(maxMessageSize);
             return disposable;
         }
     }

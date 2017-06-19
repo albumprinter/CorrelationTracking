@@ -34,6 +34,18 @@ namespace Albumprinter.CorrelationTracking.Tracing.MassTransit
         public ILog Log { get; set; }
         public bool LogEnvelope { get; set; }
         public bool LogMessage { get; set; }
+        
+        /// <summary>
+        /// 0 is no limit, positive value is amount of characters logged in the message (exception and other objects are not truncated)
+        /// </summary>
+        public int MaxMessageSize { get; set; }
+
+        private string TruncateMessage(string original)
+        {
+            if (MaxMessageSize > 0 && MaxMessageSize < original.Length)
+                return original.Remove(MaxMessageSize) + $"// LOG TRUNCATED from {original.Length} to {MaxMessageSize} characters";
+            return original;
+        }
 
         public Task PrePublish<T>(PublishContext<T> context) where T : class
         {
@@ -42,7 +54,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.MassTransit
                 try
                 {
                     var snapshot = JsonConvert.SerializeObject(context.Message, JsonSerializerSettings);
-                    Log.Debug(@"PrePublish: " + snapshot);
+                    Log.Debug(TruncateMessage(@"PrePublish: " + snapshot));
                 }
                 catch (Exception ex)
                 {
@@ -59,7 +71,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.MassTransit
                 try
                 {
                     var snapshot = GetTransportMessage(context);
-                    Log.Debug(@"PostPublish: " + snapshot);
+                    Log.Debug(TruncateMessage(@"PostPublish: " + snapshot));
                 }
                 catch (Exception ex)
                 {
@@ -76,7 +88,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.MassTransit
                 try
                 {
                     var snapshot = JsonConvert.SerializeObject(context.Message, JsonSerializerSettings);
-                    Log.Error(@"PublishFault: " + snapshot, exception);
+                    Log.Error(TruncateMessage(@"PublishFault: " + snapshot), exception);
                 }
                 catch (Exception ex)
                 {
@@ -93,7 +105,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.MassTransit
                 try
                 {
                     var snapshot = JsonConvert.SerializeObject(context.Message, JsonSerializerSettings);
-                    Log.Debug(@"PreSend: " + snapshot);
+                    Log.Debug(TruncateMessage(@"PreSend: " + snapshot));
                 }
                 catch (Exception ex)
                 {
@@ -110,7 +122,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.MassTransit
                 try
                 {
                     var snapshot = GetTransportMessage(context);
-                    Log.Debug(@"PostSend: " + snapshot);
+                    Log.Debug(TruncateMessage(@"PostSend: " + snapshot));
                 }
                 catch (Exception ex)
                 {
@@ -127,7 +139,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.MassTransit
                 try
                 {
                     var snapshot = JsonConvert.SerializeObject(context.Message, JsonSerializerSettings);
-                    Log.Error(@"SendFault: " + snapshot, exception);
+                    Log.Error(TruncateMessage(@"SendFault: " + snapshot), exception);
                 }
                 catch (Exception ex)
                 {
@@ -144,7 +156,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.MassTransit
                 try
                 {
                     var message = new StreamReader(context.GetBody()).ReadToEnd();
-                    Log.Debug(message);
+                    Log.Debug(TruncateMessage(message));
                 }
                 catch (Exception ex)
                 {
@@ -160,7 +172,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.MassTransit
             {
                 try
                 {
-                    Log.Debug($@"PostConsume: duration={duration}, consumerType={consumerType}");
+                    Log.Debug(TruncateMessage($@"PostConsume: duration={duration}, consumerType={consumerType}"));
                 }
                 catch (Exception ex)
                 {
@@ -193,7 +205,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.MassTransit
                 try
                 {
                     var snapshot = JsonConvert.SerializeObject(context.Message, JsonSerializerSettings);
-                    Log.Debug(@"PreConsume: " + snapshot);
+                    Log.Debug(TruncateMessage(@"PreConsume: " + snapshot));
                 }
                 catch (Exception ex)
                 {
@@ -215,7 +227,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.MassTransit
                 try
                 {
                     var snapshot = JsonConvert.SerializeObject(context.Message, JsonSerializerSettings);
-                    Log.Error(@"ConsumeFault: " + snapshot, exception);
+                    Log.Error(TruncateMessage(@"ConsumeFault: " + snapshot), exception);
                 }
                 catch (Exception ex)
                 {

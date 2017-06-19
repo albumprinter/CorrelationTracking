@@ -20,6 +20,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.IIS.Tests
             Assert.Contains("Accept", actual.AllowedHeaders);
             Assert.Contains("Content-Type", actual.AllowedHeaders);
             Assert.Equal(@"^[^:]+$", actual.DeniedUrls.ToString());
+            Assert.Equal(0, actual.MaxMessageSize);
         }
 
         [Fact]
@@ -31,6 +32,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.IIS.Tests
             ConfigurationManager.AppSettings[moduleName + @":AllowedUrls"] = ".*AllowedUrls.*";
             ConfigurationManager.AppSettings[moduleName + @":AllowedHeaders"] = "X-EXT-1 X-EXT-2";
             ConfigurationManager.AppSettings[moduleName + @":DeniedUrls"] = ".*DeniedUrls.*";
+            ConfigurationManager.AppSettings[moduleName + @":MaxMessageSize"] = "5";
 
             // act
             var actual = TrackingHttpModuleConfiguration.FromConfig(moduleName);
@@ -40,6 +42,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.IIS.Tests
             Assert.Contains("X-EXT-1", actual.AllowedHeaders);
             Assert.Contains("X-EXT-2", actual.AllowedHeaders);
             Assert.Equal(".*DeniedUrls.*", actual.DeniedUrls.ToString());
+            Assert.Equal(5, actual.MaxMessageSize);
         }
     }
 }

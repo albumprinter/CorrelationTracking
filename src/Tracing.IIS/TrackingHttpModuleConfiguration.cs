@@ -17,7 +17,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.IIS
             @"X-RequestId"
         };
 
-        public TrackingHttpModuleConfiguration(string allowedUrls, IEnumerable<string> allowedHeaders, string deniedUrls)
+        public TrackingHttpModuleConfiguration(string allowedUrls, IEnumerable<string> allowedHeaders, string deniedUrls, int maxMessageSize)
         {
             // NOTE: set to zero
             allowedUrls = string.IsNullOrWhiteSpace(allowedUrls) ? null : allowedUrls;
@@ -32,6 +32,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.IIS
             AllowedUrls = new Regex(allowedUrls, DefaultRegexOptions);
             AllowedHeaders = new HashSet<string>(allowedHeaders, StringComparer.OrdinalIgnoreCase);
             DeniedUrls = new Regex(deniedUrls, DefaultRegexOptions);
+            MaxMessageSize = maxMessageSize;
 
             DefaultAllowedHeaders.ForEach(allowedHeader => AllowedHeaders.Add(allowedHeader));
         }
@@ -40,13 +41,20 @@ namespace Albumprinter.CorrelationTracking.Tracing.IIS
         public HashSet<string> AllowedHeaders { get; private set; }
         public Regex DeniedUrls { get; private set; }
 
+        /// <summary>
+        /// 0 is no limit, positive value is amount of characters logged in the message (exception and other objects are not truncated)
+        /// </summary>
+        public int MaxMessageSize { get; }
+
         public static TrackingHttpModuleConfiguration FromConfig(string moduleName)
         {
             var appSettings = WebConfigurationManager.AppSettings;
             var allowedUrls = appSettings.Get(moduleName + @":AllowedUrls");
             var allowedHeaders = (appSettings.Get(moduleName + @":AllowedHeaders") ?? string.Empty).Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
             var deniedUrls = appSettings.Get(moduleName + @":DeniedUrls");
-            return new TrackingHttpModuleConfiguration(allowedUrls, allowedHeaders, deniedUrls);
+            var maxMessageSizeText = appSettings.Get(moduleName + @":MaxMessageSize");
+            var maxMessageSize = maxMessageSizeText == null ? 0 : int.Parse(maxMessageSizeText);
+            return new TrackingHttpModuleConfiguration(allowedUrls, allowedHeaders, deniedUrls, maxMessageSize);
         }
     }
 }

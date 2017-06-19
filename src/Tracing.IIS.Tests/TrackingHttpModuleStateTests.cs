@@ -24,7 +24,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.IIS.Tests
             // arrange
             var context = A.Fake<HttpContextBase>();
             A.CallTo(() => context.Request.Url).Returns(new Uri(uri));
-            var configuration = new TrackingHttpModuleConfiguration(allowedUrls, new string[0], deniedUrls);
+            var configuration = new TrackingHttpModuleConfiguration(allowedUrls, new string[0], deniedUrls, 0);
 
             // act
             var actual = TrackingHttpModuleState.IsTrackable(context, configuration);

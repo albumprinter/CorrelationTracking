@@ -66,7 +66,7 @@ namespace Correlation.IntegrationTests
             using (CorrelationManager.Instance.UseScope(expect))
             {
                 client.Endpoint.Behaviors.Add(new CorrelationClientBehavior());
-                client.Endpoint.Behaviors.Add(new Log4NetClientBehavior());
+                client.Endpoint.Behaviors.Add(new Log4NetClientBehavior(100));
                 client.Endpoint.Behaviors.Add(spy);
 
                 var actual = act(client);
