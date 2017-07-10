@@ -40,7 +40,12 @@
     </Compile>
     <Compile Include="CorrelationKeys.cs" />
     <Compile Include="CorrelationManager.cs" />
+    <Compile Include="CorrelationScopeProvider.cs" />
+    <Compile Include="Providers\CallContextCorrelationScopeProvider.cs" />
+    <Compile Include="Providers\CompositeCorrelationScopeProvider.cs" />
+    <Compile Include="Providers\CorrelationScopeProviders.cs" />
     <Compile Include="CorrelationScope.cs" />
+    <Compile Include="ICorrelationTrackingConfiguration.cs" />
     <Compile Include="ICorrelationScopeInterceptor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

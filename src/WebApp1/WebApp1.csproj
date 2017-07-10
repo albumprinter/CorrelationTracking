@@ -151,6 +151,13 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\CorrelationController.cs" />
+    <Compile Include="CorrelationPage.aspx.cs">
+      <DependentUpon>CorrelationPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CorrelationPage.aspx.designer.cs">
+      <DependentUpon>CorrelationPage.aspx</DependentUpon>
+    </Compile>
     <Compile Include="CorrelationService.svc.cs">
       <DependentUpon>CorrelationService.svc</DependentUpon>
     </Compile>
@@ -166,6 +173,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="CorrelationPage.aspx" />
     <Content Include="CorrelationService.svc" />
     <Content Include="CorrelationWebService.asmx" />
     <Content Include="favicon.ico" />

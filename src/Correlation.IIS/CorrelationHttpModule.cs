@@ -12,7 +12,11 @@ namespace Albumprinter.CorrelationTracking.Correlation.IIS
             application.EndRequest += Application_EndRequest;
         }
 
-        private void Application_BeginRequest(object sender, EventArgs args)
+        public void Dispose()
+        {
+        }
+
+        private static void Application_BeginRequest(object sender, EventArgs args)
         {
             var application = (HttpApplication) sender;
             var context = application.Context;
@@ -30,6 +34,15 @@ namespace Albumprinter.CorrelationTracking.Correlation.IIS
             context.Items[typeof(CorrelationScope).Name] = CorrelationScope.Current;
         }
 
+        private static void Application_EndRequest(object sender, EventArgs eventArgs)
+        {
+            var application = (HttpApplication) sender;
+            var context = application.Context;
+
+            var disposable = context.Items[typeof(CorrelationHttpModule).Name] as IDisposable;
+            disposable?.Dispose();
+        }
+
         private static Guid GetCorrelationId(HttpRequest request)
         {
             Guid correlationId;
@@ -44,28 +57,12 @@ namespace Albumprinter.CorrelationTracking.Correlation.IIS
         private static Guid GetRequestId(IServiceProvider serviceProvider)
         {
             var workerRequest = serviceProvider.GetService(typeof(HttpWorkerRequest)) as HttpWorkerRequest;
-            var requestId = workerRequest != null ? workerRequest.RequestTraceIdentifier : Guid.NewGuid();
+            var requestId = workerRequest?.RequestTraceIdentifier ?? Guid.NewGuid();
             if (requestId == Guid.Empty)
             {
                 requestId = Guid.NewGuid();
             }
             return requestId;
-        }
-
-        private void Application_EndRequest(object sender, EventArgs eventArgs)
-        {
-            var application = (HttpApplication) sender;
-            var context = application.Context;
-
-            var disposable = context.Items[typeof(CorrelationHttpModule).Name] as IDisposable;
-            if (disposable != null)
-            {
-                disposable.Dispose();
-            }
-        }
-
-        public void Dispose()
-        {
         }
     }
 }

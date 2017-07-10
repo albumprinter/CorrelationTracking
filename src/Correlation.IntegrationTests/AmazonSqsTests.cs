@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using Albumprinter.CorrelationTracking.AmazonSqs;
 using Albumprinter.CorrelationTracking.Correlation.AmazonSqs;
-using Albumprinter.CorrelationTracking.Correlation.Core;
 using Amazon.SQS;
 using Amazon.SQS.Internal;
 using Amazon.SQS.Model;
 using log4net;
 using Xunit;
 using Xunit.Abstractions;
+using CorrelationManager = Albumprinter.CorrelationTracking.Correlation.Core.CorrelationManager;
 
 namespace Correlation.IntegrationTests
 {
@@ -47,7 +48,14 @@ namespace Correlation.IntegrationTests
             var queue = client.ListQueues(new ListQueuesRequest {QueueNamePrefix = "d-dtap-test-queue"});
             var queueUrl = queue.QueueUrls.First();
 
-            client.PurgeQueue(queueUrl);
+            try
+            {
+                client.PurgeQueue(queueUrl);
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine($"Could not purge the '{queueUrl}' queue. " + ex.Message);
+            }
 
             var correlationId1 = Guid.NewGuid();
             Log.Debug($">>> Sending an individual message with correlation: {correlationId1}");

@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.Remoting.Messaging;
+using Albumprinter.CorrelationTracking.Correlation.Core.Providers;
 
 namespace Albumprinter.CorrelationTracking.Correlation.Core
 {
     [Serializable]
     public sealed class CorrelationScope
     {
-        private static readonly string CorrelationScopeSlotName = typeof (CorrelationScope).FullName;
         public static readonly CorrelationScope Initial = new CorrelationScope(Guid.NewGuid(), Guid.Empty, Guid.Empty);
         [NonSerialized] private readonly Dictionary<string, object> properties;
 
@@ -25,8 +24,8 @@ namespace Albumprinter.CorrelationTracking.Correlation.Core
 
         public static CorrelationScope Current
         {
-            get { return CallContext.LogicalGetData(CorrelationScopeSlotName) as CorrelationScope ?? Initial; }
-            internal set { CallContext.LogicalSetData(CorrelationScopeSlotName, value); }
+            get => CorrelationScopeProviders.Current.Scope ?? Initial;
+            internal set => CorrelationScopeProviders.Current.Scope = value;
         }
 
         /// <summary>

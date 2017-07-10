@@ -5,10 +5,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.Log4net
 {
     public sealed class Log4NetCorrelationScopeInterceptor : ICorrelationScopeInterceptor
     {
-        public Log4NetCorrelationScopeInterceptor()
-        {
-            SetLogicalPropertiesOnExit = true;
-        }
+        public static readonly Log4NetCorrelationScopeInterceptor Instance = new Log4NetCorrelationScopeInterceptor();
 
         /// <summary>
         /// Gets or sets a value indicating whether to set the logical properties on exiting to restore WCF flow tracing context on end-request in IIS.
@@ -16,7 +13,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.Log4net
         /// <value>
         ///   <c>true</c> if [restore WCF scope]; otherwise, <c>false</c>.
         /// </value>
-        public bool SetLogicalPropertiesOnExit { get; set; }
+        public bool SetLogicalPropertiesOnExit { get; set; } = true;
 
         public void Enter(CorrelationManager manager, CorrelationScope scope)
         {

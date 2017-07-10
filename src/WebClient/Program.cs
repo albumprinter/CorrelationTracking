@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Reflection;
 using Albumprinter.CorrelationTracking;
@@ -10,6 +11,7 @@ using log4net;
 using log4net.Config;
 using WebClient.CorrelationService;
 using WebClient.CorrelationWebService;
+using CorrelationManager = Albumprinter.CorrelationTracking.Correlation.Core.CorrelationManager;
 
 namespace WebClient
 {
@@ -34,9 +36,11 @@ namespace WebClient
 
                 var client = new HttpClient().UseCorrelationTracking();
                 client.BaseAddress = new Uri("http://localhost:60695/", UriKind.Absolute);
-                client.SendAsync(new HttpRequestMessage(HttpMethod.Get, @"/api/correlation")).GetAwaiter().GetResult();
+                var response = client.SendAsync(new HttpRequestMessage(HttpMethod.Get, @"/api/correlation")).GetAwaiter().GetResult();
+                var result = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 
-                Log.Info("HTTP end job");
+                Log.Info($"HTTP end job, got: {result}");
+                Debug.Assert(CorrelationScope.Current.CorrelationId == Guid.Parse(result.Trim('"')));
             }
 
             using (correlationManager.UseScope(Guid.NewGuid()))
@@ -51,6 +55,7 @@ namespace WebClient
                 var result = client.GetCorrelationIdAsync().GetAwaiter().GetResult();
 
                 Log.Info($"WCF end job, got: {result}");
+                Debug.Assert(CorrelationScope.Current.CorrelationId == result);
             }
 
             using (correlationManager.UseScope(Guid.NewGuid()))
@@ -65,6 +70,7 @@ namespace WebClient
                 var result = client.GetCorrelationIdAsync().GetAwaiter().GetResult();
 
                 Log.Info($"ASMX end job, got: {result}");
+                Debug.Assert(CorrelationScope.Current.CorrelationId == result);
             }
 
             Console.WriteLine(@"Press any key to exit...");

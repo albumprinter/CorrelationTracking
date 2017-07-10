@@ -28,7 +28,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.Core
         {
             if (newScope == null)
             {
-                throw new ArgumentNullException("newScope");
+                throw new ArgumentNullException(nameof(newScope));
             }
             var oldScope = CorrelationScope.Current;
 
