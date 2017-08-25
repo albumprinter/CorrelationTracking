@@ -13,15 +13,13 @@ namespace Correlation.IntegrationTests
     {
         public HttpClientTests(ITestOutputHelper output) : base(output)
         {
-            Client = new HttpClient().UseCorrelationTracking();
-            Client.BaseAddress = new Uri("http://localhost:60695/", UriKind.Absolute);
         }
-
-        public HttpClient Client { get; }
 
         [Fact, Trait("Category", "Integration")]
         public async Task Should_propagate_the_correlation_id_to_Mvc()
         {
+            var client = new HttpClient { BaseAddress = new Uri("http://localhost:60695/", UriKind.Absolute) }
+                .UseCorrelationTracking();
             // arrange
             var expect = Guid.NewGuid();
 
@@ -29,7 +27,7 @@ namespace Correlation.IntegrationTests
             using (CorrelationManager.Instance.UseScope(expect))
             {
                 var request = new HttpRequestMessage(HttpMethod.Get, @"/Home/Index");
-                var response = await Client.SendAsync(request).ConfigureAwait(false);
+                var response = await client.SendAsync(request).ConfigureAwait(false);
 
                 // assert
                 Assert.True(response.Headers.Contains(CorrelationKeys.CorrelationId));
@@ -40,6 +38,9 @@ namespace Correlation.IntegrationTests
         [Fact, Trait("Category", "Integration")]
         public async Task Should_propagate_the_correlation_id_to_WebAPI()
         {
+            var client = new HttpClient { BaseAddress = new Uri("http://localhost:60695/", UriKind.Absolute) }
+                .UseCorrelationTracking();
+
             // arrange
             var expect = Guid.NewGuid();
 
@@ -47,7 +48,7 @@ namespace Correlation.IntegrationTests
             using (CorrelationManager.Instance.UseScope(expect))
             {
                 var request = new HttpRequestMessage(HttpMethod.Get, @"/api/correlation");
-                var response = await Client.SendAsync(request).ConfigureAwait(false);
+                var response = await client.SendAsync(request).ConfigureAwait(false);
 
                 // assert
                 Assert.True(response.Headers.Contains(CorrelationKeys.CorrelationId));
