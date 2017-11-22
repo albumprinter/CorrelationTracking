@@ -19,7 +19,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.AmazonSns
 
         }
 
-        public override Task<PublishResponse> PublishAsync(PublishRequest request, CancellationToken cancellationToken = default(CancellationToken))
+        public new Task<PublishResponse> PublishAsync(PublishRequest request, CancellationToken cancellationToken = default(CancellationToken))
         {
             AddCorrelationAttributeIfAbsent(request);
             return base.PublishAsync(request, cancellationToken);
