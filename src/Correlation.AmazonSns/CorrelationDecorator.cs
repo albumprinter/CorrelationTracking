@@ -12,6 +12,10 @@ namespace Albumprinter.CorrelationTracking.Correlation.AmazonSns
     {
         private readonly IAmazonSimpleNotificationService _client;
 
+        public CorrelationDecorator(IAmazonSimpleNotificationService client)
+        {
+            _client = client;
+        }
 
         public Task<PublishResponse> PublishAsync(PublishRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
