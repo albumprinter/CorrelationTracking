@@ -20,8 +20,8 @@ namespace Albumprinter.CorrelationTracking.Tracing.IIS
         public TrackingHttpModuleConfiguration(string allowedUrls, IEnumerable<string> allowedHeaders, string deniedUrls)
         {
             // NOTE: set to zero
-            allowedUrls = string.IsNullOrWhiteSpace(allowedUrls) ? null : allowedUrls;
-            deniedUrls = string.IsNullOrWhiteSpace(deniedUrls) ? null : deniedUrls;
+            allowedUrls = allowedUrls.IsNullOrWhiteSpace() ? null : allowedUrls;
+            deniedUrls = deniedUrls.IsNullOrWhiteSpace() ? null : deniedUrls;
 
             // NOTE: extend with defaults
             allowedUrls = allowedUrls ?? @"/(api|v\d+)/|\.(asmx|svc)(\?|$)";
@@ -47,6 +47,15 @@ namespace Albumprinter.CorrelationTracking.Tracing.IIS
             var allowedHeaders = (appSettings.Get(moduleName + @":AllowedHeaders") ?? string.Empty).Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
             var deniedUrls = appSettings.Get(moduleName + @":DeniedUrls");
             return new TrackingHttpModuleConfiguration(allowedUrls, allowedHeaders, deniedUrls);
+        }
+    }
+
+    internal static class StringExtensions
+    {
+        public static bool IsNullOrWhiteSpace(this string value)
+        {
+            if (value == null) return true;
+            return string.IsNullOrEmpty(value.Trim());
         }
     }
 }

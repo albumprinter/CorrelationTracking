@@ -117,13 +117,27 @@ namespace Albumprinter.CorrelationTracking.Correlation.Asmx
             var correlationId = Guid.Empty;
             if (correlationHeader != null && string.IsNullOrEmpty(correlationHeader.Element.InnerText) == false)
             {
-                correlationId = Guid.Parse(correlationHeader.Element.InnerText);
+                correlationId = new Guid(correlationHeader.Element.InnerText);
             }
             if (correlationId == Guid.Empty)
             {
                 correlationId = Guid.NewGuid();
             }
             CorrelationManager.Instance.UseScope(correlationId);
+        }
+    }
+
+    internal static class StreamExtensions
+    {
+        public static void CopyTo(this Stream src, Stream destination, int bufferSize = 81920)
+        {
+            byte[] buffer = new byte[bufferSize];
+            int bytesRead;
+
+            while ((bytesRead = src.Read(buffer, 0, buffer.Length)) > 0)
+            {
+                destination.Write(buffer, 0, bytesRead);
+            }
         }
     }
 }

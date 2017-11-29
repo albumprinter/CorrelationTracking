@@ -26,6 +26,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <WcfConfigValidationEnabled>True</WcfConfigValidationEnabled>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -51,7 +52,6 @@
     </Reference>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="log4net.Ext.Json, Version=1.2.15.4228, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.Ext.Json.1.2.15.14586\lib\net45-full\log4net.Ext.Json.dll</HintPath>

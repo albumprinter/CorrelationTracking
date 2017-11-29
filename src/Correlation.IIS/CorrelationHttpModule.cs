@@ -30,10 +30,24 @@ namespace Albumprinter.CorrelationTracking.Correlation.IIS
             context.Items[typeof(CorrelationScope).Name] = CorrelationScope.Current;
         }
 
+        private static bool GuidTryParse(string strGuid, out Guid guid)
+        {
+            try
+            {
+                guid = new Guid(strGuid);
+                return true;
+            }
+            catch (Exception e)
+            {
+                guid = default(Guid);
+                return false;
+            }
+        }
+
         private static Guid GetCorrelationId(HttpRequest request)
         {
             Guid correlationId;
-            Guid.TryParse(request.Headers[CorrelationKeys.CorrelationId], out correlationId);
+            GuidTryParse(request.Headers[CorrelationKeys.CorrelationId], out correlationId);
             if (correlationId == Guid.Empty)
             {
                 correlationId = Guid.NewGuid();

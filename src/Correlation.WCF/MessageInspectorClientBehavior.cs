@@ -8,6 +8,8 @@ namespace Albumprinter.CorrelationTracking.Correlation.WCF
 {
     public class MessageInspectorClientBehavior : IEndpointBehavior, IClientMessageInspector
     {
+        public delegate void EventHandler<TEventArgs>(object sender, TEventArgs e);
+
         public event EventHandler<Message> BeforeSend = delegate { };
         public event EventHandler<Message> AfterReceive = delegate { };
 

@@ -75,7 +75,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.IIS
         public static string GetHeaders(NameValueCollection headers, HashSet<string> allowedHeaders)
         {
             var allowed = headers.AllKeys.Where(allowedHeaders.Contains);
-            return string.Join(Environment.NewLine, allowed.Select(key => $"{key}: {headers[key]}"));
+            return string.Join(Environment.NewLine, allowed.Select(key => $"{key}: {headers[key]}").ToArray());
         }
 
         private static string GetStreamContent(Stream stream, Encoding encoding)
