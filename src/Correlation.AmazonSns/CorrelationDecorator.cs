@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Albumprinter.CorrelationTracking.Correlation.Core;
+using Amazon.Runtime;
 using Amazon.Runtime.SharedInterfaces;
 using Amazon.SimpleNotificationService;
 using Amazon.SimpleNotificationService.Model;
@@ -49,9 +50,19 @@ namespace Albumprinter.CorrelationTracking.Correlation.AmazonSns
             return _client.SubscribeQueue(topicArn, sqsClient, sqsQueueUrl);
         }
 
+        public Task<string> SubscribeQueueAsync(string topicArn, ICoreAmazonSQS sqsClient, string sqsQueueUrl)
+        {
+            return _client.SubscribeQueueAsync(topicArn, sqsClient, sqsQueueUrl);
+        }
+
         public IDictionary<string, string> SubscribeQueueToTopics(IList<string> topicArns, ICoreAmazonSQS sqsClient, string sqsQueueUrl)
         {
             return _client.SubscribeQueueToTopics(topicArns, sqsClient, sqsQueueUrl);
+        }
+
+        public Task<IDictionary<string, string>> SubscribeQueueToTopicsAsync(IList<string> topicArns, ICoreAmazonSQS sqsClient, string sqsQueueUrl)
+        {
+            return _client.SubscribeQueueToTopicsAsync(topicArns, sqsClient, sqsQueueUrl);
         }
 
         public Topic FindTopic(string topicName)
@@ -59,9 +70,19 @@ namespace Albumprinter.CorrelationTracking.Correlation.AmazonSns
             return _client.FindTopic(topicName);
         }
 
+        public Task<Topic> FindTopicAsync(string topicName)
+        {
+            return _client.FindTopicAsync(topicName);
+        }
+
         public void AuthorizeS3ToPublish(string topicArn, string bucket)
         {
             _client.AuthorizeS3ToPublish(topicArn, bucket);
+        }
+
+        public Task AuthorizeS3ToPublishAsync(string topicArn, string bucket)
+        {
+            return _client.AuthorizeS3ToPublishAsync(topicArn, bucket);
         }
 
         public AddPermissionResponse AddPermission(string topicArn, string label, List<string> awsAccountId, List<string> actionName)
@@ -605,5 +626,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.AmazonSns
             return _client.UnsubscribeAsync(request, cancellationToken);
         }
         #endregion
+
+        public IClientConfig Config => _client.Config;
     }
 }
