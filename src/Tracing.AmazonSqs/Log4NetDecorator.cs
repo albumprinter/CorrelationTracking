@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Amazon.Runtime;
 using Amazon.SQS;
 using Amazon.SQS.Model;
 
@@ -122,14 +123,29 @@ namespace Albumprinter.CorrelationTracking.Tracing.AmazonSqs
             return _client.GetAttributes(queueUrl);
         }
 
+        public Task<Dictionary<string, string>> GetAttributesAsync(string queueUrl)
+        {
+            return _client.GetAttributesAsync(queueUrl);
+        }
+
         public void SetAttributes(string queueUrl, Dictionary<string, string> attributes)
         {
             _client.SetAttributes(queueUrl, attributes);
         }
 
+        public Task SetAttributesAsync(string queueUrl, Dictionary<string, string> attributes)
+        {
+            return _client.SetAttributesAsync(queueUrl, attributes);
+        }
+
         public string AuthorizeS3ToSendMessage(string queueUrl, string bucket)
         {
             return _client.AuthorizeS3ToSendMessage(queueUrl, bucket);
+        }
+
+        public Task<string> AuthorizeS3ToSendMessageAsync(string queueUrl, string bucket)
+        {
+            return _client.AuthorizeS3ToSendMessageAsync(queueUrl, bucket);
         }
 
         public AddPermissionResponse AddPermission(string queueUrl, string label, List<string> awsAccountIds, List<string> actions)
@@ -353,6 +369,16 @@ namespace Albumprinter.CorrelationTracking.Tracing.AmazonSqs
             return _client.ListQueuesAsync(request, cancellationToken);
         }
 
+        public ListQueueTagsResponse ListQueueTags(ListQueueTagsRequest request)
+        {
+            return _client.ListQueueTags(request);
+        }
+
+        public Task<ListQueueTagsResponse> ListQueueTagsAsync(ListQueueTagsRequest request, CancellationToken cancellationToken = new CancellationToken())
+        {
+            return _client.ListQueueTagsAsync(request, cancellationToken);
+        }
+
         public PurgeQueueResponse PurgeQueue(string queueUrl)
         {
             return _client.PurgeQueue(queueUrl);
@@ -416,11 +442,33 @@ namespace Albumprinter.CorrelationTracking.Tracing.AmazonSqs
             return _client.SetQueueAttributesAsync(request, cancellationToken);
         }
 
+        public TagQueueResponse TagQueue(TagQueueRequest request)
+        {
+            return _client.TagQueue(request);
+        }
+
+        public Task<TagQueueResponse> TagQueueAsync(TagQueueRequest request, CancellationToken cancellationToken = new CancellationToken())
+        {
+            return _client.TagQueueAsync(request, cancellationToken);
+        }
+
+        public UntagQueueResponse UntagQueue(UntagQueueRequest request)
+        {
+            return _client.UntagQueue(request);
+        }
+
+        public Task<UntagQueueResponse> UntagQueueAsync(UntagQueueRequest request, CancellationToken cancellationToken = new CancellationToken())
+        {
+            return _client.UntagQueueAsync(request, cancellationToken);
+        }
+
         public void Dispose()
         {
             _client.Dispose();
         }
 
         #endregion
+
+        public IClientConfig Config => _client.Config;
     }
 }
