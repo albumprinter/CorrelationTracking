@@ -23,8 +23,8 @@ namespace Correlation.Core.Standard
 
         public static CorrelationScope Current
         {
-            get { return CallContext.LogicalGetData(CorrelationScopeSlotName) as CorrelationScope ?? Initial; }
-            internal set { CallContext.LogicalSetData(CorrelationScopeSlotName, value); }
+            get { return CallContext.GetData(CorrelationScopeSlotName) as CorrelationScope ?? Initial; }
+            internal set { CallContext.SetData(CorrelationScopeSlotName, value); }
         }
 
         /// <summary>
