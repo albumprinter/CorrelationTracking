@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Albumprinter.CorrelationTracking.Correlation.Core
+namespace Correlation.Core.Standard
 {
     public sealed class CorrelationManager
     {

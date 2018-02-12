@@ -1,4 +1,4 @@
-﻿namespace Albumprinter.CorrelationTracking.Correlation.Core
+﻿namespace Correlation.Core.Standard
 {
     public interface ICorrelationScopeInterceptor
     {

@@ -1,15 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.Remoting.Messaging;
 
-namespace Albumprinter.CorrelationTracking.Correlation.Core
+namespace Correlation.Core.Standard
 {
-    [Serializable]
     public sealed class CorrelationScope
     {
         private static readonly string CorrelationScopeSlotName = typeof (CorrelationScope).FullName;
         public static readonly CorrelationScope Initial = new CorrelationScope(Guid.NewGuid(), Guid.Empty, Guid.Empty);
-        [NonSerialized] private readonly Dictionary<string, object> properties;
+        private readonly Dictionary<string, object> properties;
 
         public CorrelationScope() : this(Guid.Empty, Guid.Empty, Guid.Empty)
         {
