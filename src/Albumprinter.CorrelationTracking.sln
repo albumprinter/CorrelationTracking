@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.15
+VisualStudioVersion = 15.0.26430.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp1", "WebApp1\WebApp1.csproj", "{ED712D31-A542-4850-AD4E-50EC00D50CC2}"
 EndProject
@@ -74,6 +74,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorrelationTracking.AmazonSqs", "CorrelationTracking.AmazonSqs\CorrelationTracking.AmazonSqs.csproj", "{F9F4BE37-10BE-42C1-87FA-AD573807739C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correlation.AmazonSns", "Correlation.AmazonSns\Correlation.AmazonSns.csproj", "{64D85298-47C4-4B98-9220-7974CFA0AB16}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correlation.Core.Standard", "Correlation.Core.Standard\Correlation.Core.Standard.csproj", "{AE749F0C-4D01-418D-8B36-1D2B6556D6A0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -193,6 +195,10 @@ Global
 		{64D85298-47C4-4B98-9220-7974CFA0AB16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{64D85298-47C4-4B98-9220-7974CFA0AB16}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{64D85298-47C4-4B98-9220-7974CFA0AB16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE749F0C-4D01-418D-8B36-1D2B6556D6A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE749F0C-4D01-418D-8B36-1D2B6556D6A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE749F0C-4D01-418D-8B36-1D2B6556D6A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE749F0C-4D01-418D-8B36-1D2B6556D6A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
