@@ -19,7 +19,7 @@ var buildDir = Directory("./src/CorrelationTracking/bin") + Directory(configurat
 Task("Restore-NuGet-Packages")
     .Does(() =>
 {
-    NuGetRestore("./src/Example.sln");
+    NuGetRestore("./src/Albumprinter.CorrelationTracking.sln");
 });
 
 Task("Build")
