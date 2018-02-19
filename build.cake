@@ -17,7 +17,6 @@ var buildDir = Directory("./src/CorrelationTracking/bin") + Directory(configurat
 // TASKS
 //////////////////////////////////////////////////////////////////////
 Task("Restore-NuGet-Packages")
-    .IsDependentOn("Clean")
     .Does(() =>
 {
     NuGetRestore("./src/Example.sln");
