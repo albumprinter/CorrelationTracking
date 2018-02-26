@@ -1,57 +1,165 @@
-#tool nuget:?package=NUnit.ConsoleRunner&version=3.4.0
-//////////////////////////////////////////////////////////////////////
-// ARGUMENTS
-//////////////////////////////////////////////////////////////////////
+#tool "nuget:?package=GitVersion.CommandLine&version=3.6.5"
+#tool "nuget:?package=NUnit.Runners&version=2.6.4"
 
-var target = Argument("target", "Default");
-var configuration = Argument("configuration", "Release");
+var CONFIGURATION = Argument<string>("c", "Release");
+var NUGET_SOURCE = EnvironmentVariable("NUGET_SOURCE") ?? "http://offproget001.vistaprint.net:81/nuget";
+var NUGET_APIKEY = EnvironmentVariable("NUGET_APIKEY");
+var NUGET_LIBRARY = NUGET_SOURCE + "/Library";
+var NUGET_DEPLOY = NUGET_SOURCE + "/Deploy";
+var MYGET_DEPLOY = EnvironmentVariable("MYGET_DEPLOY") ?? "https://www.myget.org/F/albelli-ebt/auth/f0f0cc84-71e6-45e1-8bff-5f160c729e77/api/v3/index.json";
 
-//////////////////////////////////////////////////////////////////////
-// PREPARATION
-//////////////////////////////////////////////////////////////////////
+var src = Directory("./src");
+var dst = Directory("./artifacts");
+var packages = dst + Directory("./packages");
+var octopacks = dst + Directory("./octopacks");
 
-// Define directories.
-var buildDir = Directory("./src/CorrelationTracking/bin") + Directory(configuration);
-
-//////////////////////////////////////////////////////////////////////
-// TASKS
-//////////////////////////////////////////////////////////////////////
-Task("Restore-NuGet-Packages")
-    .Does(() =>
-{
-    NuGetRestore("./src/Albumprinter.CorrelationTracking.sln");
+Task("Clean").Does(() => {
+    CleanDirectories(dst);
+    CleanDirectories(src.Path + "/packages");
+    CleanDirectories(src.Path + "/**/bin");
+    CleanDirectories(src.Path + "/**/obj");
+    CleanDirectories(src.Path + "/**/pkg");
 });
 
-Task("Build")
-    .IsDependentOn("Restore-NuGet-Packages")
-    .Does(() =>
-{
-    if(IsRunningOnWindows())
-    {
-      // Use MSBuild
-      MSBuild("./src/Albumprinter.CorrelationTracking.sln",new MSBuildSettings
-      {
-        ToolVersion = MSBuildToolVersion.VS2017,
-        Configuration = "Release",
+Task("Restore").Does(() => {
+    EnsureDirectoryExists(dst);
+    EnsureDirectoryExists(packages);
+    EnsureDirectoryExists(octopacks);
+
+    foreach(var sln in GetFiles(src.Path + "/*.sln")) {
+        var settings = new NuGetRestoreSettings {
+            FallbackSource = new List<string> { NUGET_LIBRARY }
+        };
+        NuGetRestore(sln, settings);
+    }
+});
+
+Task("SemVer").Does(() => {
+    var settings = new GitVersionSettings {
+        OutputType = GitVersionOutput.Json,
+        UpdateAssemblyInfo = true,
+        UpdateAssemblyInfoFilePath = src + File("CommonAssemblyInfo.cs")
+    };
+
+    if (BuildSystem.IsRunningOnTeamCity) {
+        settings.OutputType = GitVersionOutput.BuildServer;
+    }
+
+    var version = GitVersion(settings);
+
+    if (settings.OutputType == GitVersionOutput.Json) {
+        Information("{{  FullSemVer: {0}", version.FullSemVer);
+        Information("    NuGetVersionV2: {0}", version.NuGetVersionV2);
+        Information("    InformationalVersion: {0}  }}", version.InformationalVersion);
+        System.IO.File.WriteAllText(dst.Path + "/VERSION", version.NuGetVersionV2);
+    }
+});
+
+Task("Build").Does(() => {
+    foreach(var sln in GetFiles(src.Path + "/*.sln")) {
+        MSBuild(sln, settings => settings
+            .UseToolVersion(MSBuildToolVersion.VS2017)
+            .SetVerbosity(Verbosity.Normal)
+            .SetConfiguration(CONFIGURATION)
+            .SetPlatformTarget(PlatformTarget.MSIL)
+            .SetMSBuildPlatform(MSBuildPlatform.Automatic)
+            .WithProperty("RunOctoPack", "true"));
+    }
+    Information("Copying the octo pack artifacts ...");
+    CopyFiles(src.Path + "/**/obj/octopacked/*.nupkg", octopacks);
+});
+
+Task("Test").Does(() => {
+    Information("Running unit tests...");
+    NUnit(src.Path + "/**/bin/" + CONFIGURATION + "/*.Test*.dll", new NUnitSettings {
+        NoLogo = true,
+        StopOnError = true,
+        Exclude = "Integration",
+        ResultsFile = dst + File("./TestResults.xml")
+    });
+    if (BuildSystem.IsRunningOnTeamCity) {
+        TeamCity.ImportData("nunit", dst.Path + "/TestResults.xml");
+    }
+});
+
+Task("Pack").Does(() => {
+    var settings = new NuGetPackSettings {
+        Symbols = true,
+        IncludeReferencedProjects = true,
+        Verbosity = NuGetVerbosity.Detailed,
+        Properties = new Dictionary<string, string> {
+            {"Configuration", CONFIGURATION}
+        },
+        OutputDirectory = packages
+    };
+
+    var clients = new FilePath [] {
+        src + File("Correlation.Core/Correlation.Core.csproj"),
+        src + File("Correlation.Http/Correlation.Http.csproj"),
+        src + File("Correlation.IIS/Correlation.IIS.csproj"),
+        src + File("Correlation.WCF/Correlation.WCF.csproj"),
+        src + File("Correlation.Asmx/Correlation.Asmx.csproj"),
+        src + File("Correlation.MassTransit/Correlation.MassTransit.csproj"),
+        src + File("Tracing.Http/Tracing.Http.csproj"),
+        src + File("Tracing.IIS/Tracing.IIS.csproj"),
+        src + File("Tracing.WCF/Tracing.WCF.csproj"),
+        src + File("Tracing.Asmx/Tracing.Asmx.csproj"),
+        src + File("Tracing.AmazonSqs/Tracing.AmazonSqs.csproj"),
+        src + File("Tracing.MassTransit/Tracing.MassTransit.csproj"),
+        src + File("Correlation.Log4net/Correlation.Log4net.csproj"),
+        src + File("CorrelationTracking/CorrelationTracking.csproj"),
+        src + File("CorrelationTracking.Http/CorrelationTracking.Http.csproj"),
+        src + File("CorrelationTracking.IIS/CorrelationTracking.IIS.csproj"),
+        src + File("CorrelationTracking.MassTransit/CorrelationTracking.MassTransit.csproj"),
+        src + File("Correlation.AmazonSqs/Correlation.AmazonSqs.csproj"),
+        src + File("Correlation.AmazonSns/Correlation.AmazonSns.csproj")
+    };
+    NuGetPack(clients, settings);
+
+    var coreSettings = new DotNetCorePackSettings {
+        Configuration = CONFIGURATION,
+        OutputDirectory = packages
+    };
+
+    DotNetCorePack(src + File("Correlation.Core.Standard/Correlation.Core.Standard.csproj"), coreSettings);
+});
+
+Task("Push").Does(() => {
+    Information("Pushing the octopack packages...");
+    foreach(var package in GetFiles(octopacks.Path + "/*.nupkg")) {
+        NuGetPush(package, new NuGetPushSettings {
+            Source = NUGET_DEPLOY,
+            ApiKey = NUGET_APIKEY
         });
     }
-    else
-    {
-      // Use XBuild
-      XBuild("./src/Albumprinter.CorrelationTracking.sln", settings =>
-        settings.SetConfiguration(configuration));
+
+    Information("Pushing the nuget packages...");
+    foreach(var package in GetFiles(packages.Path + "/*.nupkg").Where(path => !path.FullPath.Contains(".symbols."))) {
+        NuGetPush(package, new NuGetPushSettings {
+            Source = NUGET_LIBRARY,
+            ApiKey = NUGET_APIKEY
+        });
+    }
+
+    Information("Pushing the myget packages...");
+    foreach(var package in GetFiles(packages.Path + "/Correlation.Core.Standard.*.nupkg").Where(path => !path.FullPath.Contains(".symbols."))) {
+        NuGetPush(package, new NuGetPushSettings {
+            Source = MYGET_DEPLOY,
+            ApiKey = ""
+        });
     }
 });
 
-//////////////////////////////////////////////////////////////////////
-// TASK TARGETS
-//////////////////////////////////////////////////////////////////////
-
 Task("Default")
-    .IsDependentOn("Build");
+  .IsDependentOn("Clean")
+  .IsDependentOn("Restore")
+  .IsDependentOn("SemVer")
+  .IsDependentOn("Build")
+  .IsDependentOn("Test")
+  .IsDependentOn("Pack");
 
-//////////////////////////////////////////////////////////////////////
-// EXECUTION
-//////////////////////////////////////////////////////////////////////
+Task("TeamCity")
+  .IsDependentOn("Default")
+  .IsDependentOn("Push");
 
-RunTarget(target);
+RunTarget(Argument("target", "Default"));
