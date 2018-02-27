@@ -3,6 +3,13 @@
   <PropertyGroup>
     <TargetFramework>netstandard1.3</TargetFramework>
     <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
+    <RootNamespace>Albumprinter.CorrelationTracking.Correlation.Core</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Correlation.Core\CorrelationKeys.cs" Link="CorrelationKeys.cs" />
+    <Compile Include="..\Correlation.Core\CorrelationManager.cs" Link="CorrelationManager.cs" />
+    <Compile Include="..\Correlation.Core\ICorrelationScopeInterceptor.cs" Link="ICorrelationScopeInterceptor.cs" />
+  </ItemGroup>
 
 </Project>
