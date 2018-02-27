@@ -1,0 +1,9 @@
+assembly-informational-format: '{NuGetVersion}' # NOTE: OctoPack compatibility
+mode: ContinuousDeployment
+branches:
+  master:
+    tag: beta
+    increment: Minor
+  features?[/-]:
+    tag: alpha-{BranchName}
+    increment: Minor # NOTE: TeamCity compatibility
