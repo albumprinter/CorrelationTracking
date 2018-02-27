@@ -6,12 +6,12 @@ var NUGET_SOURCE = EnvironmentVariable("NUGET_SOURCE") ?? "http://offproget001.v
 var NUGET_APIKEY = EnvironmentVariable("NUGET_APIKEY");
 var NUGET_LIBRARY = NUGET_SOURCE + "/Library";
 var NUGET_DEPLOY = NUGET_SOURCE + "/Deploy";
-var MYGET_DEPLOY = EnvironmentVariable("MYGET_DEPLOY") ?? "https://www.myget.org/F/albelli-ebt/auth/f0f0cc84-71e6-45e1-8bff-5f160c729e77/api/v3/index.json";
+var MYGET_DEPLOY = EnvironmentVariable("MYGET_DEPLOY");
 
 var src = Directory("./src");
 var dst = Directory("./artifacts");
 var packages = dst + Directory("./packages");
-var octopacks = dst + Directory("./octopacks");
+
 
 Task("Clean").Does(() => {
     CleanDirectories(dst);
@@ -24,7 +24,6 @@ Task("Clean").Does(() => {
 Task("Restore").Does(() => {
     EnsureDirectoryExists(dst);
     EnsureDirectoryExists(packages);
-    EnsureDirectoryExists(octopacks);
 
     foreach(var sln in GetFiles(src.Path + "/*.sln")) {
         var settings = new NuGetRestoreSettings {
@@ -41,11 +40,8 @@ Task("Build").Does(() => {
             .SetVerbosity(Verbosity.Normal)
             .SetConfiguration(CONFIGURATION)
             .SetPlatformTarget(PlatformTarget.MSIL)
-            .SetMSBuildPlatform(MSBuildPlatform.Automatic)
-            .WithProperty("RunOctoPack", "true"));
+            .SetMSBuildPlatform(MSBuildPlatform.Automatic));
     }
-    Information("Copying the octo pack artifacts ...");
-    CopyFiles(src.Path + "/**/obj/octopacked/*.nupkg", octopacks);
 });
 
 Task("Test").Does(() => {
@@ -104,14 +100,6 @@ Task("Pack").Does(() => {
 });
 
 Task("Push").Does(() => {
-    Information("Pushing the octopack packages...");
-    foreach(var package in GetFiles(octopacks.Path + "/*.nupkg")) {
-        NuGetPush(package, new NuGetPushSettings {
-            Source = NUGET_DEPLOY,
-            ApiKey = NUGET_APIKEY
-        });
-    }
-
     Information("Pushing the nuget packages...");
     foreach(var package in GetFiles(packages.Path + "/*.nupkg").Where(path => !path.FullPath.Contains(".symbols."))) {
         NuGetPush(package, new NuGetPushSettings {
