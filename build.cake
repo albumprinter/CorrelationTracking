@@ -34,27 +34,6 @@ Task("Restore").Does(() => {
     }
 });
 
-Task("SemVer").Does(() => {
-    var settings = new GitVersionSettings {
-        OutputType = GitVersionOutput.Json,
-        UpdateAssemblyInfo = true,
-        UpdateAssemblyInfoFilePath = src + File("CommonAssemblyInfo.cs")
-    };
-
-    if (BuildSystem.IsRunningOnTeamCity) {
-        settings.OutputType = GitVersionOutput.BuildServer;
-    }
-
-    var version = GitVersion(settings);
-
-    if (settings.OutputType == GitVersionOutput.Json) {
-        Information("{{  FullSemVer: {0}", version.FullSemVer);
-        Information("    NuGetVersionV2: {0}", version.NuGetVersionV2);
-        Information("    InformationalVersion: {0}  }}", version.InformationalVersion);
-        System.IO.File.WriteAllText(dst.Path + "/VERSION", version.NuGetVersionV2);
-    }
-});
-
 Task("Build").Does(() => {
     foreach(var sln in GetFiles(src.Path + "/*.sln")) {
         MSBuild(sln, settings => settings
@@ -153,7 +132,6 @@ Task("Push").Does(() => {
 Task("Default")
   .IsDependentOn("Clean")
   .IsDependentOn("Restore")
-  .IsDependentOn("SemVer")
   .IsDependentOn("Build")
   .IsDependentOn("Test")
   .IsDependentOn("Pack");
