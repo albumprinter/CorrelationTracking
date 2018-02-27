@@ -8,7 +8,7 @@
     <tags>CorrelationTracking</tags>
     <projectUrl>https://github.com/albumprinter/CorrelationTracking</projectUrl>
     <owners>$author$</owners>
-    <authors>Albumprinter</authors>
+    <authors>Albelli</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <dependencies>
       <dependency id="Albumprinter.CorrelationTracking" version="$version$" />
