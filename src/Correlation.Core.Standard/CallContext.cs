@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Threading;
 
-namespace Correlation.Core.Standard
+namespace Albumprinter.CorrelationTracking.Correlation.Core
 {
     /// <summary>
     /// Provides a way to set contextual data that flows with the call and 

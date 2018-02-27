@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Correlation.Core.Standard
+namespace Albumprinter.CorrelationTracking.Correlation.Core
 {
     public sealed class CorrelationScope
     {
@@ -23,8 +23,8 @@ namespace Correlation.Core.Standard
 
         public static CorrelationScope Current
         {
-            get { return CallContext.GetData(CorrelationScopeSlotName) as CorrelationScope ?? Initial; }
-            internal set { CallContext.SetData(CorrelationScopeSlotName, value); }
+            get => CallContext.GetData(CorrelationScopeSlotName) as CorrelationScope ?? Initial;
+            internal set => CallContext.SetData(CorrelationScopeSlotName, value);
         }
 
         /// <summary>
