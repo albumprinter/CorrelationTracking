@@ -252,19 +252,7 @@ paket-files/
 # JetBrains Rider
 .idea/
 *.sln.iml
-tools/NUnit.ConsoleRunner.3.4.0/tools/nunit.engine.api.xml
-tools/NUnit.ConsoleRunner.3.4.0/LICENSE.txt
-tools/NUnit.ConsoleRunner.3.4.0/CHANGES.txt
-tools/Cake/Cake.runtimeconfig.json
-tools/Cake/Cake.NuGet.xml
-tools/Cake/Cake.Core.xml
-tools/packages.config.md5sum
-tools/NUnit.ConsoleRunner.3.4.0/NUnit.ConsoleRunner.nuspec
-tools/NUnit.ConsoleRunner.3.4.0/NOTICES.txt
-tools/Cake/LICENSE
-tools/Cake/Cake.xml
-tools/Cake/Cake.exe.config
-tools/Cake/Cake.Common.xml
-tools/NUnit.ConsoleRunner.3.4.0/tools/nunit3-console.exe.config
-tools/NUnit.ConsoleRunner.3.4.0/tools/nunit-agent-x86.exe.config
-tools/NUnit.ConsoleRunner.3.4.0/tools/nunit-agent.exe.config
+
+# Cake
+tools/**
+!tools/packages.config
