@@ -1,3 +1,4 @@
+next-version: 2.0.125
 assembly-informational-format: '{NuGetVersion}' # NOTE: OctoPack compatibility
 mode: ContinuousDeployment
 branches:
