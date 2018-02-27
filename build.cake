@@ -121,6 +121,7 @@ Task("Pack").Does(() => {
 });
 
 Task("Push").Does(() => {
+    /*
     Information("Pushing the nuget packages...");
     foreach(var package in GetFiles(packages.Path + "/*.nupkg").Where(path => !path.FullPath.Contains(".symbols."))) {
         NuGetPush(package, new NuGetPushSettings {
@@ -128,7 +129,7 @@ Task("Push").Does(() => {
             ApiKey = NUGET_APIKEY
         });
     }
-
+ */
     Information("Pushing the myget packages...");
     foreach(var package in GetFiles(packages.Path + "/Correlation.Core.Standard.*.nupkg").Where(path => !path.FullPath.Contains(".symbols."))) {
         NuGetPush(package, new NuGetPushSettings {
