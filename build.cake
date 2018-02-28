@@ -35,16 +35,16 @@ Task("Restore").Does(() => {
 Task("SemVer").Does(() => {
     var settings = new GitVersionSettings {
         UpdateAssemblyInfo = true,
-        UpdateAssemblyInfoFilePath = src + File("CommonAssemblyInfo.cs")
+        UpdateAssemblyInfoFilePath = src + File("CommonAssemblyInfo.cs"),
+        OutputType = GitVersionOutput.Json
     };
 
+    var version = GitVersion(settings);
+
     if (BuildSystem.IsRunningOnTeamCity) {
-        settings.OutputType = GitVersionOutput.BuildServer;
-        var versionTC = GitVersion(settings);
+         BuildSystem.TeamCity.SetBuildNumber(version.SemVer);
     }
 
-    settings.OutputType = GitVersionOutput.Json;
-    var version = GitVersion(settings);
     Information("{{  FullSemVer: {0}", version.FullSemVer);
     Information("    NuGetVersionV2: {0}", version.NuGetVersionV2);
     Information("    InformationalVersion: {0}  }}", version.InformationalVersion);
