@@ -4,9 +4,6 @@
     <TargetFramework>netstandard1.3</TargetFramework>
     <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
     <RootNamespace>Albumprinter.CorrelationTracking.Correlation.Core</RootNamespace>
-    <AssemblyVersion>2.0.125.0</AssemblyVersion>
-    <FileVersion>2.0.125.0</FileVersion>
-    <Version>2.0.125</Version>
     <Authors>Albelli</Authors>
     <Company>Albelli</Company>
     <Product>CorrelationTracking</Product>

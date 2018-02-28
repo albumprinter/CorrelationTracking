@@ -12,6 +12,8 @@ var src = Directory("./src");
 var dst = Directory("./artifacts");
 var packages = dst + Directory("./packages");
 
+GitVersion version = null;
+
 
 Task("Clean").Does(() => {
     CleanDirectories(dst);
@@ -44,7 +46,7 @@ Task("SemVer").Does(() => {
         settings.OutputType = GitVersionOutput.BuildServer;
     }
 
-    var version = GitVersion(settings);
+    version = GitVersion(settings);
 
     if (settings.OutputType == GitVersionOutput.Json) {
         Information("{{  FullSemVer: {0}", version.FullSemVer);
@@ -61,7 +63,11 @@ Task("Build").Does(() => {
             .SetVerbosity(Verbosity.Normal)
             .SetConfiguration(CONFIGURATION)
             .SetPlatformTarget(PlatformTarget.MSIL)
-            .SetMSBuildPlatform(MSBuildPlatform.Automatic));
+            .SetMSBuildPlatform(MSBuildPlatform.Automatic)
+            .WithProperty("Version", version.NuGetVersionV2)
+            .WithProperty("AssemblyVersion", version.AssemblySemVer)
+            .WithProperty("FileVersion", version.AssemblySemFileVer)
+            );
     }
 });
 
