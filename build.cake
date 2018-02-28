@@ -12,9 +12,6 @@ var src = Directory("./src");
 var dst = Directory("./artifacts");
 var packages = dst + Directory("./packages");
 
-GitVersion version = null;
-
-
 Task("Clean").Does(() => {
     CleanDirectories(dst);
     CleanDirectories(src.Path + "/packages");
@@ -46,13 +43,22 @@ Task("SemVer").Does(() => {
         settings.OutputType = GitVersionOutput.BuildServer;
     }
 
-    version = GitVersion(settings);
+    var version = GitVersion(settings);
 
     if (settings.OutputType == GitVersionOutput.Json) {
         Information("{{  FullSemVer: {0}", version.FullSemVer);
         Information("    NuGetVersionV2: {0}", version.NuGetVersionV2);
         Information("    InformationalVersion: {0}  }}", version.InformationalVersion);
         System.IO.File.WriteAllText(dst.Path + "/VERSION", version.NuGetVersionV2);
+    }
+
+    //Set version in csproj file for .Net Standard project
+    foreach(var file in GetFiles(src.Path + "/Correlation.Core.Standard/Correlation.Core.Standard.csproj")) {
+        string text = System.IO.File.ReadAllText(file.ToString());
+        text = System.Text.RegularExpressions.Regex.Replace(text, "(<Version>)(.*?)(</Version>)", m => m.Groups[1].Value + version.NuGetVersionV2 + m.Groups[3].Value);
+        text = System.Text.RegularExpressions.Regex.Replace(text, "(<AssemblyVersion>)(.*?)(</AssemblyVersion>)", m => m.Groups[1].Value + version.AssemblySemVer + m.Groups[3].Value);
+        text = System.Text.RegularExpressions.Regex.Replace(text, "(<FileVersion>)(.*?)(</FileVersion>)", m => m.Groups[1].Value + version.AssemblySemVer + m.Groups[3].Value);
+        System.IO.File.WriteAllText(file.ToString(), text);
     }
 });
 
@@ -64,9 +70,6 @@ Task("Build").Does(() => {
             .SetConfiguration(CONFIGURATION)
             .SetPlatformTarget(PlatformTarget.MSIL)
             .SetMSBuildPlatform(MSBuildPlatform.Automatic)
-            .WithProperty("Version", version.NuGetVersionV2)
-            .WithProperty("AssemblyVersion", version.AssemblySemVer)
-            .WithProperty("FileVersion", version.AssemblySemFileVer)
             );
     }
 });
@@ -150,7 +153,8 @@ Task("Default")
   .IsDependentOn("SemVer")
   .IsDependentOn("Build")
   .IsDependentOn("Test")
-  .IsDependentOn("Pack");
+  .IsDependentOn("Pack")
+  ;
 
 Task("TeamCity")
   .IsDependentOn("Default")
