@@ -4,11 +4,11 @@
     <id>$id$</id>
     <version>$version$</version>
     <title>$title$</title>
-    <description>$title$</description>
+    <description>$id$</description>
     <tags>CorrelationTracking</tags>
     <projectUrl>https://github.com/albumprinter/CorrelationTracking</projectUrl>
     <owners>$author$</owners>
-    <authors>$author$</authors>
+    <authors>Albelli</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <dependencies>
       <dependency id="log4net" version="2.0.5" />

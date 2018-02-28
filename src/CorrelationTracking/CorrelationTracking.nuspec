@@ -3,12 +3,12 @@
   <metadata>
     <id>$id$</id>
     <version>$version$</version>
-    <title>$title$</title>
-    <description>$title$</description>
+    <title>$id$</title>
+    <description>$id$</description>
     <tags>CorrelationTracking</tags>
     <projectUrl>https://github.com/albumprinter/CorrelationTracking</projectUrl>
     <owners>$author$</owners>
-    <authors>$author$</authors>
+    <authors>Albelli</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <dependencies>
       <dependency id="Albumprinter.CorrelationTracking.Correlation.Core" version="$version$" />
