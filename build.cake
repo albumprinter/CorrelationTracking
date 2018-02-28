@@ -34,29 +34,27 @@ Task("Restore").Does(() => {
 
 Task("SemVer").Does(() => {
     var settings = new GitVersionSettings {
-        OutputType = GitVersionOutput.Json,
         UpdateAssemblyInfo = true,
         UpdateAssemblyInfoFilePath = src + File("CommonAssemblyInfo.cs")
     };
 
     if (BuildSystem.IsRunningOnTeamCity) {
         settings.OutputType = GitVersionOutput.BuildServer;
+        var versionTC = GitVersion(settings);
     }
 
+    settings.OutputType = GitVersionOutput.Json;
     var version = GitVersion(settings);
-
-    if (settings.OutputType == GitVersionOutput.Json) {
-        Information("{{  FullSemVer: {0}", version.FullSemVer);
-        Information("    NuGetVersionV2: {0}", version.NuGetVersionV2);
-        Information("    InformationalVersion: {0}  }}", version.InformationalVersion);
-        System.IO.File.WriteAllText(dst.Path + "/VERSION", version.NuGetVersionV2);
-    }
+    Information("{{  FullSemVer: {0}", version.FullSemVer);
+    Information("    NuGetVersionV2: {0}", version.NuGetVersionV2);
+    Information("    InformationalVersion: {0}  }}", version.InformationalVersion);
+    System.IO.File.WriteAllText(dst.Path + "/VERSION", version.NuGetVersionV2);
 
     //Set version in csproj file for .Net Standard project
     foreach(var file in GetFiles(src.Path + "/Correlation.Core.Standard/Correlation.Core.Standard.csproj")) {
-        Information("Applying version " + version.NuGetVersionV2 + " for file " + file.ToString());
+        Information("Applying version " + version.SemVer + " for file " + file.ToString());
         string text = System.IO.File.ReadAllText(file.ToString());
-        text = System.Text.RegularExpressions.Regex.Replace(text, "(<Version>)(.*?)(</Version>)", m => m.Groups[1].Value + version.NuGetVersionV2 + m.Groups[3].Value);
+        text = System.Text.RegularExpressions.Regex.Replace(text, "(<Version>)(.*?)(</Version>)", m => m.Groups[1].Value + version.SemVer + m.Groups[3].Value);
         text = System.Text.RegularExpressions.Regex.Replace(text, "(<AssemblyVersion>)(.*?)(</AssemblyVersion>)", m => m.Groups[1].Value + version.AssemblySemVer + m.Groups[3].Value);
         text = System.Text.RegularExpressions.Regex.Replace(text, "(<FileVersion>)(.*?)(</FileVersion>)", m => m.Groups[1].Value + version.AssemblySemVer + m.Groups[3].Value);
         System.IO.File.WriteAllText(file.ToString(), text);
