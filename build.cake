@@ -54,7 +54,7 @@ Task("SemVer").Does(() => {
     foreach(var file in GetFiles(src.Path + "/Correlation.Core.Standard/Correlation.Core.Standard.csproj")) {
         Information("Applying version " + version.SemVer + " for file " + file.ToString());
         string text = System.IO.File.ReadAllText(file.ToString());
-        text = System.Text.RegularExpressions.Regex.Replace(text, "(<Version>)(.*?)(</Version>)", m => m.Groups[1].Value + version.SemVer + m.Groups[3].Value);
+        text = System.Text.RegularExpressions.Regex.Replace(text, "(<Version>)(.*?)(</Version>)", m => m.Groups[1].Value + version.NuGetVersionV2 + m.Groups[3].Value);
         text = System.Text.RegularExpressions.Regex.Replace(text, "(<AssemblyVersion>)(.*?)(</AssemblyVersion>)", m => m.Groups[1].Value + version.AssemblySemVer + m.Groups[3].Value);
         text = System.Text.RegularExpressions.Regex.Replace(text, "(<FileVersion>)(.*?)(</FileVersion>)", m => m.Groups[1].Value + version.AssemblySemVer + m.Groups[3].Value);
         System.IO.File.WriteAllText(file.ToString(), text);
@@ -152,11 +152,11 @@ Task("Default")
   .IsDependentOn("SemVer")
   .IsDependentOn("Build")
   .IsDependentOn("Test")
-  .IsDependentOn("Pack")
-  ;
+  .IsDependentOn("Pack");
 
 Task("TeamCity")
   .IsDependentOn("Default")
   .IsDependentOn("Push");
+
 
 RunTarget(Argument("target", "Default"));
