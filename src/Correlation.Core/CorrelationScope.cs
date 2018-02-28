@@ -5,7 +5,7 @@ using System.Runtime.Remoting.Messaging;
 namespace Albumprinter.CorrelationTracking.Correlation.Core
 {
     [Serializable]
-    public sealed class CorrelationScope
+    public sealed partial class CorrelationScope
     {
         private static readonly string CorrelationScopeSlotName = typeof (CorrelationScope).FullName;
         public static readonly CorrelationScope Initial = new CorrelationScope(Guid.NewGuid(), Guid.Empty, Guid.Empty);

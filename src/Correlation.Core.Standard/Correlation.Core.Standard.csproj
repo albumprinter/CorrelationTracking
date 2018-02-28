@@ -7,14 +7,15 @@
     <Authors>Albelli</Authors>
     <Company>Albelli</Company>
     <Product>CorrelationTracking</Product>
-    <AssemblyVersion>1.0.1.0</AssemblyVersion>
-    <FileVersion>1.0.1.0</FileVersion>
-    <Version>1.0.1</Version>
+    <AssemblyVersion>2.0.125.0</AssemblyVersion>
+    <FileVersion>2.0.125.0</FileVersion>
+    <Version>2.0.125-alpha-net-standard.84</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Include="..\Correlation.Core\CorrelationKeys.cs" Link="CorrelationKeys.cs" />
     <Compile Include="..\Correlation.Core\CorrelationManager.cs" Link="CorrelationManager.cs" />
+    <Compile Include="..\Correlation.Core\CorrelationScope.cs" Link="CorrelationScope.cs" />
     <Compile Include="..\Correlation.Core\ICorrelationScopeInterceptor.cs" Link="ICorrelationScopeInterceptor.cs" />
   </ItemGroup>
 
