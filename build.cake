@@ -54,6 +54,7 @@ Task("SemVer").Does(() => {
 
     //Set version in csproj file for .Net Standard project
     foreach(var file in GetFiles(src.Path + "/Correlation.Core.Standard/Correlation.Core.Standard.csproj")) {
+        Information("Applying version " + version.NuGetVersionV2 + " for file " + file.ToString());
         string text = System.IO.File.ReadAllText(file.ToString());
         text = System.Text.RegularExpressions.Regex.Replace(text, "(<Version>)(.*?)(</Version>)", m => m.Groups[1].Value + version.NuGetVersionV2 + m.Groups[3].Value);
         text = System.Text.RegularExpressions.Regex.Replace(text, "(<AssemblyVersion>)(.*?)(</AssemblyVersion>)", m => m.Groups[1].Value + version.AssemblySemVer + m.Groups[3].Value);
