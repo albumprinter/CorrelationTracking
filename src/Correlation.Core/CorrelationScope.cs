@@ -9,7 +9,6 @@ namespace Albumprinter.CorrelationTracking.Correlation.Core
     {
         private static readonly string CorrelationScopeSlotName = typeof (CorrelationScope).FullName;
         public static readonly CorrelationScope Initial = new CorrelationScope(Guid.NewGuid(), Guid.Empty, Guid.Empty);
-        [NonSerialized] private readonly Dictionary<string, object> properties;
 
         public CorrelationScope() : this(Guid.Empty, Guid.Empty, Guid.Empty)
         {
@@ -20,7 +19,6 @@ namespace Albumprinter.CorrelationTracking.Correlation.Core
             ProcessId = processId;
             CorrelationId = correlationId;
             RequestId = requestId;
-            properties = new Dictionary<string, object>();
         }
 
         public static CorrelationScope Current
@@ -53,9 +51,5 @@ namespace Albumprinter.CorrelationTracking.Correlation.Core
         /// </value>
         public Guid RequestId { get; private set; }
 
-        /// <summary>
-        ///     Gets the scope properties.
-        /// </summary>
-        public Dictionary<string, object> Properties => properties;
     }
 }
