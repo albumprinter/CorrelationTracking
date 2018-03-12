@@ -2,7 +2,18 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <RootNamespace>Correlation.Serilog</RootNamespace>
+    <PackageId>Albumprinter.CorrelationTracking.Correlation.Serilog.Standard</PackageId>
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
+    <FileVersion>2.1.0.0</FileVersion>
+    <Version>2.1.0-alpha-watson-1160004</Version>
+    <Authors>Albumprinter.CorrelationTracking.Correlation.Serilog.Standard</Authors>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs" Link="CommonAssemblyInfo.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Serilog" Version="2.6.0" />

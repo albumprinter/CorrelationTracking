@@ -3,16 +3,16 @@
   <PropertyGroup>
     <TargetFramework>netstandard1.3</TargetFramework>
     <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AssemblyName>Albumprinter.CorrelationTracking.Correlation.Core.Standard</AssemblyName>
     <RootNamespace>Albumprinter.CorrelationTracking.Correlation.Core</RootNamespace>
-    <Authors>Albelli</Authors>
-    <Company>Albelli</Company>
-    <Product>CorrelationTracking</Product>
-    <AssemblyVersion>2.0.125.0</AssemblyVersion>
-    <FileVersion>2.0.125.0</FileVersion>
-    <Version>2.0.125-alpha-net-standard.84</Version>
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
+    <FileVersion>2.1.0.0</FileVersion>
+    <Version>2.1.0-alpha-watson-1160004</Version>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs" Link="CommonAssemblyInfo.cs" />
     <Compile Include="..\Correlation.Core\CorrelationKeys.cs" Link="CorrelationKeys.cs" />
     <Compile Include="..\Correlation.Core\CorrelationManager.cs" Link="CorrelationManager.cs" />
     <Compile Include="..\Correlation.Core\CorrelationScope.cs" Link="CorrelationScope.cs" />

@@ -7,7 +7,7 @@ using Amazon.Runtime.SharedInterfaces;
 using Amazon.SimpleNotificationService;
 using Amazon.SimpleNotificationService.Model;
 
-namespace Correlation.AmazonSns.Standard
+namespace Correlation.AmazonSns
 {
     public class CorrelationDecorator : IAmazonSimpleNotificationService
     {

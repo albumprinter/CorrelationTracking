@@ -51,7 +51,7 @@ Task("SemVer").Does(() => {
     System.IO.File.WriteAllText(dst.Path + "/VERSION", version.NuGetVersionV2);
 
     //Set version in csproj file for .Net Standard project
-    foreach(var file in GetFiles(src.Path + "/Correlation.Core.Standard/Correlation.Core.Standard.csproj")) {
+    foreach(var file in GetFiles(src.Path + "/*.Standard/*.Standard.csproj")) {
         Information("Applying version " + version.SemVer + " for file " + file.ToString());
         string text = System.IO.File.ReadAllText(file.ToString());
         text = System.Text.RegularExpressions.Regex.Replace(text, "(<Version>)(.*?)(</Version>)", m => m.Groups[1].Value + version.NuGetVersionV2 + m.Groups[3].Value);
@@ -126,6 +126,8 @@ Task("Pack").Does(() => {
     };
 
     DotNetCorePack(src + File("Correlation.Core.Standard/Correlation.Core.Standard.csproj"), coreSettings);
+    DotNetCorePack(src + File("Correlation.AmazonSns.Standard/Correlation.AmazonSns.Standard.csproj"), coreSettings);
+    DotNetCorePack(src + File("Correlation.Serilog.Standard/Correlation.Serilog.Standard.csproj"), coreSettings);
 });
 
 Task("Push").Does(() => {
@@ -138,7 +140,7 @@ Task("Push").Does(() => {
     }
 
     Information("Pushing the myget packages...");
-    foreach(var package in GetFiles(packages.Path + "/Correlation.Core.Standard.*.nupkg").Where(path => !path.FullPath.Contains(".symbols."))) {
+    foreach(var package in GetFiles(packages.Path + "/*.Standard.*.nupkg").Where(path => !path.FullPath.Contains(".symbols."))) {
         NuGetPush(package, new NuGetPushSettings {
             Source = MYGET_DEPLOY,
             ApiKey = ""
@@ -152,7 +154,8 @@ Task("Default")
   .IsDependentOn("SemVer")
   .IsDependentOn("Build")
   .IsDependentOn("Test")
-  .IsDependentOn("Pack");
+  .IsDependentOn("Pack")
+;
 
 Task("TeamCity")
   .IsDependentOn("Default")

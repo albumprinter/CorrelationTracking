@@ -1,7 +1,7 @@
 using Albumprinter.CorrelationTracking.Correlation.Core;
 using Serilog.Context;
 
-namespace Correlation.Serilog.Standard
+namespace Correlation.Serilog
 {
     public sealed class SerilogCorrelationScopeInterceptor : ICorrelationScopeInterceptor
     {
