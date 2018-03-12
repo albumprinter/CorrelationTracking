@@ -79,6 +79,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Correlation.Core.Standard",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correlation.Serilog.Standard", "Correlation.Serilog.Standard\Correlation.Serilog.Standard.csproj", "{922E7A60-6D70-4282-BCA3-99F5D9293993}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correlation.AmazonSns.Standard", "Correlation.AmazonSns.Standard\Correlation.AmazonSns.Standard.csproj", "{BA5F803C-57BD-449F-AD6B-CD88B4225EA4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -205,6 +207,10 @@ Global
 		{922E7A60-6D70-4282-BCA3-99F5D9293993}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{922E7A60-6D70-4282-BCA3-99F5D9293993}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{922E7A60-6D70-4282-BCA3-99F5D9293993}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA5F803C-57BD-449F-AD6B-CD88B4225EA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA5F803C-57BD-449F-AD6B-CD88B4225EA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA5F803C-57BD-449F-AD6B-CD88B4225EA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA5F803C-57BD-449F-AD6B-CD88B4225EA4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
