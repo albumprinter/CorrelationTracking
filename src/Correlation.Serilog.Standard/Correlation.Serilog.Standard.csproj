@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <RootNamespace>Correlation.Serilog</RootNamespace>
     <PackageId>Albumprinter.CorrelationTracking.Correlation.Serilog.Standard</PackageId>
     <AssemblyVersion>2.1.0.0</AssemblyVersion>
     <FileVersion>2.1.0.0</FileVersion>
-    <Version>2.1.0-alpha-watson-1160004</Version>
+    <Version>2.1.0-0</Version>
     <Authors>Albumprinter.CorrelationTracking.Correlation.Serilog.Standard</Authors>
   </PropertyGroup>
 
@@ -19,8 +19,12 @@
     <PackageReference Include="Serilog" Version="2.6.0" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <ProjectReference Include="..\Correlation.Core.Standard\Correlation.Core.Standard.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
+    <ProjectReference Include="..\Correlation.Core\Correlation.Core.csproj" />
   </ItemGroup>
 
 </Project>

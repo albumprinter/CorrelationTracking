@@ -1,14 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <RootNamespace>Correlation.AmazonSns</RootNamespace>
+    <RootNamespace>Albumprinter.CorrelationTracking.Correlation.AmazonSns</RootNamespace>
     <PackageId>Albumprinter.CorrelationTracking.Correlation.AmazonSns.Standard</PackageId>
     <AssemblyVersion>2.1.0.0</AssemblyVersion>
     <FileVersion>2.1.0.0</FileVersion>
-    <Version>2.1.0-alpha-watson-1160004</Version>
+    <Version>2.1.0-0</Version>
     <Authors>Albumprinter.CorrelationTracking.Correlation.AmazonSns.Standard</Authors>
+    <AssemblyName>Albumprinter.CorrelationTracking.Correlation.AmazonSns</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,8 +20,12 @@
     <PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.3.0.25" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <ProjectReference Include="..\Correlation.Core.Standard\Correlation.Core.Standard.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
+    <ProjectReference Include="..\Correlation.Core\Correlation.Core.csproj" />
   </ItemGroup>
 
 </Project>
