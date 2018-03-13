@@ -11,7 +11,12 @@ var MYGET_DEPLOY = EnvironmentVariable("MYGET_DEPLOY");
 var src = Directory("./src");
 var dst = Directory("./artifacts");
 var packages = dst + Directory("./packages");
-
+var netCoreProjectFiles = new FilePath [] {        
+	src + File("Correlation.Core/Correlation.Core.csproj"),
+	src + File("Correlation.AmazonSns/Correlation.AmazonSns.csproj"),
+	src + File("Correlation.Serilog/Correlation.Serilog.csproj")
+	};
+		
 Task("Clean").Does(() => {
     CleanDirectories(dst);
     CleanDirectories(src.Path + "/packages");
@@ -51,7 +56,7 @@ Task("SemVer").Does(() => {
     System.IO.File.WriteAllText(dst.Path + "/VERSION", version.NuGetVersionV2);
 
     //Set version in csproj file for .Net Standard project
-    foreach(var file in GetFiles(src.Path + "/*.Standard/*.Standard.csproj")) {
+	foreach(var file in netCoreProjectFiles) {
         Information("Applying version " + version.SemVer + " for file " + file.ToString());
         string text = System.IO.File.ReadAllText(file.ToString());
         text = System.Text.RegularExpressions.Regex.Replace(text, "(<Version>)(.*?)(</Version>)", m => m.Groups[1].Value + version.NuGetVersionV2 + m.Groups[3].Value);
@@ -87,9 +92,18 @@ Task("Test").Does(() => {
 });
 
 Task("Pack").Does(() => {
+    var coreSettings = new DotNetCorePackSettings {
+        Configuration = CONFIGURATION,
+        OutputDirectory = packages
+    };
+	
+	foreach(var file in netCoreProjectFiles) {
+		DotNetCorePack(file.ToString(), coreSettings);			
+	}
+	
     var settings = new NuGetPackSettings {
         Symbols = true,
-        IncludeReferencedProjects = true,
+        IncludeReferencedProjects = false,
         Verbosity = NuGetVerbosity.Detailed,
         Properties = new Dictionary<string, string> {
             {"Configuration", CONFIGURATION}
@@ -97,8 +111,7 @@ Task("Pack").Does(() => {
         OutputDirectory = packages
     };
 
-    var clients = new FilePath [] {
-        src + File("Correlation.Core/Correlation.Core.csproj"),
+    var clients = new FilePath [] {        
         src + File("Correlation.Http/Correlation.Http.csproj"),
         src + File("Correlation.IIS/Correlation.IIS.csproj"),
         src + File("Correlation.WCF/Correlation.WCF.csproj"),
@@ -115,19 +128,9 @@ Task("Pack").Does(() => {
         src + File("CorrelationTracking.Http/CorrelationTracking.Http.csproj"),
         src + File("CorrelationTracking.IIS/CorrelationTracking.IIS.csproj"),
         src + File("CorrelationTracking.MassTransit/CorrelationTracking.MassTransit.csproj"),
-        src + File("Correlation.AmazonSqs/Correlation.AmazonSqs.csproj"),
-        src + File("Correlation.AmazonSns/Correlation.AmazonSns.csproj")
+        src + File("Correlation.AmazonSqs/Correlation.AmazonSqs.csproj")        
     };
-    NuGetPack(clients, settings);
-
-    var coreSettings = new DotNetCorePackSettings {
-        Configuration = CONFIGURATION,
-        OutputDirectory = packages
-    };
-
-    DotNetCorePack(src + File("Correlation.Core.Standard/Correlation.Core.Standard.csproj"), coreSettings);
-    DotNetCorePack(src + File("Correlation.AmazonSns.Standard/Correlation.AmazonSns.Standard.csproj"), coreSettings);
-    DotNetCorePack(src + File("Correlation.Serilog.Standard/Correlation.Serilog.Standard.csproj"), coreSettings);
+    NuGetPack(clients, settings);     
 });
 
 Task("Push").Does(() => {
@@ -138,14 +141,6 @@ Task("Push").Does(() => {
             ApiKey = NUGET_APIKEY
         });
     }
-
-    Information("Pushing the myget packages...");
-    foreach(var package in GetFiles(packages.Path + "/*.Standard.*.nupkg").Where(path => !path.FullPath.Contains(".symbols."))) {
-        NuGetPush(package, new NuGetPushSettings {
-            Source = MYGET_DEPLOY,
-            ApiKey = ""
-        });
-    }
 });
 
 Task("Default")
@@ -154,8 +149,7 @@ Task("Default")
   .IsDependentOn("SemVer")
   .IsDependentOn("Build")
   .IsDependentOn("Test")
-  .IsDependentOn("Pack")
-;
+  .IsDependentOn("Pack");
 
 Task("TeamCity")
   .IsDependentOn("Default")
