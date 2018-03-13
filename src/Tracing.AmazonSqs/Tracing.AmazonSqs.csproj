@@ -66,12 +66,6 @@
     <None Include="Tracing.AmazonSqs.nuspec" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Correlation.Core\Correlation.Core.csproj">
-      <Project>{DDF69C1C-ECC1-46A5-B0B5-657B0DBBA330}</Project>
-      <Name>Correlation.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Analyzer Include="..\packages\AWSSDK.SQS.3.3.3.2\analyzers\dotnet\cs\AWSSDK.SQS.CodeAnalysis.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

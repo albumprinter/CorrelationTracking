@@ -43,13 +43,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Correlation.Core\Correlation.Core.csproj">
-      <Project>{ddf69c1c-ecc1-46a5-b0b5-657b0dbba330}</Project>
-      <Name>Correlation.Core</Name>
-    </ProjectReference>
+    <None Include="Correlation.Http.nuspec" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Correlation.Http.nuspec" />
+    <ProjectReference Include="..\Correlation.Core\Correlation.Core.csproj">
+      <Project>{ae749f0c-4d01-418d-8b36-1d2b6556d6a0}</Project>
+      <Name>Correlation.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

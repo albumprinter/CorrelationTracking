@@ -58,7 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Correlation.Core\Correlation.Core.csproj">
-      <Project>{DDF69C1C-ECC1-46A5-B0B5-657B0DBBA330}</Project>
+      <Project>{ae749f0c-4d01-418d-8b36-1d2b6556d6a0}</Project>
       <Name>Correlation.Core</Name>
     </ProjectReference>
   </ItemGroup>

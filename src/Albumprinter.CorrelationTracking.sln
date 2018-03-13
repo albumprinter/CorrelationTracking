@@ -51,8 +51,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correlation.WCF", "Correlat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tracing.WCF", "Tracing.WCF\Tracing.WCF.csproj", "{5349BF26-7F07-4158-B969-979DF3BD14A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correlation.Core", "Correlation.Core\Correlation.Core.csproj", "{DDF69C1C-ECC1-46A5-B0B5-657B0DBBA330}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorrelationTracking.MassTransit", "CorrelationTracking.MassTransit\CorrelationTracking.MassTransit.csproj", "{9F3AF3AB-EB3B-400B-B02F-6D7172F63A1B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorrelationTracking.Http", "CorrelationTracking.Http\CorrelationTracking.Http.csproj", "{685C5EF6-4966-4358-814B-EE518452B1D6}"
@@ -73,13 +71,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tracing.AmazonSqs", "Tracin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorrelationTracking.AmazonSqs", "CorrelationTracking.AmazonSqs\CorrelationTracking.AmazonSqs.csproj", "{F9F4BE37-10BE-42C1-87FA-AD573807739C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correlation.AmazonSns", "Correlation.AmazonSns\Correlation.AmazonSns.csproj", "{64D85298-47C4-4B98-9220-7974CFA0AB16}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Correlation.Core", "Correlation.Core\Correlation.Core.csproj", "{AE749F0C-4D01-418D-8B36-1D2B6556D6A0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Correlation.Core.Standard", "Correlation.Core.Standard\Correlation.Core.Standard.csproj", "{AE749F0C-4D01-418D-8B36-1D2B6556D6A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Correlation.Serilog", "Correlation.Serilog\Correlation.Serilog.csproj", "{922E7A60-6D70-4282-BCA3-99F5D9293993}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correlation.Serilog.Standard", "Correlation.Serilog.Standard\Correlation.Serilog.Standard.csproj", "{922E7A60-6D70-4282-BCA3-99F5D9293993}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correlation.AmazonSns.Standard", "Correlation.AmazonSns.Standard\Correlation.AmazonSns.Standard.csproj", "{BA5F803C-57BD-449F-AD6B-CD88B4225EA4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Correlation.AmazonSns", "Correlation.AmazonSns\Correlation.AmazonSns.csproj", "{9D56A715-2E1D-4FFB-8A03-6F7E4CE3F84B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -151,10 +147,6 @@ Global
 		{5349BF26-7F07-4158-B969-979DF3BD14A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5349BF26-7F07-4158-B969-979DF3BD14A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5349BF26-7F07-4158-B969-979DF3BD14A3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DDF69C1C-ECC1-46A5-B0B5-657B0DBBA330}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DDF69C1C-ECC1-46A5-B0B5-657B0DBBA330}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DDF69C1C-ECC1-46A5-B0B5-657B0DBBA330}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DDF69C1C-ECC1-46A5-B0B5-657B0DBBA330}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9F3AF3AB-EB3B-400B-B02F-6D7172F63A1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9F3AF3AB-EB3B-400B-B02F-6D7172F63A1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F3AF3AB-EB3B-400B-B02F-6D7172F63A1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -195,10 +187,6 @@ Global
 		{F9F4BE37-10BE-42C1-87FA-AD573807739C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F9F4BE37-10BE-42C1-87FA-AD573807739C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F9F4BE37-10BE-42C1-87FA-AD573807739C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{64D85298-47C4-4B98-9220-7974CFA0AB16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{64D85298-47C4-4B98-9220-7974CFA0AB16}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{64D85298-47C4-4B98-9220-7974CFA0AB16}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{64D85298-47C4-4B98-9220-7974CFA0AB16}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AE749F0C-4D01-418D-8B36-1D2B6556D6A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AE749F0C-4D01-418D-8B36-1D2B6556D6A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE749F0C-4D01-418D-8B36-1D2B6556D6A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -207,10 +195,10 @@ Global
 		{922E7A60-6D70-4282-BCA3-99F5D9293993}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{922E7A60-6D70-4282-BCA3-99F5D9293993}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{922E7A60-6D70-4282-BCA3-99F5D9293993}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BA5F803C-57BD-449F-AD6B-CD88B4225EA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BA5F803C-57BD-449F-AD6B-CD88B4225EA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BA5F803C-57BD-449F-AD6B-CD88B4225EA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BA5F803C-57BD-449F-AD6B-CD88B4225EA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D56A715-2E1D-4FFB-8A03-6F7E4CE3F84B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D56A715-2E1D-4FFB-8A03-6F7E4CE3F84B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D56A715-2E1D-4FFB-8A03-6F7E4CE3F84B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D56A715-2E1D-4FFB-8A03-6F7E4CE3F84B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
