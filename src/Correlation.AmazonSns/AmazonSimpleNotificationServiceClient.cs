@@ -9,53 +9,53 @@ using Amazon.SimpleNotificationService.Model;
 
 namespace Albumprinter.CorrelationTracking.Correlation.AmazonSns
 {
-    public class CorrelationDecorator : AmazonSimpleNotificationServiceClient
+    public class AmazonSimpleNotificationServiceWithCorrelationClient : AmazonSimpleNotificationServiceClient
     {
-        public CorrelationDecorator()
+        public AmazonSimpleNotificationServiceWithCorrelationClient()
         {
         }
 
-        public CorrelationDecorator(RegionEndpoint region) : base(region)
+        public AmazonSimpleNotificationServiceWithCorrelationClient(RegionEndpoint region) : base(region)
         {
         }
 
-        public CorrelationDecorator(AmazonSimpleNotificationServiceConfig config) : base(config)
+        public AmazonSimpleNotificationServiceWithCorrelationClient(AmazonSimpleNotificationServiceConfig config) : base(config)
         {
         }
 
-        public CorrelationDecorator(AWSCredentials credentials) : base(credentials)
+        public AmazonSimpleNotificationServiceWithCorrelationClient(AWSCredentials credentials) : base(credentials)
         {
         }
 
-        public CorrelationDecorator(AWSCredentials credentials, RegionEndpoint region) : base(credentials, region)
+        public AmazonSimpleNotificationServiceWithCorrelationClient(AWSCredentials credentials, RegionEndpoint region) : base(credentials, region)
         {
         }
 
-        public CorrelationDecorator(AWSCredentials credentials, AmazonSimpleNotificationServiceConfig clientConfig) : base(credentials, clientConfig)
+        public AmazonSimpleNotificationServiceWithCorrelationClient(AWSCredentials credentials, AmazonSimpleNotificationServiceConfig clientConfig) : base(credentials, clientConfig)
         {
         }
 
-        public CorrelationDecorator(string awsAccessKeyId, string awsSecretAccessKey) : base(awsAccessKeyId, awsSecretAccessKey)
+        public AmazonSimpleNotificationServiceWithCorrelationClient(string awsAccessKeyId, string awsSecretAccessKey) : base(awsAccessKeyId, awsSecretAccessKey)
         {
         }
 
-        public CorrelationDecorator(string awsAccessKeyId, string awsSecretAccessKey, RegionEndpoint region) : base(awsAccessKeyId, awsSecretAccessKey, region)
+        public AmazonSimpleNotificationServiceWithCorrelationClient(string awsAccessKeyId, string awsSecretAccessKey, RegionEndpoint region) : base(awsAccessKeyId, awsSecretAccessKey, region)
         {
         }
 
-        public CorrelationDecorator(string awsAccessKeyId, string awsSecretAccessKey, AmazonSimpleNotificationServiceConfig clientConfig) : base(awsAccessKeyId, awsSecretAccessKey, clientConfig)
+        public AmazonSimpleNotificationServiceWithCorrelationClient(string awsAccessKeyId, string awsSecretAccessKey, AmazonSimpleNotificationServiceConfig clientConfig) : base(awsAccessKeyId, awsSecretAccessKey, clientConfig)
         {
         }
 
-        public CorrelationDecorator(string awsAccessKeyId, string awsSecretAccessKey, string awsSessionToken) : base(awsAccessKeyId, awsSecretAccessKey, awsSessionToken)
+        public AmazonSimpleNotificationServiceWithCorrelationClient(string awsAccessKeyId, string awsSecretAccessKey, string awsSessionToken) : base(awsAccessKeyId, awsSecretAccessKey, awsSessionToken)
         {
         }
 
-        public CorrelationDecorator(string awsAccessKeyId, string awsSecretAccessKey, string awsSessionToken, RegionEndpoint region) : base(awsAccessKeyId, awsSecretAccessKey, awsSessionToken, region)
+        public AmazonSimpleNotificationServiceWithCorrelationClient(string awsAccessKeyId, string awsSecretAccessKey, string awsSessionToken, RegionEndpoint region) : base(awsAccessKeyId, awsSecretAccessKey, awsSessionToken, region)
         {
         }
 
-        public CorrelationDecorator(string awsAccessKeyId, string awsSecretAccessKey, string awsSessionToken, AmazonSimpleNotificationServiceConfig clientConfig) : base(awsAccessKeyId, awsSecretAccessKey, awsSessionToken, clientConfig)
+        public AmazonSimpleNotificationServiceWithCorrelationClient(string awsAccessKeyId, string awsSecretAccessKey, string awsSessionToken, AmazonSimpleNotificationServiceConfig clientConfig) : base(awsAccessKeyId, awsSecretAccessKey, awsSessionToken, clientConfig)
         {
         }
 
