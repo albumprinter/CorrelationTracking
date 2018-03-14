@@ -142,6 +142,11 @@ Task("Push").Does(() => {
             Source = NUGET_LIBRARY,
             ApiKey = NUGET_APIKEY
         });
+
+        NuGetPush(package, new NuGetPushSettings {
+            Source = MYGET_DEPLOY,
+            ApiKey = ""
+        });
     }
 });
 
