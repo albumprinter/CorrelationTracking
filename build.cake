@@ -11,11 +11,32 @@ var MYGET_DEPLOY = EnvironmentVariable("MYGET_DEPLOY");
 var src = Directory("./src");
 var dst = Directory("./artifacts");
 var packages = dst + Directory("./packages");
-var netCoreProjectFiles = new FilePath [] {        
-	src + File("Correlation.Core/Correlation.Core.csproj"),
-	src + File("Correlation.AmazonSns/Correlation.AmazonSns.csproj"),
-	src + File("Correlation.Serilog/Correlation.Serilog.csproj")
-	};
+
+IEnumerable<FilePath> GetProjectFiles()
+{
+    return GetFiles(src.Path + "/*/*.csproj").Where(file=> 
+        !file.GetFilenameWithoutExtension().FullPath.EndsWith("Tests")
+        && file.GetFilenameWithoutExtension().FullPath != "MQClient"
+        && file.GetFilenameWithoutExtension().FullPath != "WebApp1"
+        && file.GetFilenameWithoutExtension().FullPath != "WebApp2"
+        && file.GetFilenameWithoutExtension().FullPath != "WebClient"
+        && file.GetFilenameWithoutExtension().FullPath != "TopShelfDemo"
+        ).OrderBy(x=>x.FullPath);
+}
+
+bool IsDotNetStandard(FilePath project)
+{
+    string text = System.IO.File.ReadAllText(project.ToString());
+    var matchResult = System.Text.RegularExpressions.Regex.Match(text, "(<TargetFrameworks?>)(.*?)(</TargetFrameworks?)");
+    var matchingvalue = matchResult.Groups[2].Value;
+    if(matchingvalue.Contains("netstandard"))
+    {
+        Information($"{project.FullPath} treated as .NET Standard project because it contains: {matchResult.Groups[0].Value}");
+        return true;
+    } 
+    Information($"{project.FullPath}: treated as .NET Framework project");
+    return false;
+}
 		
 Task("Clean").Does(() => {
     CleanDirectories(dst);
@@ -56,7 +77,7 @@ Task("SemVer").Does(() => {
     System.IO.File.WriteAllText(dst.Path + "/VERSION", version.NuGetVersionV2);
 
     //Set version in csproj file for .Net Standard project
-	foreach(var file in netCoreProjectFiles) {
+	foreach(var file in GetProjectFiles().Where(file=>IsDotNetStandard(file))) {
         Information("Applying version " + version.SemVer + " for file " + file.ToString());
         string text = System.IO.File.ReadAllText(file.ToString());
         text = System.Text.RegularExpressions.Regex.Replace(text, "(<Version>)(.*?)(</Version>)", m => m.Groups[1].Value + version.NuGetVersionV2 + m.Groups[3].Value);
@@ -97,7 +118,7 @@ Task("Pack").Does(() => {
         OutputDirectory = packages
     };
 	
-	foreach(var file in netCoreProjectFiles) {
+	foreach(var file in GetProjectFiles().Where(file=>IsDotNetStandard(file))) {
 		DotNetCorePack(file.ToString(), coreSettings);			
 	}
 	
@@ -111,26 +132,7 @@ Task("Pack").Does(() => {
         OutputDirectory = packages
     };
 
-    var clients = new FilePath [] {        
-        src + File("Correlation.Http/Correlation.Http.csproj"),
-        src + File("Correlation.IIS/Correlation.IIS.csproj"),
-        src + File("Correlation.WCF/Correlation.WCF.csproj"),
-        src + File("Correlation.Asmx/Correlation.Asmx.csproj"),
-        src + File("Correlation.MassTransit/Correlation.MassTransit.csproj"),
-        src + File("Tracing.Http/Tracing.Http.csproj"),
-        src + File("Tracing.IIS/Tracing.IIS.csproj"),
-        src + File("Tracing.WCF/Tracing.WCF.csproj"),
-        src + File("Tracing.Asmx/Tracing.Asmx.csproj"),
-        src + File("Tracing.AmazonSqs/Tracing.AmazonSqs.csproj"),
-        src + File("Tracing.MassTransit/Tracing.MassTransit.csproj"),
-        src + File("Correlation.Log4net/Correlation.Log4net.csproj"),
-        src + File("CorrelationTracking/CorrelationTracking.csproj"),
-        src + File("CorrelationTracking.Http/CorrelationTracking.Http.csproj"),
-        src + File("CorrelationTracking.IIS/CorrelationTracking.IIS.csproj"),
-        src + File("CorrelationTracking.MassTransit/CorrelationTracking.MassTransit.csproj"),
-        src + File("Correlation.AmazonSqs/Correlation.AmazonSqs.csproj")        
-    };
-    NuGetPack(clients, settings);     
+    NuGetPack(GetProjectFiles().Where(file=>!IsDotNetStandard(file)), settings);     
 });
 
 Task("Push").Does(() => {
