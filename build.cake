@@ -67,7 +67,6 @@ Task("SemVer").Does(() => {
 
     var version = GitVersion(settings);
 
-
     if (BuildSystem.IsRunningOnTeamCity) {
          BuildSystem.TeamCity.SetBuildNumber(version.SemVer);
     }

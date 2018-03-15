@@ -1,12 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+    <TargetFrameworks>netstandard1.3;netstandard2.0;net45</TargetFrameworks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <RootNamespace>Albumprinter.CorrelationTracking.Correlation.AmazonSns</RootNamespace>
     <PackageId>Albumprinter.CorrelationTracking.Correlation.AmazonSns</PackageId>
     <Authors>Albumprinter.CorrelationTracking.Correlation.AmazonSns</Authors>
     <AssemblyName>Albumprinter.CorrelationTracking.Correlation.AmazonSns</AssemblyName>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
+    <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
