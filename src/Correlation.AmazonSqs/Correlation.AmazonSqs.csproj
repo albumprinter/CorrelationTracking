@@ -7,9 +7,6 @@
     <PackageId>Albumprinter.CorrelationTracking.Correlation.AmazonSqs</PackageId>
     <Authors>Albumprinter.CorrelationTracking.Correlation.AmazonSqs</Authors>
     <AssemblyName>Albumprinter.CorrelationTracking.Correlation.AmazonSqs</AssemblyName>
-    <AssemblyVersion>3.0.0.0</AssemblyVersion>
-    <FileVersion>3.0.0.0</FileVersion>
-    <Version>3.0.0.0</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
