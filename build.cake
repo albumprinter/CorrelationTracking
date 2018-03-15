@@ -12,6 +12,23 @@ var src = Directory("./src");
 var dst = Directory("./artifacts");
 var packages = dst + Directory("./packages");
 
+IEnumerable<FilePath> GetProjectFiles()
+{
+    return GetFiles(src.Path + "/*/*.csproj").Where(file=>
+        !file.GetFilenameWithoutExtension().FullPath.EndsWith("Tests")
+        && file.GetFilenameWithoutExtension().FullPath != "MQClient"
+        && file.GetFilenameWithoutExtension().FullPath != "WebApp1"
+        && file.GetFilenameWithoutExtension().FullPath != "WebApp2"
+        && file.GetFilenameWithoutExtension().FullPath != "WebClient"
+        && file.GetFilenameWithoutExtension().FullPath != "TopShelfDemo"
+        ).OrderBy(x=>x.FullPath);
+}
+
+bool IsDotNetStandard(FilePath project)
+{
+    return System.IO.File.ReadAllText(project.FullPath).Contains("<Project Sdk=\"Microsoft.NET.Sdk\">");
+}
+
 Task("Clean").Does(() => {
     CleanDirectories(dst);
     CleanDirectories(src.Path + "/packages");
@@ -48,17 +65,6 @@ Task("SemVer").Does(() => {
     Information("{{  FullSemVer: {0}", version.FullSemVer);
     Information("    NuGetVersionV2: {0}", version.NuGetVersionV2);
     Information("    InformationalVersion: {0}  }}", version.InformationalVersion);
-    System.IO.File.WriteAllText(dst.Path + "/VERSION", version.NuGetVersionV2);
-
-    //Set version in csproj file for .Net Standard project
-    foreach(var file in GetFiles(src.Path + "/Correlation.Core.Standard/Correlation.Core.Standard.csproj")) {
-        Information("Applying version " + version.SemVer + " for file " + file.ToString());
-        string text = System.IO.File.ReadAllText(file.ToString());
-        text = System.Text.RegularExpressions.Regex.Replace(text, "(<Version>)(.*?)(</Version>)", m => m.Groups[1].Value + version.NuGetVersionV2 + m.Groups[3].Value);
-        text = System.Text.RegularExpressions.Regex.Replace(text, "(<AssemblyVersion>)(.*?)(</AssemblyVersion>)", m => m.Groups[1].Value + version.AssemblySemVer + m.Groups[3].Value);
-        text = System.Text.RegularExpressions.Regex.Replace(text, "(<FileVersion>)(.*?)(</FileVersion>)", m => m.Groups[1].Value + version.AssemblySemVer + m.Groups[3].Value);
-        System.IO.File.WriteAllText(file.ToString(), text);
-    }
 });
 
 Task("Build").Does(() => {
@@ -87,9 +93,23 @@ Task("Test").Does(() => {
 });
 
 Task("Pack").Does(() => {
+    var msBuildSettings
+        = new DotNetCoreMSBuildSettings()
+            .WithProperty("Version", GitVersion().NuGetVersionV2);
+
+    var coreSettings = new DotNetCorePackSettings {
+        Configuration = CONFIGURATION,
+        OutputDirectory = packages,
+        MSBuildSettings = msBuildSettings
+    };
+
+	foreach(var file in GetProjectFiles().Where(file=>IsDotNetStandard(file))) {
+		DotNetCorePack(file.ToString(), coreSettings);
+	}
+
     var settings = new NuGetPackSettings {
         Symbols = true,
-        IncludeReferencedProjects = true,
+        IncludeReferencedProjects = false,
         Verbosity = NuGetVerbosity.Detailed,
         Properties = new Dictionary<string, string> {
             {"Configuration", CONFIGURATION}
@@ -97,35 +117,7 @@ Task("Pack").Does(() => {
         OutputDirectory = packages
     };
 
-    var clients = new FilePath [] {
-        src + File("Correlation.Core/Correlation.Core.csproj"),
-        src + File("Correlation.Http/Correlation.Http.csproj"),
-        src + File("Correlation.IIS/Correlation.IIS.csproj"),
-        src + File("Correlation.WCF/Correlation.WCF.csproj"),
-        src + File("Correlation.Asmx/Correlation.Asmx.csproj"),
-        src + File("Correlation.MassTransit/Correlation.MassTransit.csproj"),
-        src + File("Tracing.Http/Tracing.Http.csproj"),
-        src + File("Tracing.IIS/Tracing.IIS.csproj"),
-        src + File("Tracing.WCF/Tracing.WCF.csproj"),
-        src + File("Tracing.Asmx/Tracing.Asmx.csproj"),
-        src + File("Tracing.AmazonSqs/Tracing.AmazonSqs.csproj"),
-        src + File("Tracing.MassTransit/Tracing.MassTransit.csproj"),
-        src + File("Correlation.Log4net/Correlation.Log4net.csproj"),
-        src + File("CorrelationTracking/CorrelationTracking.csproj"),
-        src + File("CorrelationTracking.Http/CorrelationTracking.Http.csproj"),
-        src + File("CorrelationTracking.IIS/CorrelationTracking.IIS.csproj"),
-        src + File("CorrelationTracking.MassTransit/CorrelationTracking.MassTransit.csproj"),
-        src + File("Correlation.AmazonSqs/Correlation.AmazonSqs.csproj"),
-        src + File("Correlation.AmazonSns/Correlation.AmazonSns.csproj")
-    };
-    NuGetPack(clients, settings);
-
-    var coreSettings = new DotNetCorePackSettings {
-        Configuration = CONFIGURATION,
-        OutputDirectory = packages
-    };
-
-    DotNetCorePack(src + File("Correlation.Core.Standard/Correlation.Core.Standard.csproj"), coreSettings);
+    NuGetPack(GetProjectFiles().Where(file => !IsDotNetStandard(file)), settings);
 });
 
 Task("Push").Does(() => {
@@ -135,10 +127,7 @@ Task("Push").Does(() => {
             Source = NUGET_LIBRARY,
             ApiKey = NUGET_APIKEY
         });
-    }
 
-    Information("Pushing the myget packages...");
-    foreach(var package in GetFiles(packages.Path + "/Correlation.Core.Standard.*.nupkg").Where(path => !path.FullPath.Contains(".symbols."))) {
         NuGetPush(package, new NuGetPushSettings {
             Source = MYGET_DEPLOY,
             ApiKey = ""

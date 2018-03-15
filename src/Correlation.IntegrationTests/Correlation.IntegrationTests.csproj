@@ -136,7 +136,7 @@
       <Name>Correlation.AmazonSqs</Name>
     </ProjectReference>
     <ProjectReference Include="..\Correlation.Core\Correlation.Core.csproj">
-      <Project>{ddf69c1c-ecc1-46a5-b0b5-657b0dbba330}</Project>
+      <Project>{ae749f0c-4d01-418d-8b36-1d2b6556d6a0}</Project>
       <Name>Correlation.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\Correlation.Http\Correlation.Http.csproj">
@@ -227,6 +227,9 @@
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\AWSSDK.SQS.3.3.3.2\analyzers\dotnet\cs\AWSSDK.SQS.CodeAnalysis.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

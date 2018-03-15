@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <RootNamespace>Albumprinter.CorrelationTracking.Correlation.Serilog</RootNamespace>
+    <PackageId>Albumprinter.CorrelationTracking.Correlation.Serilog</PackageId>
+    <AssemblyVersion>3.0.0.0</AssemblyVersion>
+    <FileVersion>3.0.0.0</FileVersion>
+    <Version>3.0.0-0</Version>
+    <Authors>Albumprinter.CorrelationTracking.Correlation.Serilog</Authors>
+    <AssemblyName>Albumprinter.CorrelationTracking.Correlation.Serilog</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs" Link="CommonAssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Serilog" Version="2.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Correlation.Core\Correlation.Core.csproj" />
+  </ItemGroup>
+
+</Project>
