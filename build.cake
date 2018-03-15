@@ -26,16 +26,7 @@ IEnumerable<FilePath> GetProjectFiles()
 
 bool IsDotNetStandard(FilePath project)
 {
-    string text = System.IO.File.ReadAllText(project.ToString());
-    var matchResult = System.Text.RegularExpressions.Regex.Match(text, "(<TargetFrameworks?>)(.*?)(</TargetFrameworks?)");
-    var matchingvalue = matchResult.Groups[2].Value;
-    if(matchingvalue.Contains("netstandard"))
-    {
-        Information($"{project.FullPath} treated as .NET Standard project because it contains: {matchResult.Groups[0].Value}");
-        return true;
-    }
-    Information($"{project.FullPath}: treated as .NET Framework project");
-    return false;
+    return System.IO.File.ReadAllText(project.FullPath).Contains("<Project Sdk=\"Microsoft.NET.Sdk\">");
 }
 
 Task("Clean").Does(() => {
