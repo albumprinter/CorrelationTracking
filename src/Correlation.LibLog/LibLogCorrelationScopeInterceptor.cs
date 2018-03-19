@@ -5,7 +5,6 @@ namespace Albumprinter.CorrelationTracking.Correlation.LibLog
 {
     public sealed class LibLogCorrelationScopeInterceptor : ICorrelationScopeInterceptor
     {
-
         public LibLogCorrelationScopeInterceptor()
         {
             SetLogicalPropertiesOnExit = true;
