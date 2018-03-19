@@ -5,6 +5,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AssemblyName>Albumprinter.CorrelationTracking.Correlation.Core</AssemblyName>
     <RootNamespace>Albumprinter.CorrelationTracking.Correlation.Core</RootNamespace>
+    <Authors>Albumprinter</Authors>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">

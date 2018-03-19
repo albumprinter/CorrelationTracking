@@ -5,7 +5,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <RootNamespace>Albumprinter.CorrelationTracking.Correlation.MassTransit</RootNamespace>
     <PackageId>Albumprinter.CorrelationTracking.Correlation.MassTransit</PackageId>
-    <Authors>Albumprinter.CorrelationTracking.Correlation.MassTransit</Authors>
+    <Authors>Albumprinter</Authors>
     <AssemblyName>Albumprinter.CorrelationTracking.Correlation.MassTransit</AssemblyName>
   </PropertyGroup>
 

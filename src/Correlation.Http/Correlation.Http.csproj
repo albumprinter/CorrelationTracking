@@ -5,7 +5,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <RootNamespace>Albumprinter.CorrelationTracking.Correlation.Http</RootNamespace>
     <PackageId>Albumprinter.CorrelationTracking.Correlation.Http</PackageId>
-    <Authors>Albumprinter.CorrelationTracking.Correlation.Http</Authors>
+    <Authors>Albumprinter</Authors>
     <AssemblyName>Albumprinter.CorrelationTracking.Correlation.Http</AssemblyName>
   </PropertyGroup>
 

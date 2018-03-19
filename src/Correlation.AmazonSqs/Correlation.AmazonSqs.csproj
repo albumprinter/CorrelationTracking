@@ -5,7 +5,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <RootNamespace>Albumprinter.CorrelationTracking.Correlation.AmazonSqs</RootNamespace>
     <PackageId>Albumprinter.CorrelationTracking.Correlation.AmazonSqs</PackageId>
-    <Authors>Albumprinter.CorrelationTracking.Correlation.AmazonSqs</Authors>
+    <Authors>Albumprinter</Authors>
     <AssemblyName>Albumprinter.CorrelationTracking.Correlation.AmazonSqs</AssemblyName>
   </PropertyGroup>
 
