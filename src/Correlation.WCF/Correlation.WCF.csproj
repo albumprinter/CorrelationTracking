@@ -43,7 +43,6 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="ClientMessageInspectorBehavior.cs" />
     <Compile Include="CorrelationClientBehavior.cs" />
     <Compile Include="CorrelationClientBehaviorExtension.cs" />
     <Compile Include="CorrelationServiceBehavior.cs" />
