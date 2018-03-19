@@ -50,9 +50,9 @@
       <Project>{ae749f0c-4d01-418d-8b36-1d2b6556d6a0}</Project>
       <Name>Correlation.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Correlation.Log4net\Correlation.Log4net.csproj">
-      <Project>{064c8dda-15d0-40fb-b27d-3ff309aba1a4}</Project>
-      <Name>Correlation.Log4net</Name>
+    <ProjectReference Include="..\Correlation.LibLog\Correlation.LibLog.csproj">
+      <Project>{eb6133cd-8787-454f-a5c0-8dde07a7abed}</Project>
+      <Name>Correlation.LibLog</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
