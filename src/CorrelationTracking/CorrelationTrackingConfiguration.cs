@@ -13,17 +13,22 @@ namespace Albumprinter.CorrelationTracking
             Initialize(new LibLogCorrelationScopeInterceptor());
         }
 
-        public static void Initialize(ICorrelationScopeInterceptor interceptor)
+        public static void Initialize(params ICorrelationScopeInterceptor[] interceptors)
         {
-            if (interceptor == null)
+            if (interceptors == null)
             {
-                throw new ArgumentNullException(nameof(interceptor));
+                throw new ArgumentNullException(nameof(interceptors));
+            }
+
+            if (interceptors.Length == 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(interceptors), "Should contain at least one interceptor");
             }
 
             if (!initialized)
             {
                 initialized = true;
-                CorrelationManager.Instance.ScopeInterceptors.Add(interceptor);
+                CorrelationManager.Instance.ScopeInterceptors.AddRange(interceptors);
                 CorrelationManager.Instance.UseScope(Guid.Empty, Guid.Empty);
             }
         }
