@@ -65,7 +65,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correlation.Asmx", "Correla
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tracing.Asmx", "Tracing.Asmx\Tracing.Asmx.csproj", "{2AE91CF7-D286-49BA-BBB4-EEB05BBC7B9B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correlation.AmazonSqs", "Correlation.AmazonSqs\Correlation.AmazonSqs.csproj", "{095EA02D-2DA9-4DEC-BE88-EF8BB0F74DC5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Correlation.AmazonSqs", "Correlation.AmazonSqs\Correlation.AmazonSqs.csproj", "{095EA02D-2DA9-4DEC-BE88-EF8BB0F74DC5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tracing.AmazonSqs", "Tracing.AmazonSqs\Tracing.AmazonSqs.csproj", "{D82E6AA6-E45C-4133-8331-0406D45F9819}"
 EndProject
