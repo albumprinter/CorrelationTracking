@@ -20,7 +20,11 @@ namespace Albumprinter.CorrelationTracking.Correlation.Serilog
             LogContext.PushProperty(CorrelationKeys.ProcessId, scope.ProcessId);
             LogContext.PushProperty(CorrelationKeys.CorrelationId, scope.CorrelationId);
             LogContext.PushProperty(CorrelationKeys.RequestId, scope.RequestId);
+#if NETSTANDARD1_3
+            LogContext.PushProperty(CorrelationKeys.ActivityId, System.Diagnostics.Activity.Current.Id);
+#else
             LogContext.PushProperty(CorrelationKeys.ActivityId, System.Diagnostics.Trace.CorrelationManager.ActivityId);
+#endif
         }
     }
 }
