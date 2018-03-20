@@ -1,6 +1,4 @@
-﻿using Albumprinter.CorrelationTracking.Correlation.MassTransit;
-using Albumprinter.CorrelationTracking.Tracing.MassTransit;
-using MassTransit;
+﻿using MassTransit;
 
 namespace Albumprinter.CorrelationTracking.MassTransit
 {

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net.Http;
 using System.Reflection;
-using Albumprinter.CorrelationTracking.Correlation.Http;
 using Albumprinter.CorrelationTracking.Tracing.Http;
 
 namespace Albumprinter.CorrelationTracking.Http
