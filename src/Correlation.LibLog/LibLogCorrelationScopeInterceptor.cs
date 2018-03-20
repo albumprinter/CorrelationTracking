@@ -41,14 +41,16 @@ namespace Albumprinter.CorrelationTracking.Correlation.LibLog
 
         private static void SetLogicalProperties(CorrelationScope scope)
         {
-            LogProvider.CurrentLogProvider.OpenMappedContext(CorrelationKeys.ProcessId, scope.ProcessId);
-            LogProvider.CurrentLogProvider.OpenMappedContext(CorrelationKeys.CorrelationId, scope.CorrelationId);
-            LogProvider.CurrentLogProvider.OpenMappedContext(CorrelationKeys.RequestId, scope.RequestId);
+            ILogProvider currentLogProvider = LogProvider.CurrentLogProvider;
+
+            currentLogProvider.OpenMappedContext(CorrelationKeys.ProcessId, scope.ProcessId);
+            currentLogProvider.OpenMappedContext(CorrelationKeys.CorrelationId, scope.CorrelationId);
+            currentLogProvider.OpenMappedContext(CorrelationKeys.RequestId, scope.RequestId);
 
 #if NETSTANDARD1_3
-            LogProvider.CurrentLogProvider.OpenMappedContext(CorrelationKeys.ActivityId, System.Diagnostics.Activity.Current.Id);
+            currentLogProvider.OpenMappedContext(CorrelationKeys.ActivityId, System.Diagnostics.Activity.Current.Id);
 #else
-            LogProvider.CurrentLogProvider.OpenMappedContext(CorrelationKeys.ActivityId, System.Diagnostics.Trace.CorrelationManager.ActivityId);
+            currentLogProvider.OpenMappedContext(CorrelationKeys.ActivityId, System.Diagnostics.Trace.CorrelationManager.ActivityId);
 #endif
 
         }
