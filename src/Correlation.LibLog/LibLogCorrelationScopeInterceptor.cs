@@ -5,6 +5,14 @@ namespace Albumprinter.CorrelationTracking.Correlation.LibLog
 {
     public sealed class LibLogCorrelationScopeInterceptor : ICorrelationScopeInterceptor
     {
+        static LibLogCorrelationScopeInterceptor()
+        {
+            if (LogProvider.CurrentLogProvider == null)
+            {
+                LogProvider.SetCurrentLogProvider(LogProvider.ResolveLogProvider());
+            }
+        }
+
         public LibLogCorrelationScopeInterceptor()
         {
             SetLogicalPropertiesOnExit = true;
@@ -40,7 +48,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.LibLog
 #if NETSTANDARD1_3
             LogProvider.CurrentLogProvider.OpenMappedContext(CorrelationKeys.ActivityId, System.Diagnostics.Activity.Current.Id);
 #else
-    LogProvider.CurrentLogProvider.OpenMappedContext(CorrelationKeys.ActivityId, System.Diagnostics.Trace.CorrelationManager.ActivityId);
+            LogProvider.CurrentLogProvider.OpenMappedContext(CorrelationKeys.ActivityId, System.Diagnostics.Trace.CorrelationManager.ActivityId);
 #endif
 
         }
