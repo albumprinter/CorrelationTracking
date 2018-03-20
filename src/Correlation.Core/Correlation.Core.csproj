@@ -14,7 +14,14 @@
 
   <ItemGroup>
     <Compile Include="..\CommonAssemblyInfo.cs" Link="CommonAssemblyInfo.cs" />    
-    <compile Condition="'$(TargetFramework)' == 'net45'" Remove="CallContext.cs" />
   </ItemGroup>
+
+  <Target Name="AddNetStdMinDefine"
+        BeforeTargets="CoreCompile"
+        Condition="('$(TargetFrameworkIdentifier)' == '.NETStandard' and '$(TargetFrameworkVersion.Substring(1))' &gt;= '1.3')">
+   <PropertyGroup>
+     <DefineConstants>$(DefineConstants);IS_MIN_NETSTANDARD1_3</DefineConstants>
+   </PropertyGroup>
+  </Target>
 
 </Project>
