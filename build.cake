@@ -2,15 +2,16 @@
 #tool "nuget:?package=NUnit.Runners&version=2.6.4"
 
 var CONFIGURATION = Argument<string>("c", "Release");
-var NUGET_SOURCE = EnvironmentVariable("NUGET_SOURCE") ?? "http://offproget001.vistaprint.net:81/nuget";
-var NUGET_APIKEY = EnvironmentVariable("NUGET_APIKEY");
-var NUGET_LIBRARY = NUGET_SOURCE + "/Library";
-var NUGET_DEPLOY = NUGET_SOURCE + "/Deploy";
-var MYGET_DEPLOY = EnvironmentVariable("MYGET_DEPLOY");
+var NUGET_LIBRARY = "https://api.nuget.org/v3/index.json";
+var NUGET_APIKEY = EnvironmentVariableOrFail("NUGET_API_KEY");
 
 var src = Directory("./src");
 var dst = Directory("./artifacts");
 var packages = dst + Directory("./packages");
+
+string EnvironmentVariableOrFail(string varName){
+    return EnvironmentVariable(varName) ?? throw new Exception($"Can't find variable {varName}");
+}
 
 IEnumerable<FilePath> GetProjectFiles()
 {
@@ -42,10 +43,7 @@ Task("Restore").Does(() => {
     EnsureDirectoryExists(packages);
 
     foreach(var sln in GetFiles(src.Path + "/*.sln")) {
-        var settings = new NuGetRestoreSettings {
-            FallbackSource = new List<string> { NUGET_LIBRARY }
-        };
-        NuGetRestore(sln, settings);
+        NuGetRestore(sln);
     }
 });
 
@@ -57,10 +55,6 @@ Task("SemVer").Does(() => {
     };
 
     var version = GitVersion(settings);
-
-    if (BuildSystem.IsRunningOnTeamCity) {
-         BuildSystem.TeamCity.SetBuildNumber(version.SemVer);
-    }
 
     Information("{{  FullSemVer: {0}", version.FullSemVer);
     Information("    NuGetVersionV2: {0}", version.NuGetVersionV2);
@@ -87,9 +81,6 @@ Task("Test").Does(() => {
         Exclude = "Integration",
         ResultsFile = dst + File("./TestResults.xml")
     });
-    if (BuildSystem.IsRunningOnTeamCity) {
-        TeamCity.ImportData("nunit", dst.Path + "/TestResults.xml");
-    }
 });
 
 Task("Pack").Does(() => {
@@ -112,7 +103,7 @@ Task("Pack").Does(() => {
         IncludeReferencedProjects = false,
         Verbosity = NuGetVerbosity.Detailed,
         Properties = new Dictionary<string, string> {
-            {"Configuration", CONFIGURATION}
+            { "Configuration", CONFIGURATION }
         },
         OutputDirectory = packages
     };
@@ -122,15 +113,10 @@ Task("Pack").Does(() => {
 
 Task("Push").Does(() => {
     Information("Pushing the nuget packages...");
-    foreach(var package in GetFiles(packages.Path + "/*.nupkg").Where(path => !path.FullPath.Contains(".symbols."))) {
+    foreach(var package in GetFiles(packages.Path + "/*.nupkg")) {
         NuGetPush(package, new NuGetPushSettings {
             Source = NUGET_LIBRARY,
             ApiKey = NUGET_APIKEY
-        });
-
-        NuGetPush(package, new NuGetPushSettings {
-            Source = MYGET_DEPLOY,
-            ApiKey = ""
         });
     }
 });
@@ -143,9 +129,8 @@ Task("Default")
   .IsDependentOn("Test")
   .IsDependentOn("Pack");
 
-Task("TeamCity")
+Task("BuildServer")
   .IsDependentOn("Default")
   .IsDependentOn("Push");
-
 
 RunTarget(Argument("target", "Default"));
