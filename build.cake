@@ -2,8 +2,9 @@
 #tool "nuget:?package=NUnit.Runners&version=2.6.4"
 
 var CONFIGURATION = Argument<string>("c", "Release");
-var NUGET_LIBRARY = "https://api.nuget.org/v3/index.json";
-var NUGET_APIKEY = EnvironmentVariableOrFail("NUGET_API_KEY");
+string NUGET_APIKEY() {
+    return EnvironmentVariableOrFail("NUGET_API_KEY");
+}
 
 var src = Directory("./src");
 var dst = Directory("./artifacts");
@@ -116,8 +117,7 @@ Task("Push").Does(() => {
     Information("Pushing the nuget packages...");
     foreach(var package in GetFiles(packages.Path + "/*.nupkg").Where(p => !p.FullPath.Contains(".symbols."))) {
         NuGetPush(package, new NuGetPushSettings {
-            Source = NUGET_LIBRARY,
-            ApiKey = NUGET_APIKEY
+            ApiKey = NUGET_APIKEY()
         });
     }
 });
