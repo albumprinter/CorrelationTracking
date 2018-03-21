@@ -91,7 +91,8 @@ Task("Pack").Does(() => {
     var coreSettings = new DotNetCorePackSettings {
         Configuration = CONFIGURATION,
         OutputDirectory = packages,
-        MSBuildSettings = msBuildSettings
+        MSBuildSettings = msBuildSettings,
+        IncludeSymbols = true
     };
 
 	foreach(var file in GetProjectFiles().Where(file=>IsDotNetStandard(file))) {
