@@ -24,6 +24,18 @@
   <ItemGroup>
     <ProjectReference Include="..\Correlation.Core\Correlation.Core.csproj" />
   </ItemGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
+    <PackageReference Include="Amazon.Lambda.SNSEvents">
+      <Version>1.0.0</Version>
+    </PackageReference>
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="Amazon.Lambda.SNSEvents">
+      <Version>1.0.0</Version>
+    </PackageReference>
+  </ItemGroup>
 
   <Target Name="AddNetStdMinDefine"
         BeforeTargets="CoreCompile"
