@@ -758,7 +758,9 @@ namespace Albumprinter.CorrelationTracking.Tracing.Http.Logging
         private readonly ICallSiteExtension _callsiteLogger;
         private readonly Func<bool> _getIsDisabled;
         internal const string FailedToGenerateLogMessage = "Failed to generate log message";
+#pragma warning disable 169
         private Func<string> _lastExtensionMethod;
+#pragma warning restore 169
 
         internal LoggerExecutionWrapper(Logger logger, Func<bool> getIsDisabled = null)
         {
