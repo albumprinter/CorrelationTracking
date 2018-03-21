@@ -3,10 +3,11 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard1.3;netstandard2.0;net45</TargetFrameworks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <RootNamespace>Albumprinter.CorrelationTracking.Correlation.Serilog</RootNamespace>
-    <PackageId>Albumprinter.CorrelationTracking.Correlation.Serilog</PackageId>
+    <RootNamespace>Albumprinter.CorrelationTracking.Correlation.LibLog</RootNamespace>
+    <PackageId>Albumprinter.CorrelationTracking.Correlation.LibLog</PackageId>
     <Authors>Albumprinter</Authors>
-    <AssemblyName>Albumprinter.CorrelationTracking.Correlation.Serilog</AssemblyName>
+    <AssemblyName>Albumprinter.CorrelationTracking.Correlation.LibLog</AssemblyName>
+    <DefineConstants>$(DefineConstants);LIBLOG_PORTABLE</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
@@ -18,7 +19,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Serilog" Version="2.6.0" />
+    <PackageReference Include="LibLog" Version="4.2.6" >
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CSharp" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
