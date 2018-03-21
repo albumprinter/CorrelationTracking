@@ -113,7 +113,7 @@ Task("Pack").Does(() => {
 
 Task("Push").Does(() => {
     Information("Pushing the nuget packages...");
-    foreach(var package in GetFiles(packages.Path + "/*.nupkg")) {
+    foreach(var package in GetFiles(packages.Path + "/*.nupkg").Where(p => !p.FullPath.Contains(".symbols."))) {
         NuGetPush(package, new NuGetPushSettings {
             Source = NUGET_LIBRARY,
             ApiKey = NUGET_APIKEY
