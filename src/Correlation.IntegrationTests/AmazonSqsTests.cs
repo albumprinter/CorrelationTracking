@@ -33,7 +33,7 @@ namespace Correlation.IntegrationTests
 
         private static AmazonSQSClient GetConfiguredAmazonSqs()
         {
-            return new AmazonSQSClient("AKIAJRT3MSHUD3KB5ERQ", "bEjQl/h12nwJCWwlr4x/wGvRe7+8Dsg0Y0qFS96D", new AmazonSQSConfig
+            return new AmazonSQSClient(new AmazonSQSConfig
             {
                 ServiceURL = "https://sqs.eu-west-1.amazonaws.com"
             });

@@ -66,7 +66,7 @@ namespace MQClient
 
         private static void TriggerAmazonSqs()
         {
-            var client = new AmazonSQSClient("AKIAJRT3MSHUD3KB5ERQ", "bEjQl/h12nwJCWwlr4x/wGvRe7+8Dsg0Y0qFS96D", new AmazonSQSConfig
+            var client = new AmazonSQSClient(new AmazonSQSConfig
             {
                 ServiceURL = "https://sqs.eu-west-1.amazonaws.com"
             }).UseCorrelationTracking();
