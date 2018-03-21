@@ -3,17 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using log4net;
+using Albumprinter.CorrelationTracking.Tracing.Http.Logging;
 
 namespace Albumprinter.CorrelationTracking.Tracing.Http
 {
     public sealed class Log4NetDelegatingHandler : DelegatingHandler
     {
-        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog Log = LogProvider.GetLogger(typeof(Log4NetDelegatingHandler));
 
         public Log4NetDelegatingHandler(bool logAll = true)
         {
