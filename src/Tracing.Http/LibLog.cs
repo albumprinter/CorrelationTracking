@@ -45,10 +45,10 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "Albumprinter.CorrelationTracking.Correlation.LibLog.Logging")]
-[assembly: SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Scope = "member", Target = "Albumprinter.CorrelationTracking.Correlation.LibLog.Logging.Logger.#Invoke(Albumprinter.CorrelationTracking.Correlation.LibLog.Logging.LogLevel,System.Func`1<System.String>,System.Exception,System.Object[])")]
+[assembly: SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "Albumprinter.CorrelationTracking.Tracing.Http.Logging")]
+[assembly: SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Scope = "member", Target = "Albumprinter.CorrelationTracking.Tracing.Http.Logging.Logger.#Invoke(Albumprinter.CorrelationTracking.Tracing.Http.Logging.LogLevel,System.Func`1<System.String>,System.Exception,System.Object[])")]
 
-// If you copied this file manually, you need to change all "Albumprinter.CorrelationTracking.Correlation.LibLog" so not to clash with other libraries
+// If you copied this file manually, you need to change all "Albumprinter.CorrelationTracking.Tracing.Http" so not to clash with other libraries
 // that use LibLog
 #if LIBLOG_PROVIDERS_ONLY
 namespace Albumprinter.CorrelationTracking.Tracing.Http.LibLog
