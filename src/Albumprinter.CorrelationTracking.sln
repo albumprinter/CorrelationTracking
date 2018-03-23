@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp1", "WebApp1\WebApp1.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp2", "WebApp2\WebApp2.csproj", "{E8DFD0D2-4AA6-4D22-9A4E-C142E4283116}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorrelationTracking", "CorrelationTracking\CorrelationTracking.csproj", "{E38F2832-573A-4DA1-8856-82DCC3F0F6FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CorrelationTracking", "CorrelationTracking\CorrelationTracking.csproj", "{E38F2832-573A-4DA1-8856-82DCC3F0F6FD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correlation.Core.Tests", "Correlation.Core.Tests\Correlation.Core.Tests.csproj", "{D0B44B2F-2661-46EE-A9E2-D821295EEECC}"
 EndProject
@@ -22,13 +22,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebClient", "WebClient\WebC
 		{ED712D31-A542-4850-AD4E-50EC00D50CC2} = {ED712D31-A542-4850-AD4E-50EC00D50CC2}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correlation.Http", "Correlation.Http\Correlation.Http.csproj", "{0F6FA333-AE48-4448-AF0D-5E9DFC3418D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Correlation.Http", "Correlation.Http\Correlation.Http.csproj", "{0F6FA333-AE48-4448-AF0D-5E9DFC3418D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tracing.Http", "Tracing.Http\Tracing.Http.csproj", "{5BDA796A-C6BC-4A0D-9746-56703D448B3B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tracing.Http", "Tracing.Http\Tracing.Http.csproj", "{5BDA796A-C6BC-4A0D-9746-56703D448B3B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MQClient", "MQClient\MQClient.csproj", "{5377C081-8A3D-4C3B-AD76-CC5CC6425E37}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correlation.MassTransit", "Correlation.MassTransit\Correlation.MassTransit.csproj", "{5D390661-0D88-477C-B145-172CE1BB2D2E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Correlation.MassTransit", "Correlation.MassTransit\Correlation.MassTransit.csproj", "{5D390661-0D88-477C-B145-172CE1BB2D2E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tracing.MassTransit", "Tracing.MassTransit\Tracing.MassTransit.csproj", "{36BE3840-C7DA-4308-A688-DD195FBC9D23}"
 EndProject
@@ -78,6 +78,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Correlation.AmazonSns", "Correlation.AmazonSns\Correlation.AmazonSns.csproj", "{9D56A715-2E1D-4FFB-8A03-6F7E4CE3F84B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Correlation.LibLog", "Correlation.LibLog\Correlation.LibLog.csproj", "{EB6133CD-8787-454F-A5C0-8DDE07A7ABED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correlation.AmazonSns.Lambda", "Correlation.AmazonSns.Lambda\Correlation.AmazonSns.Lambda.csproj", "{70A33843-218C-4DC4-96D7-D9DCF2126872}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -205,6 +207,10 @@ Global
 		{EB6133CD-8787-454F-A5C0-8DDE07A7ABED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB6133CD-8787-454F-A5C0-8DDE07A7ABED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB6133CD-8787-454F-A5C0-8DDE07A7ABED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70A33843-218C-4DC4-96D7-D9DCF2126872}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70A33843-218C-4DC4-96D7-D9DCF2126872}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70A33843-218C-4DC4-96D7-D9DCF2126872}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70A33843-218C-4DC4-96D7-D9DCF2126872}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard1.3;netstandard2.0</TargetFrameworks>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <RootNamespace>Albumprinter.CorrelationTracking.Correlation.AmazonSns.Lambda</RootNamespace>
+    <PackageId>Albumprinter.CorrelationTracking.Correlation.AmazonSns.Lambda</PackageId>
+    <Authors>Albumprinter</Authors>
+    <AssemblyName>Albumprinter.CorrelationTracking.Correlation.AmazonSns.Lambda</AssemblyName>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
+    <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Correlation.Core\Correlation.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs" Link="CommonAssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Amazon.Lambda.SNSEvents" Version="1.0.0" />
+  </ItemGroup>
+</Project>
