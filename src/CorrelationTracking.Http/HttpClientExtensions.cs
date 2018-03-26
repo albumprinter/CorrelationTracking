@@ -28,7 +28,7 @@ namespace Albumprinter.CorrelationTracking.Http
             {
                 var newHandler = new CorrelationDelegatingHandler
                 {
-                    InnerHandler = new Log4NetDelegatingHandler { InnerHandler = oldHandler }
+                    InnerHandler = new LoggingDelegatingHandler { InnerHandler = oldHandler }
                 };
                 HandlerField.SetValue(client, newHandler);
             }

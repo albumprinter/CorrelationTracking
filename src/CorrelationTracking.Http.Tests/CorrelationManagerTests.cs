@@ -32,7 +32,7 @@ namespace Albumprinter.CorrelationTracking.Http.Tests
                 client.UseCorrelationTracking();
 
                 // assert
-                Assert.NotNull(client.GetHttpMessageHandler<Log4NetDelegatingHandler>());
+                Assert.NotNull(client.GetHttpMessageHandler<LoggingDelegatingHandler>());
             }
 
             [Fact]
@@ -44,7 +44,7 @@ namespace Albumprinter.CorrelationTracking.Http.Tests
                 // act
                 client.UseCorrelationTracking();
                 var correlationDelegatingHandler = client.GetHttpMessageHandler<CorrelationDelegatingHandler>();
-                var log4NetDelegatingHandler = client.GetHttpMessageHandler<Log4NetDelegatingHandler>();
+                var log4NetDelegatingHandler = client.GetHttpMessageHandler<LoggingDelegatingHandler>();
 
                 // assert
                 Assert.Same(log4NetDelegatingHandler, correlationDelegatingHandler.InnerHandler);
@@ -59,7 +59,7 @@ namespace Albumprinter.CorrelationTracking.Http.Tests
                 // act
                 client.UseCorrelationTracking();
                 var actual = client.GetHttpMessageHandler<HttpClientHandler>();
-                var expected = client.GetHttpMessageHandler<Log4NetDelegatingHandler>().InnerHandler;
+                var expected = client.GetHttpMessageHandler<LoggingDelegatingHandler>().InnerHandler;
 
                 // assert
                 Assert.NotNull(actual);
