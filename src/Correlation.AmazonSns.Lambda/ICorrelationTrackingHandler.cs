@@ -5,6 +5,6 @@ namespace Albumprinter.CorrelationTracking.Correlation.AmazonSns.Lambda
 {
     public interface ICorrelationTrackingHandler
     {
-        Task Handle(SNSEvent snsEvent);
+        void Handle(SNSEvent snsEvent);
     }
 }

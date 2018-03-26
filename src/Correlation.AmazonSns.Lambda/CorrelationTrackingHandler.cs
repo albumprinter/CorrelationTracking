@@ -16,7 +16,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.AmazonSns.Lambda
             _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
         }
 
-        public async Task Handle(SNSEvent snsEvent)
+        public void Handle(SNSEvent snsEvent)
         {
             var requestId = Guid.NewGuid();
 
@@ -32,7 +32,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.AmazonSns.Lambda
                         throw new InvalidOperationException($"No INotificationHandler<{typeof(ISnsRecordHandler).Name}> could be found.");
                     }
                     _logger.Info("Invoking message handler");
-                    await handler.Handle(snsRecord).ConfigureAwait(false);
+                    handler.Handle(snsRecord).ConfigureAwait(false).GetAwaiter().GetResult();
                 }
             }
         }
