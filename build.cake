@@ -86,10 +86,10 @@ Task("Test").Does(() => {
 });
 
 Task("Pack").Does(() => {
-    var settings = new GitVersionSettings {
+    var gitVersionSettings = new GitVersionSettings {
         NoFetch = true
     };
-    var gitVersion = GitVersion(settings);
+    var gitVersion = GitVersion(gitVersionSettings);
 
     var msBuildSettings
         = new DotNetCoreMSBuildSettings()
