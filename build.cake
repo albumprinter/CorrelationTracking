@@ -52,7 +52,8 @@ Task("SemVer").Does(() => {
     var settings = new GitVersionSettings {
         UpdateAssemblyInfo = true,
         UpdateAssemblyInfoFilePath = src + File("CommonAssemblyInfo.cs"),
-        OutputType = GitVersionOutput.Json
+        OutputType = GitVersionOutput.Json,
+        NoFetch = true
     };
 
     var version = GitVersion(settings);
@@ -85,9 +86,14 @@ Task("Test").Does(() => {
 });
 
 Task("Pack").Does(() => {
+    var settings = new GitVersionSettings {
+        NoFetch = true
+    };
+    var gitVersion = GitVersion(settings);
+
     var msBuildSettings
         = new DotNetCoreMSBuildSettings()
-            .WithProperty("Version", GitVersion().NuGetVersionV2);
+            .WithProperty("Version", gitVersion.NuGetVersionV2);
 
     var coreSettings = new DotNetCorePackSettings {
         Configuration = CONFIGURATION,
