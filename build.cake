@@ -10,6 +10,19 @@ var src = Directory("./src");
 var dst = Directory("./artifacts");
 var packages = dst + Directory("./packages");
 
+var currentGitVersion = new Lazy<GitVersion>(
+    () => {
+        var settings = new GitVersionSettings {
+        UpdateAssemblyInfo = true,
+        UpdateAssemblyInfoFilePath = src + File("CommonAssemblyInfo.cs"),
+        OutputType = GitVersionOutput.Json,
+        NoFetch = true
+    };
+
+    return GitVersion(settings);
+    }
+);
+
 string EnvironmentVariableOrFail(string varName){
     return EnvironmentVariable(varName) ?? throw new Exception($"Can't find variable {varName}");
 }
@@ -49,13 +62,7 @@ Task("Restore").Does(() => {
 });
 
 Task("SemVer").Does(() => {
-    var settings = new GitVersionSettings {
-        UpdateAssemblyInfo = true,
-        UpdateAssemblyInfoFilePath = src + File("CommonAssemblyInfo.cs"),
-        OutputType = GitVersionOutput.Json
-    };
-
-    var version = GitVersion(settings);
+    var version = currentGitVersion.Value;
 
     Information("{{  FullSemVer: {0}", version.FullSemVer);
     Information("    NuGetVersionV2: {0}", version.NuGetVersionV2);
@@ -85,9 +92,11 @@ Task("Test").Does(() => {
 });
 
 Task("Pack").Does(() => {
+    var gitVersion = currentGitVersion.Value;
+
     var msBuildSettings
         = new DotNetCoreMSBuildSettings()
-            .WithProperty("Version", GitVersion().NuGetVersionV2);
+            .WithProperty("Version", gitVersion.NuGetVersionV2);
 
     var coreSettings = new DotNetCorePackSettings {
         Configuration = CONFIGURATION,
