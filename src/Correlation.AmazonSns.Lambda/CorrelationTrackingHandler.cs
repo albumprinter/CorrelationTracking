@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Albumprinter.CorrelationTracking.Correlation.AmazonSns.Lambda.Logging;
-using Albumprinter.CorrelationTracking.Correlation.Core;
 using Amazon.Lambda.SNSEvents;
 
 namespace Albumprinter.CorrelationTracking.Correlation.AmazonSns.Lambda
