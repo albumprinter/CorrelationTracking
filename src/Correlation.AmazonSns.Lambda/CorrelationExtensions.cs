@@ -8,11 +8,14 @@ namespace Albumprinter.CorrelationTracking.Correlation.AmazonSns.Lambda
     {
         public static Guid? ExtractCorrelationId(this SNSEvent.SNSMessage snsMessage)
         {
-            Guid? correlationId;
-            if (snsMessage?.MessageAttributes == null) return null;
-            snsMessage.MessageAttributes.TryGetValue(CorrelationKeys.CorrelationId, out var attribute);
-            correlationId = Guid.Parse(attribute?.Value);
-            return correlationId;
+            if (snsMessage?.MessageAttributes != null &&
+                snsMessage.MessageAttributes.TryGetValue(CorrelationKeys.CorrelationId, out var attribute) &&
+                attribute?.Value != null &&
+                Guid.TryParse(attribute.Value, out var correlationId))
+            {
+                return correlationId;
+            }
+            return null;
         }
 
         public static IDisposable TrackCorrelationId(this SNSEvent.SNSRecord snsRecord)
