@@ -16,11 +16,9 @@ namespace Albumprinter.CorrelationTracking.Correlation.AmazonSns.Lambda
 
         public void Handle(SNSEvent snsEvent)
         {
-            var requestId = Guid.NewGuid();
-
             foreach (var snsRecord in snsEvent.Records)
             {
-                using (CorrelationManager.Instance.UseScope(snsRecord.Sns.ExtractCorrelationId() ?? Guid.NewGuid(), requestId))
+                using (snsRecord.TrackCorrelationId())
                 {
                     _logger.Info("Getting message handler");
                     var handler = (ISnsRecordHandler)_serviceProvider.GetService(typeof(ISnsRecordHandler));

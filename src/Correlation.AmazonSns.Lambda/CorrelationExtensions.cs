@@ -14,5 +14,10 @@ namespace Albumprinter.CorrelationTracking.Correlation.AmazonSns.Lambda
             correlationId = Guid.Parse(attribute?.Value);
             return correlationId;
         }
+
+        public static IDisposable TrackCorrelationId(this SNSEvent.SNSRecord snsRecord)
+        {
+            return CorrelationManager.Instance.UseScope(snsRecord.Sns.ExtractCorrelationId() ?? Guid.NewGuid(), Guid.NewGuid());
+        }
     }
 }
