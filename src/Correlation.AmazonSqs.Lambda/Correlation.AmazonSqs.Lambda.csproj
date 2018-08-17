@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard1.3;netstandard2.0</TargetFrameworks>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <RootNamespace>Albumprinter.CorrelationTracking.Correlation.AmazonSqs.Lambda</RootNamespace>
+    <PackageId>Albumprinter.CorrelationTracking.Correlation.AmazonSqs.Lambda</PackageId>
+    <Authors>Albumprinter</Authors>
+    <AssemblyName>Albumprinter.CorrelationTracking.Correlation.AmazonSqs.Lambda</AssemblyName>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
+    <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Correlation.Core\Correlation.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs" Link="CommonAssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Amazon.Lambda.SQSEvents" Version="1.0.0" />  
+    <PackageReference Include="LibLog" Version="4.2.6">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CSharp" Version="4.3.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="1.0.2" Condition="'$(TargetFramework)' == 'netstandard1.3'" />
+  </ItemGroup>
+</Project>
