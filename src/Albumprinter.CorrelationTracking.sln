@@ -79,7 +79,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Correlation.AmazonSns", "Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Correlation.LibLog", "Correlation.LibLog\Correlation.LibLog.csproj", "{EB6133CD-8787-454F-A5C0-8DDE07A7ABED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correlation.AmazonSns.Lambda", "Correlation.AmazonSns.Lambda\Correlation.AmazonSns.Lambda.csproj", "{70A33843-218C-4DC4-96D7-D9DCF2126872}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Correlation.AmazonSns.Lambda", "Correlation.AmazonSns.Lambda\Correlation.AmazonSns.Lambda.csproj", "{70A33843-218C-4DC4-96D7-D9DCF2126872}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Correlation.AmazonSqs.Lambda", "Correlation.AmazonSqs.Lambda\Correlation.AmazonSqs.Lambda.csproj", "{8E61F82B-478E-4C8C-B1A3-30B1E1E662B0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -211,6 +213,10 @@ Global
 		{70A33843-218C-4DC4-96D7-D9DCF2126872}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70A33843-218C-4DC4-96D7-D9DCF2126872}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70A33843-218C-4DC4-96D7-D9DCF2126872}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E61F82B-478E-4C8C-B1A3-30B1E1E662B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E61F82B-478E-4C8C-B1A3-30B1E1E662B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E61F82B-478E-4C8C-B1A3-30B1E1E662B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E61F82B-478E-4C8C-B1A3-30B1E1E662B0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
