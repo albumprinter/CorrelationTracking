@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Albumprinter.CorrelationTracking.Correlation.Lambda</AssemblyName>
+    <RootNamespace>Albumprinter.CorrelationTracking.Correlation</RootNamespace>
+  </PropertyGroup>
+
+</Project>
