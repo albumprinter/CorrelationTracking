@@ -1,9 +1,19 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Albumprinter.CorrelationTracking.Correlation.Lambda</AssemblyName>
     <RootNamespace>Albumprinter.CorrelationTracking.Correlation</RootNamespace>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs" Link="Properties\CommonAssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Albumprinter.CorrelationTracking.Correlation.Core" Version="3.2.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.1.1" />
+  </ItemGroup>
 
 </Project>
