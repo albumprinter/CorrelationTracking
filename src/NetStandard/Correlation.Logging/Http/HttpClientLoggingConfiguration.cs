@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Albumprinter.CorrelationTracking.Correlation.Core;
 
 namespace Albelli.Correlation.Http
 {
@@ -27,8 +28,8 @@ namespace Albelli.Correlation.Http
         {
             "Accept",
             "Content-Type",
-            "X-CorrelationId",
-            "X-RequestId"
+            CorrelationKeys.CorrelationId,
+            CorrelationKeys.RequestId
         };
 
         public HttpClientLoggingConfiguration(IHttpClientLogger logger) : this(logger, _allowedHeaders)

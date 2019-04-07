@@ -2,11 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Albelli.Correlation.Logging</AssemblyName>
-    <RootNamespace>Albelli.Correlation</RootNamespace>
+    <AssemblyName>Albelli.Correlation.Http.Server</AssemblyName>
+    <RootNamespace>Albelli.Correlation.Http.Server</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <PackageId>Albelli.Correlation.Logging</PackageId>
-    <Description>Logging contracts (interfaces and models)</Description>
+    <PackageId>Albelli.Correlation..Http.Server</PackageId>
+    <Description>Asp.Net Core middleware for correlation tracking</Description>
     <Authors>Albelli</Authors>
     <Company>Albelli B.V.</Company>
     <IsPackable>true</IsPackable>
@@ -18,6 +18,11 @@
 
   <ItemGroup>
     <PackageReference Include="Albumprinter.CorrelationTracking.Correlation.Core" Version="3.2.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
 
 </Project>
