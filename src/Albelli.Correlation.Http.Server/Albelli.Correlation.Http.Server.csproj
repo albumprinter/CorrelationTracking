@@ -5,7 +5,7 @@
     <AssemblyName>Albelli.Correlation.Http.Server</AssemblyName>
     <RootNamespace>Albelli.Correlation.Http.Server</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <PackageId>Albelli.Correlation..Http.Server</PackageId>
+    <PackageId>Albelli.Correlation.Http.Server</PackageId>
     <Description>Asp.Net Core middleware for correlation tracking</Description>
     <Authors>Albelli</Authors>
     <Company>Albelli B.V.</Company>

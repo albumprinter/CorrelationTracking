@@ -91,6 +91,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Albelli.Correlation.Http.Cl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Albelli.Correlation.Http.Server", "Albelli.Correlation.Http.Server\Albelli.Correlation.Http.Server.csproj", "{2A13D580-1381-4CE0-9C09-EF223B81B24D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Albelli.Correlation.Logging.log4net", "Albelli.Correlation.Logging.log4net\Albelli.Correlation.Logging.log4net.csproj", "{23D24A36-BB5A-4993-8A2C-29082E48EF40}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -241,6 +243,10 @@ Global
 		{2A13D580-1381-4CE0-9C09-EF223B81B24D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A13D580-1381-4CE0-9C09-EF223B81B24D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A13D580-1381-4CE0-9C09-EF223B81B24D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23D24A36-BB5A-4993-8A2C-29082E48EF40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23D24A36-BB5A-4993-8A2C-29082E48EF40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23D24A36-BB5A-4993-8A2C-29082E48EF40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23D24A36-BB5A-4993-8A2C-29082E48EF40}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

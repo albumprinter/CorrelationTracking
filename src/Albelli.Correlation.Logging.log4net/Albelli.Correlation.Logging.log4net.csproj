@@ -2,11 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Albelli.Correlation.Http.Client</AssemblyName>
-    <RootNamespace>Albelli.Correlation.Http.Client</RootNamespace>
+    <AssemblyName>Albelli.Correlation.Logging.log4net</AssemblyName>
+    <RootNamespace>Albelli.Correlation.Logging.log4net</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <PackageId>Albelli.Correlation.Http.Client</PackageId>
-    <Description>.Net Core correlation tracking for HttpClient</Description>
+    <PackageId>Albelli.Correlation.Logging.log4net</PackageId>
+    <Description>Albelli.Correlation.Logging log4net implementation</Description>
     <Authors>Albelli</Authors>
     <Company>Albelli B.V.</Company>
     <IsPackable>true</IsPackable>
@@ -17,11 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Albumprinter.CorrelationTracking.Correlation.Core" Version="3.2.4" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Extensions\" />
+    <PackageReference Include="log4net" Version="2.0.8" />
   </ItemGroup>
 
 </Project>
