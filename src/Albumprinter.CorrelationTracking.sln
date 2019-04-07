@@ -85,6 +85,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Correlation.AmazonSqs.Lambd
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correlation.Lambda", "Correlation.Lambda\Correlation.Lambda.csproj", "{5BF79140-E7DC-4A6E-9E28-96202472E5C3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NetStandard", "NetStandard", "{7B1CDE05-FCB4-47F6-83DC-0D5D6BDF908F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correlation.Logging", "NetStandard\Correlation.Logging\Correlation.Logging.csproj", "{09AF6261-5917-47E3-B2B0-36685D24198B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -223,6 +227,10 @@ Global
 		{5BF79140-E7DC-4A6E-9E28-96202472E5C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5BF79140-E7DC-4A6E-9E28-96202472E5C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5BF79140-E7DC-4A6E-9E28-96202472E5C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09AF6261-5917-47E3-B2B0-36685D24198B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09AF6261-5917-47E3-B2B0-36685D24198B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09AF6261-5917-47E3-B2B0-36685D24198B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09AF6261-5917-47E3-B2B0-36685D24198B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -236,6 +244,7 @@ Global
 		{029EDD43-987C-4C6C-ABA7-0B8AB48722DF} = {169A40CA-05B5-40E3-A0B8-688BF2350962}
 		{C451BE76-AF43-4EFC-9421-659D3F34FF85} = {169A40CA-05B5-40E3-A0B8-688BF2350962}
 		{E169E116-E8AA-44E6-88AD-310A9C488D80} = {169A40CA-05B5-40E3-A0B8-688BF2350962}
+		{09AF6261-5917-47E3-B2B0-36685D24198B} = {7B1CDE05-FCB4-47F6-83DC-0D5D6BDF908F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E258C3C5-078A-47FC-8B6C-3206D02C86C9}

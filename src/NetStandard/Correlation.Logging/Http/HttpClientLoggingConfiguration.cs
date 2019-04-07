@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Albumprinter.CorrelationTracking.Correlation.Interfaces
+namespace Albelli.Correlation.Http
 {
-    public interface ILoggingConfiguration
+    public interface IHttpClientLoggingConfiguration
     {
         IHttpClientLogger Logger { get; }
         ICollection<string> AllowedHeaders { get; }
@@ -14,7 +14,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.Interfaces
     }
 
 
-    public class LoggingConfiguration : ILoggingConfiguration
+    public class HttpClientLoggingConfiguration : IHttpClientLoggingConfiguration
     {
         public IHttpClientLogger Logger { get; }
         public ICollection<string> AllowedHeaders { get; }
@@ -31,11 +31,11 @@ namespace Albumprinter.CorrelationTracking.Correlation.Interfaces
             "X-RequestId"
         };
 
-        public LoggingConfiguration(IHttpClientLogger logger) : this(logger, _allowedHeaders)
+        public HttpClientLoggingConfiguration(IHttpClientLogger logger) : this(logger, _allowedHeaders)
         {
         }
 
-        public LoggingConfiguration(IHttpClientLogger logger,
+        public HttpClientLoggingConfiguration(IHttpClientLogger logger,
             ICollection<string> allowedHeaders,
             bool logRequest = true,
             bool logRequestContent = true,

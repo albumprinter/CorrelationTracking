@@ -12,9 +12,9 @@ namespace Albumprinter.CorrelationTracking.Correlation.Handlers
 {
     public class LoggingDelegatingHandler : DelegatingHandler
     {
-        private readonly ILoggingConfiguration _config;
+        private readonly IHttpClientLoggingConfiguration _config;
 
-        public LoggingDelegatingHandler(ILoggingConfiguration config)
+        public LoggingDelegatingHandler(IHttpClientLoggingConfiguration config)
         {
             _config = config;
         }

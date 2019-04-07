@@ -15,7 +15,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.Extensions
             HandlerField = typeof(HttpMessageInvoker).GetField("handler", BindingFlags.Instance | BindingFlags.NonPublic);
         }
 
-        public static HttpClient UseCorrelationTracking(this HttpClient client, ILoggingConfiguration config = null)
+        public static HttpClient UseCorrelationTracking(this HttpClient client, IHttpClientLoggingConfiguration config = null)
         {
             ValidateContext();
             var oldHandler = HandlerField.GetValue(client) as HttpMessageHandler;
