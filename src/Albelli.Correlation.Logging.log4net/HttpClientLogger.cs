@@ -46,10 +46,10 @@ namespace Albelli.Correlation.Logging.log4net
                 {
                     [MessageCodeKey] = nameof(HttpClientCommunicationRequest),
                     [OperationKey] = request.OperationId,
+                    [MethodKey] = request.Method,
                     [UrlKey] = request.Url,
                     [HeadersKey] = request.Headers,
-                    [ContentKey] = request.Content,
-                    [MethodKey] = request.Method
+                    [ContentKey] = request.Content
                 }
             };
 
@@ -71,9 +71,9 @@ namespace Albelli.Correlation.Logging.log4net
                 Properties = new PropertiesDictionary
                 {
                     [MessageCodeKey] = nameof(HttpClientCommunicationResponse),
-                    [DurationKey] = (long)response.Duration.TotalMilliseconds,
                     [OperationKey] = response.OperationId,
-                    // [UrlKey] = response.Url,
+                    [DurationKey] = (long)response.Duration.TotalMilliseconds,
+                    [UrlKey] = response.Url,
                     [HeadersKey] = response.Headers,
                     [ContentKey] = response.Content
                 }
