@@ -17,7 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Albelli.Correlation.Logging" Version="3.3.0-alpha-dotnet-cor0012" />
     <PackageReference Include="log4net" Version="2.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.1.1" />
   </ItemGroup>
 
 </Project>

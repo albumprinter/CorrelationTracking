@@ -17,11 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Albelli.Correlation.Logging" Version="3.3.0-alpha-dotnet-cor0012" />
     <PackageReference Include="Albumprinter.CorrelationTracking.Correlation.Core" Version="3.2.4" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Extensions\" />
   </ItemGroup>
 
 </Project>

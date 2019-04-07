@@ -12,6 +12,9 @@ namespace Albelli.Correlation.Http
         public Guid OperationId { get; set; }
 
         [DataMember]
+        public string Url { get; set; }
+
+        [DataMember]
         public List<KeyValuePair<string, string>> Headers { get; set; }
 
         [DataMember]

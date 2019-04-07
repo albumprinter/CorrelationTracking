@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Albumprinter.CorrelationTracking.Correlation.Core;
+using Microsoft.AspNetCore.Http;
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
-using Albumprinter.CorrelationTracking.Correlation.Core;
-using Microsoft.AspNetCore.Http;
 
 namespace Albelli.Correlation.Http.Server.Middleware
 {

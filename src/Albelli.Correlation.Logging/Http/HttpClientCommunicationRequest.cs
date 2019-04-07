@@ -7,9 +7,6 @@ namespace Albelli.Correlation.Http
     public class HttpClientCommunicationRequest : HttpClientCommunicationBase
     {
         [DataMember]
-        public string Url { get; set; }
-
-        [DataMember]
         public string Method { get; set; }
 
         public override string ToString()
