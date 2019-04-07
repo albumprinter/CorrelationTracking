@@ -2,18 +2,18 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Albelli.Correlation.Logging</AssemblyName>
-    <RootNamespace>Albelli.Correlation</RootNamespace>
+    <AssemblyName>Albelli.Correlation.Http.Client</AssemblyName>
+    <RootNamespace>Albelli.Correlation.Http.Client</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <PackageId>Albelli.Correlation.Logging</PackageId>
-    <Description>Logging contracts (interfaces and models)</Description>
+    <PackageId>Albelli.Correlation..Http.Client</PackageId>
+    <Description>.Net Core correlation tracking for HttpClient</Description>
     <Authors>Albelli</Authors>
     <Company>Albelli B.V.</Company>
     <IsPackable>true</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\CommonAssemblyInfo.cs" Link="Properties\CommonAssemblyInfo.cs" />
+    <Compile Include="..\CommonAssemblyInfo.cs" Link="Properties\CommonAssemblyInfo.cs" />
   </ItemGroup>
 
   <ItemGroup>
