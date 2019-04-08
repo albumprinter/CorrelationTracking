@@ -1,4 +1,5 @@
-﻿using Albelli.Correlation.Http.Client.Handlers;
+﻿using Albelli.Correlation.Http.Client.Configuration;
+using Albelli.Correlation.Http.Client.Handlers;
 using System;
 using System.Net.Http;
 using System.Reflection;

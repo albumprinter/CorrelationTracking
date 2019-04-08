@@ -1,12 +1,11 @@
-﻿using System;
+﻿using Albumprinter.CorrelationTracking.Correlation.Core;
+using System;
 using System.Collections.Generic;
-using Albumprinter.CorrelationTracking.Correlation.Core;
 
-namespace Albelli.Correlation.Http
+namespace Albelli.Correlation.Http.Client.Configuration
 {
     public interface IHttpClientLoggingConfiguration
     {
-        IHttpClientLogger Logger { get; }
         ICollection<string> AllowedHeaders { get; }
         bool LogRequest { get; }
         bool LogRequestContent { get; }
@@ -17,7 +16,6 @@ namespace Albelli.Correlation.Http
 
     public class HttpClientLoggingConfiguration : IHttpClientLoggingConfiguration
     {
-        public IHttpClientLogger Logger { get; }
         public ICollection<string> AllowedHeaders { get; }
         public bool LogRequest { get; }
         public bool LogRequestContent { get; }
@@ -32,18 +30,17 @@ namespace Albelli.Correlation.Http
             CorrelationKeys.RequestId
         };
 
-        public HttpClientLoggingConfiguration(IHttpClientLogger logger) : this(logger, _allowedHeaders)
+        public HttpClientLoggingConfiguration() : this(_allowedHeaders)
         {
         }
 
-        public HttpClientLoggingConfiguration(IHttpClientLogger logger,
+        public HttpClientLoggingConfiguration(
             ICollection<string> allowedHeaders,
             bool logRequest = true,
             bool logRequestContent = true,
             bool logResponse = true,
             bool logResponseContent = true)
         {
-            Logger = logger;
             AllowedHeaders = allowedHeaders;
             LogRequest = logRequest;
             LogRequestContent = logRequestContent;
