@@ -22,7 +22,8 @@ namespace Albelli.Correlation.Http.Client.Configuration
         public bool LogResponse { get; }
         public bool LogResponseContent { get; }
 
-        private static readonly HashSet<string> _allowedHeaders = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        // ReSharper disable once MemberCanBePrivate.Global
+        public static readonly HashSet<string> DefaultAllowedHeaders = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
             "Accept",
             "Content-Type",
@@ -30,7 +31,7 @@ namespace Albelli.Correlation.Http.Client.Configuration
             CorrelationKeys.RequestId
         };
 
-        public HttpClientLoggingConfiguration() : this(_allowedHeaders)
+        public HttpClientLoggingConfiguration() : this(DefaultAllowedHeaders)
         {
         }
 
