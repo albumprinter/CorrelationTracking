@@ -102,31 +102,31 @@ namespace Albelli.Correlation.Http.Client.Handlers
             return string.Join(Environment.NewLine, headers);
         }
 
-        private static LogLevel ToLevel(HttpStatusCode? status)
+        private LogLevel ToLevel(HttpStatusCode? status)
         {
             if (!status.HasValue)
             {
                 return LogLevel.Error;
             }
 
-            var code = (int)status.Value;
-
-            if (code >= 200 && code < 300)
-            {
-                return LogLevel.Debug;
-            }
-
-            if (code == 404)
+            if (_config.WhiteListedCodes.Contains(status.Value))
             {
                 return LogLevel.Info;
             }
 
-            if (code >= 500)
+            var code = (int)status.Value;
+
+            if (code >= 200 && code < 300)
+            {
+                return LogLevel.Info;
+            }
+
+            if (code >= 400 &&  code < 600)
             {
                 return LogLevel.Error;
             }
 
-            return LogLevel.Warn;
+            return LogLevel.Warn; // 1xx, 3xx, >=600
         }
     }
 }
