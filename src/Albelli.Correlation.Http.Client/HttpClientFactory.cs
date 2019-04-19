@@ -10,11 +10,18 @@ namespace Albelli.Correlation.Http.Client
     {
         public static HttpClient Create(IHttpClientLoggingConfiguration _loggingConfiguration = null)
         {
-            var loggingHandler = _loggingConfiguration == null ? null : new LoggingDelegatingHandler(_loggingConfiguration);
+            var httpHandler = new HttpClientHandler(); // the most internal
+
+            HttpMessageHandler loggingHandler = _loggingConfiguration == null
+                ? null
+                : new LoggingDelegatingHandler(_loggingConfiguration)
+                {
+                    InnerHandler = httpHandler
+                };
 
             var correlationHandler = new CorrelationDelegatingHandler
             {
-                InnerHandler = loggingHandler
+                InnerHandler = loggingHandler ?? httpHandler
             };
             return new HttpClient(correlationHandler);
         }
@@ -26,6 +33,8 @@ namespace Albelli.Correlation.Http.Client
                 throw new ArgumentNullException(nameof(correlationHandler));
             }
 
+            var httpHandler = new HttpClientHandler();
+            loggingHandler.InnerHandler = httpHandler;
             correlationHandler.InnerHandler = loggingHandler;
             return new HttpClient(correlationHandler);
         }

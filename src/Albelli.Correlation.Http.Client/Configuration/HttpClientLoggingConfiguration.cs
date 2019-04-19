@@ -36,7 +36,6 @@ namespace Albelli.Correlation.Http.Client.Configuration
 
         public HttpClientLoggingConfiguration() : this(DefaultAllowedHeaders)
         {
-            WhiteListedCodes = new List<HttpStatusCode>();
         }
 
         /// <summary>

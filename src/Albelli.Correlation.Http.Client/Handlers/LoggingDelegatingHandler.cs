@@ -34,9 +34,10 @@ namespace Albelli.Correlation.Http.Client.Handlers
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             var currentLogProvider = LogProvider.CurrentLogProvider;
+
             var uri = request.RequestUri?.ToString() ?? "<null>";
-            using (currentLogProvider.OpenMappedContext(ContextKeys.OperationId, Guid.NewGuid()))
-            using (currentLogProvider.OpenMappedContext(ContextKeys.Url, uri))
+            using (currentLogProvider?.OpenMappedContext(ContextKeys.OperationId, Guid.NewGuid()))
+            using (currentLogProvider?.OpenMappedContext(ContextKeys.Url, uri))
             {
                 if (_config.LogRequest)
                 {
@@ -76,8 +77,8 @@ namespace Albelli.Correlation.Http.Client.Handlers
                         output.Append(response.Content == null ? "<null>" : await response.Content.ReadAsStringAsync().ConfigureAwait(false));
                     }
 
-                    using (currentLogProvider.OpenMappedContext(ContextKeys.Duration, elapsed))
-                    using (currentLogProvider.OpenMappedContext(ContextKeys.StatusCode, response.StatusCode))
+                    using (currentLogProvider?.OpenMappedContext(ContextKeys.Duration, elapsed))
+                    using (currentLogProvider?.OpenMappedContext(ContextKeys.StatusCode, response.StatusCode))
                     {
                         _log.Log(ToLevel(response.StatusCode), () => output.ToString());
                     }
