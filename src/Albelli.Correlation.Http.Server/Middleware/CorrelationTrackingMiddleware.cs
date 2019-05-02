@@ -18,18 +18,24 @@ namespace Albelli.Correlation.Http.Server.Middleware
 
         public async Task Invoke(HttpContext context)
         {
+            Guid correlationId = ResolveCorrelationId(context);
+
+            using (CorrelationManager.Instance.UseScope(correlationId, Guid.NewGuid()))
+            {
+                await _next(context);
+            }
+        }
+
+        private Guid ResolveCorrelationId(HttpContext context)
+        {
             if (context.Request.Headers.TryGetValue(CorrelationKeys.CorrelationId, out var headers)
                 && headers.Count >= 1
                 && Guid.TryParse(headers[0], out var correlationId))
             {
-                CorrelationManager.Instance.UseScope(correlationId, Guid.NewGuid());
-            }
-            else
-            {
-                CorrelationManager.Instance.UseScope(Guid.NewGuid(), Guid.NewGuid());
+                return correlationId;
             }
 
-            await _next(context);
+            return Guid.NewGuid();
         }
     }
 }
