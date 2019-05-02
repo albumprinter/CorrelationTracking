@@ -1,5 +1,4 @@
 ﻿using System;
-using Albumprinter.CorrelationTracking.Correlation.AmazonSqs.Lambda;
 using Albumprinter.CorrelationTracking.Correlation.AmazonSqs.Lambda.Logging;
 using Amazon.Lambda.SQSEvents;
 

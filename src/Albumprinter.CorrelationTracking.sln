@@ -83,6 +83,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Correlation.AmazonSns.Lambd
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Correlation.AmazonSqs.Lambda", "Correlation.AmazonSqs.Lambda\Correlation.AmazonSqs.Lambda.csproj", "{8E61F82B-478E-4C8C-B1A3-30B1E1E662B0}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Albelli.Correlation.Http.Client", "Albelli.Correlation.Http.Client\Albelli.Correlation.Http.Client.csproj", "{8205FDDA-B84D-4B4D-A01C-41C1CB8A2212}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Albelli.Correlation.Http.Server", "Albelli.Correlation.Http.Server\Albelli.Correlation.Http.Server.csproj", "{2A13D580-1381-4CE0-9C09-EF223B81B24D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -217,6 +221,14 @@ Global
 		{8E61F82B-478E-4C8C-B1A3-30B1E1E662B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E61F82B-478E-4C8C-B1A3-30B1E1E662B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8E61F82B-478E-4C8C-B1A3-30B1E1E662B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8205FDDA-B84D-4B4D-A01C-41C1CB8A2212}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8205FDDA-B84D-4B4D-A01C-41C1CB8A2212}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8205FDDA-B84D-4B4D-A01C-41C1CB8A2212}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8205FDDA-B84D-4B4D-A01C-41C1CB8A2212}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A13D580-1381-4CE0-9C09-EF223B81B24D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A13D580-1381-4CE0-9C09-EF223B81B24D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A13D580-1381-4CE0-9C09-EF223B81B24D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A13D580-1381-4CE0-9C09-EF223B81B24D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
