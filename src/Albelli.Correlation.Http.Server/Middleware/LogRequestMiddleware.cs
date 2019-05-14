@@ -14,6 +14,7 @@ namespace Albelli.Correlation.Http.Server.Middleware
     {
         private readonly RequestDelegate _next;
         private readonly Action<HttpDto> _logAction;
+        private readonly Func<HttpContext, bool> _logBody;
         private readonly HashSet<string> _loggedHeaders;
 
         public LogRequestMiddleware(RequestDelegate next) : this(next, new LoggingOptions<HttpDto>())
@@ -24,44 +25,52 @@ namespace Albelli.Correlation.Http.Server.Middleware
         {
             _next = next;
             _logAction = options.LogAction ?? DefaultLogger.LogWithLibLog;
+            _logBody = options.LogBody ?? (_ => true);
             _loggedHeaders = new HashSet<string>(options.LoggedHeaders ?? new[] {CorrelationKeys.CorrelationId});
+            
         }
 
         public async Task Invoke(HttpContext context)
         {
-            if (context.Request.Path.HasValue && context.Request.Path.Value.IndexOf("swagger", StringComparison.OrdinalIgnoreCase) == -1 &&
-                context.Request.Path.Value.IndexOf("health", StringComparison.OrdinalIgnoreCase) == -1)
+            var shouldLogBody = _logBody(context);
+            string requestBodyText = null;
+            MemoryStream requestBodyStream = null;
+            Stream originalRequestBody = null;
+            if (shouldLogBody)
             {
-                var requestBodyStream = new MemoryStream();
-                var originalRequestBody = context.Request.Body;
+                requestBodyStream = new MemoryStream();
+                originalRequestBody = context.Request.Body;
 
                 await context.Request.Body.CopyToAsync(requestBodyStream);
                 requestBodyStream.Seek(0, SeekOrigin.Begin);
 
-                var requestBodyText = new StreamReader(requestBodyStream).ReadToEnd();
-                var url = InternalHttpHelper.GetDisplayUrl(context.Request);
-                var operationId = InternalHttpHelper.GetOrCreateOperationId(context);
-                var requestDto = 
-                    new HttpDto
-                    {
-                        Scope = CorrelationScope.Current,
-                        Method = context.Request.Method,
-                        Url = url,
-                        Headers = InternalHttpHelper.GetHeaders(context.Request.Headers, _loggedHeaders),
-                        Body = requestBodyText,
-                        OperationId = operationId,
-                    };
-                _logAction(requestDto);
+                requestBodyText = new StreamReader(requestBodyStream).ReadToEnd();
+            }
+            
+            var url = InternalHttpHelper.GetDisplayUrl(context.Request);
+            var operationId = InternalHttpHelper.GetOrCreateOperationId(context);
+            var requestDto =
+                new HttpDto
+                {
+                    Scope = CorrelationScope.Current,
+                    Method = context.Request.Method,
+                    Url = url,
+                    Headers = InternalHttpHelper.GetHeaders(context.Request.Headers, _loggedHeaders),
+                    Body = requestBodyText,
+                    OperationId = operationId,
+                };
+            _logAction(requestDto);
 
+            if (shouldLogBody)
+            {
                 requestBodyStream.Seek(0, SeekOrigin.Begin);
                 context.Request.Body = requestBodyStream;
-
-                await _next(context);
-                context.Request.Body = originalRequestBody;
             }
-            else
+
+            await _next(context);
+            if (shouldLogBody)
             {
-                await _next(context);
+                context.Request.Body = originalRequestBody;
             }
         }
     }
@@ -70,6 +79,7 @@ namespace Albelli.Correlation.Http.Server.Middleware
     {
         public Action<TLogDto> LogAction { get; set; }
         public IReadOnlyCollection<string> LoggedHeaders { get; set; }
+        public Func<HttpContext, bool> LogBody { get; set; }
     }
 
     public class HttpDto
@@ -93,22 +103,12 @@ namespace Albelli.Correlation.Http.Server.Middleware
     {
         public static Guid GetOrCreateOperationId(HttpContext context)
         {
-            if (context.Items.TryGetValue(ContextKeys.OperationId, out var operationIdObj))
+            if (context.Items.TryGetValue(CorrelationKeys.OperationId, out var operationIdObj))
                 return (Guid)operationIdObj;
             var operationId = Guid.NewGuid();
-            context.Items[ContextKeys.OperationId] = operationId;
+            context.Items[CorrelationKeys.OperationId] = operationId;
             return operationId;
 
-        }
-
-        public static void SetStartTime(HttpContext context, DateTime time)
-        {
-            context.Items[ContextKeys.RequestTime] = time;
-        }
-
-        public static DateTime GetStartTime(HttpContext context)
-        {
-            return (DateTime)context.Items[ContextKeys.RequestTime];
         }
 
         public static string GetDisplayUrl(HttpRequest request)
@@ -131,7 +131,6 @@ namespace Albelli.Correlation.Http.Server.Middleware
 
     public static class ContextKeys
     {
-        public const string OperationId = "Albelli.Correlation.OperationId"; // TODO: move me in base project
         public const string Url = "Albelli.Correlation.Http.Url";
         public const string StatusCode = "Albelli.Correlation.Http.StatusCode";
         public const string RequestTime = "Albelli.Correlation.Http.RequestTime";
@@ -144,7 +143,7 @@ namespace Albelli.Correlation.Http.Server.Middleware
         public static void LogWithLibLog(HttpDto dto)
         {
             var currentLogProvider = LogProvider.CurrentLogProvider;
-            using (currentLogProvider?.OpenMappedContext(ContextKeys.OperationId, Guid.NewGuid()))
+            using (currentLogProvider?.OpenMappedContext(CorrelationKeys.OperationId, dto.OperationId))
             using (currentLogProvider?.OpenMappedContext(ContextKeys.Url, dto.Url))
             {
                 _log.Info(() => $"{dto.Method} {dto.Url}\nHeaders:\n{dto.Headers}\nContent:\n{dto.Body}");
