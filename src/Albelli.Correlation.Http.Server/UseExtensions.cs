@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Albelli.Correlation.Http.Server.Middleware;
+﻿using Albelli.Correlation.Http.Server.Middleware;
 using Albumprinter.CorrelationTracking;
 using Microsoft.AspNetCore.Builder;
 

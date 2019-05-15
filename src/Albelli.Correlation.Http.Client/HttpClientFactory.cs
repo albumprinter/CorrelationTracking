@@ -1,11 +1,12 @@
 ﻿using Albelli.Correlation.Http.Client.Configuration;
 using Albelli.Correlation.Http.Client.Handlers;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
-// ReSharper disable UnusedMember.Global
 
 namespace Albelli.Correlation.Http.Client
 {
+    [SuppressMessage("ReSharper", "UnusedMember.Global")]
     public class HttpClientFactory
     {
         public static HttpClient Create(IHttpClientLoggingConfiguration _loggingConfiguration = null)

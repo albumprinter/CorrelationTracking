@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Albelli.Correlation.Http.Server.Logging;
+﻿using Albelli.Correlation.Http.Server.Logging;
 using Albumprinter.CorrelationTracking.Correlation.Core;
 using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Albelli.Correlation.Http.Server.Middleware
 {
+    [SuppressMessage("ReSharper", "UnusedMember.Global")]
     public class LogRequestMiddleware
     {
         private readonly RequestDelegate _next;
@@ -26,8 +27,7 @@ namespace Albelli.Correlation.Http.Server.Middleware
             _next = next;
             _logAction = options.LogAction ?? DefaultLogger.LogWithLibLog;
             _logBody = options.LogBody ?? (_ => true);
-            _loggedHeaders = new HashSet<string>(options.LoggedHeaders ?? new[] {CorrelationKeys.CorrelationId});
-            
+            _loggedHeaders = new HashSet<string>(options.LoggedHeaders ?? new[] { CorrelationKeys.CorrelationId });
         }
 
         public async Task Invoke(HttpContext context)
@@ -46,7 +46,7 @@ namespace Albelli.Correlation.Http.Server.Middleware
 
                 requestBodyText = new StreamReader(requestBodyStream).ReadToEnd();
             }
-            
+
             var url = InternalHttpHelper.GetDisplayUrl(context.Request);
             var operationId = InternalHttpHelper.GetOrCreateOperationId(context);
             var requestDto =
@@ -75,7 +75,7 @@ namespace Albelli.Correlation.Http.Server.Middleware
         }
     }
 
-    public class LoggingOptions<TLogDto> where TLogDto: HttpDto
+    public class LoggingOptions<TLogDto> where TLogDto : HttpDto
     {
         public Action<TLogDto> LogAction { get; set; }
         public IReadOnlyCollection<string> LoggedHeaders { get; set; }
@@ -94,7 +94,6 @@ namespace Albelli.Correlation.Http.Server.Middleware
 
     public class HttpResponseDto : HttpDto
     {
-
         public int StatusCode { get; set; }
         public TimeSpan Duration { get; set; }
     }
@@ -104,11 +103,13 @@ namespace Albelli.Correlation.Http.Server.Middleware
         public static Guid GetOrCreateOperationId(HttpContext context)
         {
             if (context.Items.TryGetValue(CorrelationKeys.OperationId, out var operationIdObj))
+            {
                 return (Guid)operationIdObj;
+            }
+
             var operationId = Guid.NewGuid();
             context.Items[CorrelationKeys.OperationId] = operationId;
             return operationId;
-
         }
 
         public static string GetDisplayUrl(HttpRequest request)
@@ -131,10 +132,9 @@ namespace Albelli.Correlation.Http.Server.Middleware
 
     public static class ContextKeys
     {
-        public const string Url = "Albelli.Correlation.Http.Url";
-        public const string StatusCode = "Albelli.Correlation.Http.StatusCode";
-        public const string RequestTime = "Albelli.Correlation.Http.RequestTime";
-        public const string Duration = "Albelli.Correlation.Http.Duration";
+        public const string Url = "Albelli.Correlation.Http.Server.Url";
+        public const string StatusCode = "Albelli.Correlation.Http.Server.StatusCode";
+        public const string Duration = "Albelli.Correlation.Http.Server.Duration";
     }
 
     public static class DefaultLogger

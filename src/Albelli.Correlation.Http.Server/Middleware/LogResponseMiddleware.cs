@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Albelli.Correlation.Http.Server.Logging;
+﻿using Albelli.Correlation.Http.Server.Logging;
 using Albumprinter.CorrelationTracking.Correlation.Core;
 using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace Albelli.Correlation.Http.Server.Middleware
 {
+    [SuppressMessage("ReSharper", "UnusedMember.Global")]
     public class LogResponseMiddleware
     {
         private readonly RequestDelegate _next;

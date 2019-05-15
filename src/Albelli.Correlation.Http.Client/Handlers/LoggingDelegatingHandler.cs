@@ -18,9 +18,9 @@ namespace Albelli.Correlation.Http.Client.Handlers
     {
         public static class ContextKeys
         {
-            public const string Url = "Albelli.Correlation.Http.Url";
-            public const string StatusCode = "Albelli.Correlation.Http.StatusCode";
-            public const string Duration = "Albelli.Correlation.Http.Duration";
+            public const string Url = "Albelli.Correlation.Http.Client.Url";
+            public const string StatusCode = "Albelli.Correlation.Http.Client.StatusCode";
+            public const string Duration = "Albelli.Correlation.Http.Client.Duration";
         }
 
         private readonly IHttpClientLoggingConfiguration _config;
@@ -126,7 +126,7 @@ namespace Albelli.Correlation.Http.Client.Handlers
                 return LogLevel.Info;
             }
 
-            if (code >= 400 &&  code < 600)
+            if (code >= 400 && code < 600)
             {
                 return LogLevel.Error;
             }

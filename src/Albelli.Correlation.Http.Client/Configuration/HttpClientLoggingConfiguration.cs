@@ -1,10 +1,9 @@
 ﻿using Albumprinter.CorrelationTracking.Correlation.Core;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http;
-
-// ReSharper disable UnusedMember.Global
 
 namespace Albelli.Correlation.Http.Client.Configuration
 {
@@ -18,6 +17,7 @@ namespace Albelli.Correlation.Http.Client.Configuration
         ICollection<HttpStatusCode> WhiteListedCodes { get; }
     }
 
+    [SuppressMessage("ReSharper", "UnusedMember.Global")]
     public class HttpClientLoggingConfiguration : IHttpClientLoggingConfiguration
     {
         public ICollection<string> AllowedHeaders { get; }
