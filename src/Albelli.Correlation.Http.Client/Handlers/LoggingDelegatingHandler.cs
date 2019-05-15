@@ -10,6 +10,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Albumprinter.CorrelationTracking.Correlation.Core;
 
 namespace Albelli.Correlation.Http.Client.Handlers
 {
@@ -17,10 +18,9 @@ namespace Albelli.Correlation.Http.Client.Handlers
     {
         public static class ContextKeys
         {
-            public const string OperationId = "Albelli.Correlation.OperationId"; // TODO: move me in base project
-            public const string Url = "Albelli.Correlation.Http.Url";
-            public const string StatusCode = "Albelli.Correlation.Http.StatusCode";
-            public const string Duration = "Albelli.Correlation.Http.Duration";
+            public const string Url = "Albelli.Correlation.Http.Client.Url";
+            public const string StatusCode = "Albelli.Correlation.Http.Client.StatusCode";
+            public const string Duration = "Albelli.Correlation.Http.Client.Duration";
         }
 
         private readonly IHttpClientLoggingConfiguration _config;
@@ -36,10 +36,10 @@ namespace Albelli.Correlation.Http.Client.Handlers
             var currentLogProvider = LogProvider.CurrentLogProvider;
 
             var uri = request.RequestUri?.ToString() ?? "<null>";
-            using (currentLogProvider?.OpenMappedContext(ContextKeys.OperationId, Guid.NewGuid()))
+            var operationId = Guid.NewGuid();
             using (currentLogProvider?.OpenMappedContext(ContextKeys.Url, uri))
             {
-                if (_config.LogRequest)
+                if (_config.LogRequest(request))
                 {
                     var output = new StringBuilder();
                     output.Append("BeforeSendRequest: ");
@@ -49,19 +49,22 @@ namespace Albelli.Correlation.Http.Client.Handlers
                     output.AppendLine(", Headers: {");
                     output.AppendLine(GetHeaders(_config.AllowedHeaders, request.Headers, request.Content?.Headers));
                     output.Append("}");
-                    if (_config.LogRequestContent)
+                    if (_config.LogRequestContent(request))
                     {
                         output.Append(", Content: ");
                         output.Append(request.Content == null ? "<null>" : await request.Content.ReadAsStringAsync().ConfigureAwait(false));
                     }
 
-                    _log.Log(LogLevel.Debug, () => output.ToString());
+                    using (currentLogProvider?.OpenMappedContext(CorrelationKeys.OperationId, operationId))
+                    {
+                        _log.Log(LogLevel.Debug, () => output.ToString());
+                    }
                 }
 
                 var stopWatch = Stopwatch.StartNew();
                 var response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
-                var elapsed = stopWatch.Elapsed;
-                if (_config.LogResponse)
+                stopWatch.Stop();
+                if (_config.LogResponse(response))
                 {
                     var output = new StringBuilder();
                     output.Append("AfterReceiveResponse: ");
@@ -71,13 +74,14 @@ namespace Albelli.Correlation.Http.Client.Handlers
                     output.AppendLine(", Headers: {");
                     output.AppendLine(GetHeaders(_config.AllowedHeaders, response.Headers, response.Content?.Headers));
                     output.Append("}");
-                    if (_config.LogResponseContent)
+                    if (_config.LogResponseContent(response))
                     {
                         output.Append(", Content: ");
                         output.Append(response.Content == null ? "<null>" : await response.Content.ReadAsStringAsync().ConfigureAwait(false));
                     }
 
-                    using (currentLogProvider?.OpenMappedContext(ContextKeys.Duration, elapsed))
+                    using (currentLogProvider?.OpenMappedContext(CorrelationKeys.OperationId, operationId))
+                    using (currentLogProvider?.OpenMappedContext(ContextKeys.Duration, stopWatch.Elapsed))
                     using (currentLogProvider?.OpenMappedContext(ContextKeys.StatusCode, response.StatusCode))
                     {
                         _log.Log(ToLevel(response.StatusCode), () => output.ToString());
@@ -122,7 +126,7 @@ namespace Albelli.Correlation.Http.Client.Handlers
                 return LogLevel.Info;
             }
 
-            if (code >= 400 &&  code < 600)
+            if (code >= 400 && code < 600)
             {
                 return LogLevel.Error;
             }

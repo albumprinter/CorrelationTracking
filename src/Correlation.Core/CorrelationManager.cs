@@ -39,7 +39,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.Core
                 delegate
                 {
                     CorrelationScope.Current = oldScope;
-                    ScopeInterceptors.ForEach(x => x.Exit(this, newScope));
+                    ScopeInterceptors.ForEach(x => x.Exit(this, oldScope));
                 });
         }
 
