@@ -4,9 +4,9 @@ namespace Albelli.CorrelationTracing.Amazon
 {
     public static class LoggingExtensions
     {
-        public static void ConfigureHandlers()
+        public static void ConfigureHandlers(LoggingOptions options = null)
         {
-            RuntimePipelineCustomizerRegistry.Instance.Register(new LoggingPipelineCustomizer());
+            RuntimePipelineCustomizerRegistry.Instance.Register(new LoggingPipelineCustomizer(options));
         }
     }
 }
