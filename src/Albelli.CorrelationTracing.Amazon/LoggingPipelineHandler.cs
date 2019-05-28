@@ -22,7 +22,7 @@ namespace Albelli.CorrelationTracing.Amazon
         private readonly LoggingOptions _options;
         private static readonly ILog _log = LogProvider.GetCurrentClassLogger();
 
-        public LoggingPipelineHandler(LoggingOptions options)
+        public LoggingPipelineHandler(LoggingOptions options = null)
         {
             _options = options ?? DefaultOptions;
         }
@@ -42,7 +42,7 @@ namespace Albelli.CorrelationTracing.Amazon
                 }
                 catch (HttpErrorResponseException amEx)
                 {
-                    LogSpecificException(executionContext, amEx, operationId);
+                    LogHttpException(executionContext, amEx, operationId);
 
                     throw;
                 }
@@ -71,7 +71,7 @@ namespace Albelli.CorrelationTracing.Amazon
                 }
                 catch (HttpErrorResponseException amEx)
                 {
-                    LogSpecificException(executionContext, amEx, operationId);
+                    LogHttpException(executionContext, amEx, operationId);
 
                     throw;
                 }
@@ -84,7 +84,7 @@ namespace Albelli.CorrelationTracing.Amazon
             }
         }
 
-        private static void LogSpecificException(IExecutionContext executionContext, HttpErrorResponseException amEx, Guid operationId)
+        private static void LogHttpException(IExecutionContext executionContext, HttpErrorResponseException amEx, Guid operationId)
         {
             string content;
             using (var openResponse = amEx.Response.ResponseBody.OpenResponse())
@@ -96,7 +96,7 @@ namespace Albelli.CorrelationTracing.Amazon
 
             var headers = (amEx.Response.GetHeaderNames() ?? new string[0]).ToDictionary(k => k, s => amEx.Response.GetHeaderValue(s));
             var errorResponse = new {amEx.Response.StatusCode, amEx.Response.ContentType, amEx.Response.ContentLength, Headers = headers, Content = content};
-            var errorEvent = new AmazonErrorDto
+            var errorEvent = new ErrorLoggingEventArg
             {
                 Body = JsonConvert.SerializeObject(errorResponse),
                 OperationId = operationId,
@@ -109,7 +109,7 @@ namespace Albelli.CorrelationTracing.Amazon
 
         private static void LogGenericException(IExecutionContext executionContext, Guid operationId, Exception ex)
         {
-            var errorEvent = new AmazonErrorDto
+            var errorEvent = new ErrorLoggingEventArg
             {
                 Body = JsonConvert.SerializeObject(executionContext.ResponseContext.HttpResponse),
                 OperationId = operationId,
@@ -122,7 +122,7 @@ namespace Albelli.CorrelationTracing.Amazon
 
         private void LogResponse(IExecutionContext executionContext, Guid operationId)
         {
-            var responseEvent = new AmazonDto
+            var responseEvent = new LoggingEventArg
             {
                 Body = _options.LogResponseBodyEnabled ? JsonConvert.SerializeObject(executionContext.ResponseContext.HttpResponse) : null,
                 OperationId = operationId,
@@ -134,7 +134,7 @@ namespace Albelli.CorrelationTracing.Amazon
 
         private void LogRequest(IExecutionContext executionContext, Guid operationId)
         {
-            var requestEvent = new AmazonDto
+            var requestEvent = new LoggingEventArg
             {
                 Body = _options.LogRequestBodyEnabled ? JsonConvert.SerializeObject(executionContext.RequestContext.OriginalRequest) : null,
                 OperationId = operationId,
@@ -144,19 +144,19 @@ namespace Albelli.CorrelationTracing.Amazon
             LogRequest(requestEvent);
         }
 
-        private static void LogRequest(AmazonDto dto)
+        private static void LogRequest(LoggingEventArg loggingEventArg)
         {
-            _log.Info($"Pre - {dto.RequestName}: {dto.Body}");
+            _log.Info($"Pre - {loggingEventArg.RequestName}: {loggingEventArg.Body}");
         }
 
-        private static void LogResponse(AmazonDto dto)
+        private static void LogResponse(LoggingEventArg loggingEventArg)
         {
-            _log.Info($"Post - {dto.RequestName}: {dto.Body}");
+            _log.Info($"Post - {loggingEventArg.RequestName}: {loggingEventArg.Body}");
         }
 
-        private static void LogError(AmazonErrorDto dto)
+        private static void LogError(ErrorLoggingEventArg loggingEventArg)
         {
-            _log.Error($"Post - {dto.RequestName}: {dto.Body}", dto.Exception);
+            _log.Error($"Post - {loggingEventArg.RequestName}: {loggingEventArg.Body}", loggingEventArg.Exception);
         }
     }
 }

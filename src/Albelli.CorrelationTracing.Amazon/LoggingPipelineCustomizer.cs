@@ -7,7 +7,7 @@ namespace Albelli.CorrelationTracing.Amazon
     {
         private readonly LoggingOptions _options;
 
-        public LoggingPipelineCustomizer(LoggingOptions options)
+        public LoggingPipelineCustomizer(LoggingOptions options = null)
         {
             _options = options;
         }
