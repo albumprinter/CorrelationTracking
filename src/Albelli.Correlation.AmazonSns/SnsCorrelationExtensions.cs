@@ -1,5 +1,4 @@
-﻿using Albelli.CorrelationTracing.Amazon;
-using Amazon.Runtime.Internal;
+﻿using Amazon.Runtime.Internal;
 
 namespace Albelli.Correlation.AmazonSns
 {
@@ -8,7 +7,6 @@ namespace Albelli.Correlation.AmazonSns
         public static void ConfigureAwsHandlers()
         {
             RuntimePipelineCustomizerRegistry.Instance.Register(new SnsCorrelationPipelineCustomizer());
-            LoggingExtensions.ConfigureHandlers();
         }
     }
 }

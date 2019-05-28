@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using Amazon.Runtime.Internal;
+using System.Linq;
 
 namespace Albelli.Correlation.AmazonSqs
 {

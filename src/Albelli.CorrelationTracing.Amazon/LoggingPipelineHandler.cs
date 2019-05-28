@@ -11,27 +11,31 @@ namespace Albelli.CorrelationTracing.Amazon
 {
     public class LoggingPipelineHandler : PipelineHandler
     {
-        private static readonly LoggingOptions DefaultOptions = new LoggingOptions
-        {
-            LogRequestBodyEnabled = true,
-            LogResponseBodyEnabled = true,
-            LogRequest = LogRequest,
-            LogResponse = LogResponse,
-            LogError = LogError
-        };
+        private const string SkippedValue = "[SKIPPED]";
         private readonly LoggingOptions _options;
-        private static readonly ILog _log = LogProvider.GetCurrentClassLogger();
+        private readonly ILog _log = LogProvider.GetCurrentClassLogger();
+        private readonly ILogProvider _logProvider = LogProvider.CurrentLogProvider;
 
         public LoggingPipelineHandler(LoggingOptions options = null)
         {
-            _options = options ?? DefaultOptions;
+            _options = options ?? new LoggingOptions
+            {
+                LogRequestBodyEnabled = true,
+                LogResponseBodyEnabled = true,
+                LogRequest = LogRequest,
+                LogResponse = LogResponse,
+                LogError = LogError
+            };
+
+            _options.LogRequest = _options.LogRequest ?? LogRequest;
+            _options.LogResponse = _options.LogResponse ?? LogResponse;
+            _options.LogError = _options.LogError ?? LogError;
         }
 
         public override void InvokeSync(IExecutionContext executionContext)
         {
-            var currentLogProvider = LogProvider.CurrentLogProvider;
             var operationId = Guid.NewGuid();
-            using (currentLogProvider?.OpenMappedContext(CorrelationKeys.OperationId, operationId))
+            using (_logProvider?.OpenMappedContext(CorrelationKeys.OperationId, operationId))
             {
                 LogRequest(executionContext, operationId);
 
@@ -84,14 +88,13 @@ namespace Albelli.CorrelationTracing.Amazon
             }
         }
 
-        private static void LogHttpException(IExecutionContext executionContext, HttpErrorResponseException amEx, Guid operationId)
+        private void LogHttpException(IExecutionContext executionContext, HttpErrorResponseException amEx, Guid operationId)
         {
             string content;
             using (var openResponse = amEx.Response.ResponseBody.OpenResponse())
             using (var streamReader = new System.IO.StreamReader(openResponse))
             {
                 content = streamReader.ReadToEnd();
-                Console.WriteLine(content);
             }
 
             var headers = (amEx.Response.GetHeaderNames() ?? new string[0]).ToDictionary(k => k, s => amEx.Response.GetHeaderValue(s));
@@ -104,10 +107,11 @@ namespace Albelli.CorrelationTracing.Amazon
                 Scope = CorrelationScope.Current,
                 Exception = amEx
             };
-            LogError(errorEvent);
+
+            _options.LogError(errorEvent);
         }
 
-        private static void LogGenericException(IExecutionContext executionContext, Guid operationId, Exception ex)
+        private void LogGenericException(IExecutionContext executionContext, Guid operationId, Exception ex)
         {
             var errorEvent = new ErrorLoggingEventArg
             {
@@ -117,7 +121,8 @@ namespace Albelli.CorrelationTracing.Amazon
                 Scope = CorrelationScope.Current,
                 Exception = ex
             };
-            LogError(errorEvent);
+
+            _options.LogError(errorEvent);
         }
 
         private void LogResponse(IExecutionContext executionContext, Guid operationId)
@@ -129,7 +134,8 @@ namespace Albelli.CorrelationTracing.Amazon
                 RequestName = executionContext.RequestContext.RequestName,
                 Scope = CorrelationScope.Current
             };
-            LogResponse(responseEvent);
+
+            _options.LogResponse(responseEvent);
         }
 
         private void LogRequest(IExecutionContext executionContext, Guid operationId)
@@ -141,22 +147,23 @@ namespace Albelli.CorrelationTracing.Amazon
                 RequestName = executionContext.RequestContext.RequestName,
                 Scope = CorrelationScope.Current
             };
-            LogRequest(requestEvent);
+
+            _options.LogRequest(requestEvent);
         }
 
-        private static void LogRequest(LoggingEventArg loggingEventArg)
+        private void LogRequest(LoggingEventArg loggingEventArg)
         {
-            _log.Info($"Pre - {loggingEventArg.RequestName}: {loggingEventArg.Body}");
+            _log.Info($"Pre - {loggingEventArg.RequestName}: {loggingEventArg.Body ?? SkippedValue}");
         }
 
-        private static void LogResponse(LoggingEventArg loggingEventArg)
+        private void LogResponse(LoggingEventArg loggingEventArg)
         {
-            _log.Info($"Post - {loggingEventArg.RequestName}: {loggingEventArg.Body}");
+            _log.Info($"Post - {loggingEventArg.RequestName}: {loggingEventArg.Body ?? SkippedValue}");
         }
 
-        private static void LogError(ErrorLoggingEventArg loggingEventArg)
+        private void LogError(ErrorLoggingEventArg loggingEventArg)
         {
-            _log.Error($"Post - {loggingEventArg.RequestName}: {loggingEventArg.Body}", loggingEventArg.Exception);
+            _log.Error($"Post - {loggingEventArg.RequestName}: {loggingEventArg.Body ?? SkippedValue}", loggingEventArg.Exception);
         }
     }
 }

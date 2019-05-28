@@ -5,11 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.3.0.25" />
+    <PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.3.101.13" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Albelli.CorrelationTracing.Amazon\Albelli.CorrelationTracing.Amazon.csproj" />
     <ProjectReference Include="..\Correlation.Core\Correlation.Core.csproj" />
   </ItemGroup>
 

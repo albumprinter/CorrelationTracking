@@ -1,5 +1,4 @@
 ﻿using System;
-using Albelli.CorrelationTracing.Amazon;
 using Albumprinter.CorrelationTracking.Correlation.Core;
 using Amazon.Runtime.Internal;
 using Amazon.SQS.Model;
@@ -11,7 +10,6 @@ namespace Albelli.Correlation.AmazonSqs
         public static void ConfigureHandlers()
         {
             RuntimePipelineCustomizerRegistry.Instance.Register(new SqsCorrelationPipelineCustomizer());
-            LoggingExtensions.ConfigureHandlers();
         }
 
         public static IDisposable UseCorrelationScope(this Message message)

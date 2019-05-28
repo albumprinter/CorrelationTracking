@@ -5,11 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.SQS" Version="3.3.3.2" />
+    <PackageReference Include="AWSSDK.SQS" Version="3.3.100.24" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Albelli.CorrelationTracing.Amazon\Albelli.CorrelationTracing.Amazon.csproj" />
     <ProjectReference Include="..\Correlation.Core\Correlation.Core.csproj" />
   </ItemGroup>
 
