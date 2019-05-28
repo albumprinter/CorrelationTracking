@@ -9,7 +9,32 @@ namespace Albelli.Correlation.Http.Client
     [SuppressMessage("ReSharper", "UnusedMember.Global")]
     public class HttpClientFactory
     {
-        public static HttpClient Create(IHttpClientLoggingConfiguration _loggingConfiguration = null)
+        public static HttpClient Create(IHttpClientLoggingConfiguration loggingConfiguration = null)
+        {
+            var handler = BuildHttpMessageHandler(loggingConfiguration);
+
+            return new HttpClient(handler);
+        }
+
+        public static HttpClient Create(CorrelationDelegatingHandler correlationHandler, LoggingDelegatingHandler loggingHandler)
+        {
+            if (correlationHandler == null)
+            {
+                throw new ArgumentNullException(nameof(correlationHandler));
+            }
+
+            if (loggingHandler == null)
+            {
+                throw new ArgumentNullException(nameof(correlationHandler));
+            }
+
+            var httpHandler = new HttpClientHandler();
+            loggingHandler.InnerHandler = httpHandler;
+            correlationHandler.InnerHandler = loggingHandler;
+            return new HttpClient(correlationHandler);
+        }
+
+        public static HttpMessageHandler BuildHttpMessageHandler(IHttpClientLoggingConfiguration _loggingConfiguration = null)
         {
             var httpHandler = new HttpClientHandler(); // the most internal
 
@@ -24,20 +49,8 @@ namespace Albelli.Correlation.Http.Client
             {
                 InnerHandler = loggingHandler ?? httpHandler
             };
-            return new HttpClient(correlationHandler);
-        }
 
-        public static HttpClient Create(CorrelationDelegatingHandler correlationHandler, LoggingDelegatingHandler loggingHandler)
-        {
-            if (correlationHandler == null)
-            {
-                throw new ArgumentNullException(nameof(correlationHandler));
-            }
-
-            var httpHandler = new HttpClientHandler();
-            loggingHandler.InnerHandler = httpHandler;
-            correlationHandler.InnerHandler = loggingHandler;
-            return new HttpClient(correlationHandler);
+            return correlationHandler;
         }
     }
 }
