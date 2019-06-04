@@ -99,9 +99,10 @@ namespace Albelli.CorrelationTracing.Amazon
 
             var headers = (amEx.Response.GetHeaderNames() ?? new string[0]).ToDictionary(k => k, s => amEx.Response.GetHeaderValue(s));
             var errorResponse = new {amEx.Response.StatusCode, amEx.Response.ContentType, amEx.Response.ContentLength, Headers = headers, Content = content};
+            var errorBody = JsonConvert.SerializeObject(errorResponse);
             var errorEvent = new ErrorLoggingEventArg
             {
-                Body = JsonConvert.SerializeObject(errorResponse),
+                Body = $"{errorBody}{Environment.NewLine}{amEx}",
                 OperationId = operationId,
                 RequestName = executionContext.RequestContext.RequestName,
                 Scope = CorrelationScope.Current,
@@ -113,9 +114,12 @@ namespace Albelli.CorrelationTracing.Amazon
 
         private void LogGenericException(IExecutionContext executionContext, Guid operationId, Exception ex)
         {
+            var errorBody = executionContext.ResponseContext.HttpResponse == null
+                ? JsonConvert.SerializeObject(executionContext.ResponseContext.Response)
+                : JsonConvert.SerializeObject(executionContext.ResponseContext.HttpResponse);
             var errorEvent = new ErrorLoggingEventArg
             {
-                Body = JsonConvert.SerializeObject(executionContext.ResponseContext.HttpResponse),
+                Body = $"Generic error of type {ex.GetType().Name} {errorBody}{Environment.NewLine}{ex}",
                 OperationId = operationId,
                 RequestName = executionContext.RequestContext.RequestName,
                 Scope = CorrelationScope.Current,
