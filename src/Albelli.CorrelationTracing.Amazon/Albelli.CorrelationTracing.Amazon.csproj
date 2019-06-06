@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net461;net47;net471</TargetFrameworks>
@@ -17,4 +17,22 @@
     <ProjectReference Include="..\Correlation.LibLog\Correlation.LibLog.csproj" />
   </ItemGroup>
 
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
+    <Reference Include="System.Net.Http">
+      <PrivateAssets>all</PrivateAssets>
+    </Reference>
+  </ItemGroup>
+  
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net47' ">
+    <Reference Include="System.Net.Http">
+      <PrivateAssets>all</PrivateAssets>
+    </Reference>
+  </ItemGroup>
+  
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net471' ">
+    <Reference Include="System.Net.Http">
+      <PrivateAssets>all</PrivateAssets>
+    </Reference>
+  </ItemGroup>
+  
 </Project>
