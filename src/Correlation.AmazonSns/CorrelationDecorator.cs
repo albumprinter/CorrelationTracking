@@ -463,7 +463,19 @@ namespace Albumprinter.CorrelationTracking.Correlation.AmazonSns
             return _client.ListSubscriptionsByTopicAsync(request, cancellationToken);
         }
 
+        public Task<ListTagsForResourceResponse> ListTagsForResourceAsync(ListTagsForResourceRequest request,
+            CancellationToken cancellationToken = new CancellationToken())
+        {
+            return _client.ListTagsForResourceAsync(request, cancellationToken);
+        }
+
 #if !IS_MIN_NETSTANDARD1_3
+
+        public ListTagsForResourceResponse ListTagsForResource(ListTagsForResourceRequest request)
+        {
+            return _client.ListTagsForResource(request);
+        }
+
         public ListTopicsResponse ListTopics()
         {
             return _client.ListTopics();
@@ -672,7 +684,17 @@ namespace Albumprinter.CorrelationTracking.Correlation.AmazonSns
             return _client.SubscribeAsync(request, cancellationToken);
         }
 
+        public Task<TagResourceResponse> TagResourceAsync(TagResourceRequest request, CancellationToken cancellationToken = new CancellationToken())
+        {
+            return _client.TagResourceAsync(request, cancellationToken);
+        }
+
 #if !IS_MIN_NETSTANDARD1_3
+        public TagResourceResponse TagResource(TagResourceRequest request)
+        {
+            return _client.TagResource(request);
+        }
+
         public UnsubscribeResponse Unsubscribe(string subscriptionArn)
         {
             return _client.Unsubscribe(subscriptionArn);
@@ -693,6 +715,18 @@ namespace Albumprinter.CorrelationTracking.Correlation.AmazonSns
         {
             return _client.UnsubscribeAsync(request, cancellationToken);
         }
+
+        public Task<UntagResourceResponse> UntagResourceAsync(UntagResourceRequest request, CancellationToken cancellationToken = new CancellationToken())
+        {
+            return _client.UntagResourceAsync(request, cancellationToken);
+        }
+
+#if !IS_MIN_NETSTANDARD1_3
+        public UntagResourceResponse UntagResource(UntagResourceRequest request)
+        {
+            return _client.UntagResource(request);
+        }
+#endif
         #endregion
 
         public IClientConfig Config => _client.Config;
