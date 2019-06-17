@@ -1,4 +1,4 @@
-﻿using Albelli.Correlation.Http.Server.Logging;
+using Albelli.Correlation.Http.Server.Logging;
 using Albumprinter.CorrelationTracking.Correlation.Core;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -14,7 +14,7 @@ namespace Albelli.Correlation.Http.Server.Middleware
     public class LogResponseMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly Action<HttpResponseDto> _logAction;
+        private readonly Action<HttpResponseDto, HttpContext> _logAction;
         private readonly Func<HttpContext, bool> _logBody;
         private readonly HashSet<string> _loggedHeaders;
 
@@ -71,7 +71,7 @@ namespace Albelli.Correlation.Http.Server.Middleware
                     StatusCode = context.Response.StatusCode,
                     Duration = stopwatch.Elapsed,
                 };
-            _logAction(responseDto);
+            _logAction(responseDto, context);
 
             if (shouldLogBody)
             {
@@ -84,7 +84,7 @@ namespace Albelli.Correlation.Http.Server.Middleware
     public static class DefaultResponseLogger
     {
         private static readonly ILog _log = LogProvider.GetCurrentClassLogger();
-        public static void LogWithLibLog(HttpResponseDto dto)
+        public static void LogWithLibLog(HttpResponseDto dto, HttpContext context)
         {
             var currentLogProvider = LogProvider.CurrentLogProvider;
             using (currentLogProvider?.OpenMappedContext(ContextKeys.StatusCode, dto.StatusCode))

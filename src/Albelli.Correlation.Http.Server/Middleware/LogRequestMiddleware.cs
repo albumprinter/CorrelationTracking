@@ -1,4 +1,4 @@
-﻿using Albelli.Correlation.Http.Server.Logging;
+using Albelli.Correlation.Http.Server.Logging;
 using Albumprinter.CorrelationTracking.Correlation.Core;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -14,7 +14,7 @@ namespace Albelli.Correlation.Http.Server.Middleware
     public class LogRequestMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly Action<HttpDto> _logAction;
+        private readonly Action<HttpDto, HttpContext> _logAction;
         private readonly Func<HttpContext, bool> _logBody;
         private readonly HashSet<string> _loggedHeaders;
 
@@ -59,7 +59,7 @@ namespace Albelli.Correlation.Http.Server.Middleware
                     Body = requestBodyText,
                     OperationId = operationId,
                 };
-            _logAction(requestDto);
+            _logAction(requestDto, context);
 
             if (shouldLogBody)
             {
@@ -77,7 +77,7 @@ namespace Albelli.Correlation.Http.Server.Middleware
 
     public class LoggingOptions<TLogDto> where TLogDto : HttpDto
     {
-        public Action<TLogDto> LogAction { get; set; }
+        public Action<TLogDto, HttpContext> LogAction { get; set; }
         public IReadOnlyCollection<string> LoggedHeaders { get; set; }
         public Func<HttpContext, bool> LogBody { get; set; }
     }
@@ -140,7 +140,7 @@ namespace Albelli.Correlation.Http.Server.Middleware
     public static class DefaultLogger
     {
         private static readonly ILog _log = LogProvider.GetCurrentClassLogger();
-        public static void LogWithLibLog(HttpDto dto)
+        public static void LogWithLibLog(HttpDto dto, HttpContext context)
         {
             var currentLogProvider = LogProvider.CurrentLogProvider;
             using (currentLogProvider?.OpenMappedContext(CorrelationKeys.OperationId, dto.OperationId))
