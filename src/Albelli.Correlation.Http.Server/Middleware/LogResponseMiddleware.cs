@@ -1,4 +1,4 @@
-using Albelli.Correlation.Http.Server.Logging;
+﻿using Albelli.Correlation.Http.Server.Logging;
 using Albumprinter.CorrelationTracking.Correlation.Core;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -92,7 +92,7 @@ namespace Albelli.Correlation.Http.Server.Middleware
             using (currentLogProvider?.OpenMappedContext(CorrelationKeys.OperationId, dto.OperationId))
             using (currentLogProvider?.OpenMappedContext(ContextKeys.Url, dto.Url))
             {
-                _log.Info(() => $"StatusCode: {dto.StatusCode}\nfor: {dto.Method} {dto.Url}\nHeaders:\n{dto.Headers}\nContent:\n{dto.Body}");
+                _log.Info(() => $"StatusCode: {dto.StatusCode}\nfor: {dto.Method} {dto.Url}\nHeaders:\n{InternalHttpHelper.FormatHeaders(dto.Headers)}\nContent:\n{dto.Body}");
             }
         }
     }

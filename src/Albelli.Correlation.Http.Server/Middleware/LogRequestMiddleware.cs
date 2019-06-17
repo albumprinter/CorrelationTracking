@@ -1,4 +1,4 @@
-using Albelli.Correlation.Http.Server.Logging;
+﻿using Albelli.Correlation.Http.Server.Logging;
 using Albumprinter.CorrelationTracking.Correlation.Core;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Albelli.Correlation.Http.Server.Middleware
@@ -128,6 +129,18 @@ namespace Albelli.Correlation.Http.Server.Middleware
 
             return result;
         }
+
+        public static string FormatHeaders(IHeaderDictionary headers)
+        {
+            var stringBuilder = new StringBuilder();
+
+            foreach (var kvp in headers)
+            {
+                stringBuilder.AppendLine($"- {kvp.Key}: {kvp.Value}");
+            }
+
+            return stringBuilder.ToString();
+        }
     }
 
     public static class ContextKeys
@@ -146,7 +159,7 @@ namespace Albelli.Correlation.Http.Server.Middleware
             using (currentLogProvider?.OpenMappedContext(CorrelationKeys.OperationId, dto.OperationId))
             using (currentLogProvider?.OpenMappedContext(ContextKeys.Url, dto.Url))
             {
-                _log.Info(() => $"{dto.Method} {dto.Url}\nHeaders:\n{dto.Headers}\nContent:\n{dto.Body}");
+                _log.Info(() => $"{dto.Method} {dto.Url}\nHeaders:\n{InternalHttpHelper.FormatHeaders(dto.Headers)}\nContent:\n{dto.Body}");
             }
         }
     }
