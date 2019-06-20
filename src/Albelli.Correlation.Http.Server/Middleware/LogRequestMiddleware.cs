@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Albelli.Correlation.Http.Server.Middleware
@@ -14,7 +15,7 @@ namespace Albelli.Correlation.Http.Server.Middleware
     public class LogRequestMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly Action<HttpDto> _logAction;
+        private readonly Action<HttpDto, HttpContext> _logAction;
         private readonly Func<HttpContext, bool> _logBody;
         private readonly HashSet<string> _loggedHeaders;
 
@@ -59,7 +60,7 @@ namespace Albelli.Correlation.Http.Server.Middleware
                     Body = requestBodyText,
                     OperationId = operationId,
                 };
-            _logAction(requestDto);
+            _logAction(requestDto, context);
 
             if (shouldLogBody)
             {
@@ -77,7 +78,7 @@ namespace Albelli.Correlation.Http.Server.Middleware
 
     public class LoggingOptions<TLogDto> where TLogDto : HttpDto
     {
-        public Action<TLogDto> LogAction { get; set; }
+        public Action<TLogDto, HttpContext> LogAction { get; set; }
         public IReadOnlyCollection<string> LoggedHeaders { get; set; }
         public Func<HttpContext, bool> LogBody { get; set; }
     }
@@ -128,6 +129,18 @@ namespace Albelli.Correlation.Http.Server.Middleware
 
             return result;
         }
+
+        public static string FormatHeaders(IHeaderDictionary headers)
+        {
+            var stringBuilder = new StringBuilder();
+
+            foreach (var kvp in headers)
+            {
+                stringBuilder.AppendLine($"- {kvp.Key}: {kvp.Value}");
+            }
+
+            return stringBuilder.ToString();
+        }
     }
 
     public static class ContextKeys
@@ -140,13 +153,13 @@ namespace Albelli.Correlation.Http.Server.Middleware
     public static class DefaultLogger
     {
         private static readonly ILog _log = LogProvider.GetCurrentClassLogger();
-        public static void LogWithLibLog(HttpDto dto)
+        public static void LogWithLibLog(HttpDto dto, HttpContext context)
         {
             var currentLogProvider = LogProvider.CurrentLogProvider;
             using (currentLogProvider?.OpenMappedContext(CorrelationKeys.OperationId, dto.OperationId))
             using (currentLogProvider?.OpenMappedContext(ContextKeys.Url, dto.Url))
             {
-                _log.Info(() => $"{dto.Method} {dto.Url}\nHeaders:\n{dto.Headers}\nContent:\n{dto.Body}");
+                _log.Info(() => $"{dto.Method} {dto.Url}\nHeaders:\n{InternalHttpHelper.FormatHeaders(dto.Headers)}\nContent:\n{dto.Body}");
             }
         }
     }

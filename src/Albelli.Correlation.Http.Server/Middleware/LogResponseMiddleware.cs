@@ -14,7 +14,7 @@ namespace Albelli.Correlation.Http.Server.Middleware
     public class LogResponseMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly Action<HttpResponseDto> _logAction;
+        private readonly Action<HttpResponseDto, HttpContext> _logAction;
         private readonly Func<HttpContext, bool> _logBody;
         private readonly HashSet<string> _loggedHeaders;
 
@@ -71,7 +71,7 @@ namespace Albelli.Correlation.Http.Server.Middleware
                     StatusCode = context.Response.StatusCode,
                     Duration = stopwatch.Elapsed,
                 };
-            _logAction(responseDto);
+            _logAction(responseDto, context);
 
             if (shouldLogBody)
             {
@@ -84,7 +84,7 @@ namespace Albelli.Correlation.Http.Server.Middleware
     public static class DefaultResponseLogger
     {
         private static readonly ILog _log = LogProvider.GetCurrentClassLogger();
-        public static void LogWithLibLog(HttpResponseDto dto)
+        public static void LogWithLibLog(HttpResponseDto dto, HttpContext context)
         {
             var currentLogProvider = LogProvider.CurrentLogProvider;
             using (currentLogProvider?.OpenMappedContext(ContextKeys.StatusCode, dto.StatusCode))
@@ -92,7 +92,7 @@ namespace Albelli.Correlation.Http.Server.Middleware
             using (currentLogProvider?.OpenMappedContext(CorrelationKeys.OperationId, dto.OperationId))
             using (currentLogProvider?.OpenMappedContext(ContextKeys.Url, dto.Url))
             {
-                _log.Info(() => $"StatusCode: {dto.StatusCode}\nfor: {dto.Method} {dto.Url}\nHeaders:\n{dto.Headers}\nContent:\n{dto.Body}");
+                _log.Info(() => $"StatusCode: {dto.StatusCode}\nfor: {dto.Method} {dto.Url}\nHeaders:\n{InternalHttpHelper.FormatHeaders(dto.Headers)}\nContent:\n{dto.Body}");
             }
         }
     }
