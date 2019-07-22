@@ -15,7 +15,7 @@ namespace Albumprinter.CorrelationTracking.Http
         {
             HandlerField = GetAnyField<HttpMessageInvoker>(
                 BindingFlags.Instance | BindingFlags.NonPublic
-                , "handler", "_handler"); // at some the internal name got changed and this magic broke.s
+                , "handler", "_handler"); // at some point the internal name got changed and this magic broke
         }
 
         private static FieldInfo GetAnyField<T>(BindingFlags flags, params string[] names)
