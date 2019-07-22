@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using Albumprinter.CorrelationTracking.Correlation.Http;
@@ -12,11 +13,16 @@ namespace Albumprinter.CorrelationTracking.Http
 
         static HttpClientExtensions()
         {
-            HandlerField = typeof(HttpMessageInvoker).GetField(
-                "handler",
-                BindingFlags.Instance | BindingFlags.NonPublic);
+            HandlerField = GetAnyField<HttpMessageInvoker>(
+                BindingFlags.Instance | BindingFlags.NonPublic
+                , "handler", "_handler"); // at some the internal name got changed and this magic broke.s
         }
 
+        private static FieldInfo GetAnyField<T>(BindingFlags flags, params string[] names)
+        {
+            return names.Select(name => typeof(T).GetField(name, flags)).FirstOrDefault(x => x != null);
+        }
+        
         public static HttpClient UseCorrelationTracking(this HttpClient client)
         {
             if (HandlerField == null || !typeof(HttpMessageInvoker).IsAssignableFrom(typeof(HttpClient)))
