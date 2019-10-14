@@ -86,11 +86,10 @@ namespace Albelli.Correlation.Http.Server.Middleware
         private static readonly ILog _log = LogProvider.GetCurrentClassLogger();
         public static void LogWithLibLog(HttpResponseDto dto, HttpContext context)
         {
-            var currentLogProvider = LogProvider.CurrentLogProvider;
-            using (currentLogProvider?.OpenMappedContext(ContextKeys.StatusCode, dto.StatusCode))
-            using (currentLogProvider?.OpenMappedContext(ContextKeys.Duration, (int)Math.Ceiling(dto.Duration.TotalMilliseconds)))
-            using (currentLogProvider?.OpenMappedContext(CorrelationKeys.OperationId, dto.OperationId))
-            using (currentLogProvider?.OpenMappedContext(ContextKeys.Url, dto.Url))
+            using (LogProvider.OpenMappedContext(ContextKeys.StatusCode, dto.StatusCode))
+            using (LogProvider.OpenMappedContext(ContextKeys.Duration, (int)Math.Ceiling(dto.Duration.TotalMilliseconds)))
+            using (LogProvider.OpenMappedContext(CorrelationKeys.OperationId, dto.OperationId))
+            using (LogProvider.OpenMappedContext(ContextKeys.Url, dto.Url))
             {
                 _log.Info(() => $"StatusCode: {dto.StatusCode}\nfor: {dto.Method} {dto.Url}\nHeaders:\n{InternalHttpHelper.FormatHeaders(dto.Headers)}\nContent:\n{dto.Body}");
             }
