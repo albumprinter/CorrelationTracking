@@ -1,5 +1,6 @@
 ﻿using Albelli.Correlation.Http.Client.Configuration;
 using Albelli.Correlation.Http.Client.Logging;
+using Albumprinter.CorrelationTracking.Correlation.Core;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,7 +11,6 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Albumprinter.CorrelationTracking.Correlation.Core;
 
 namespace Albelli.Correlation.Http.Client.Handlers
 {
@@ -79,7 +79,7 @@ namespace Albelli.Correlation.Http.Client.Handlers
                     }
 
                     using (LogProvider.OpenMappedContext(CorrelationKeys.OperationId, operationId))
-                    using (LogProvider.OpenMappedContext(ContextKeys.Duration, stopWatch.Elapsed))
+                    using (LogProvider.OpenMappedContext(ContextKeys.Duration, (int)Math.Ceiling(stopWatch.Elapsed.TotalMilliseconds)))
                     using (LogProvider.OpenMappedContext(ContextKeys.StatusCode, response.StatusCode))
                     {
                         _log.Log(ToLevel(response.StatusCode), () => output.ToString());
