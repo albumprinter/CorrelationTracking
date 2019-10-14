@@ -80,7 +80,7 @@ namespace Albelli.Correlation.Http.Client.Handlers
 
                     using (LogProvider.OpenMappedContext(CorrelationKeys.OperationId, operationId))
                     using (LogProvider.OpenMappedContext(ContextKeys.Duration, (int)Math.Ceiling(stopWatch.Elapsed.TotalMilliseconds)))
-                    using (LogProvider.OpenMappedContext(ContextKeys.StatusCode, response.StatusCode))
+                    using (LogProvider.OpenMappedContext(ContextKeys.StatusCode, (int)response.StatusCode))
                     {
                         _log.Log(ToLevel(response.StatusCode), () => output.ToString());
                     }
