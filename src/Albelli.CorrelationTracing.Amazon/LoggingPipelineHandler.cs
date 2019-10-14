@@ -14,7 +14,6 @@ namespace Albelli.CorrelationTracing.Amazon
         private const string SkippedValue = "[SKIPPED]";
         private readonly LoggingOptions _options;
         private readonly ILog _log = LogProvider.GetCurrentClassLogger();
-        private readonly ILogProvider _logProvider = LogProvider.CurrentLogProvider;
 
         public LoggingPipelineHandler(LoggingOptions options = null)
         {
@@ -35,7 +34,7 @@ namespace Albelli.CorrelationTracing.Amazon
         public override void InvokeSync(IExecutionContext executionContext)
         {
             var operationId = Guid.NewGuid();
-            using (_logProvider?.OpenMappedContext(CorrelationKeys.OperationId, operationId))
+            using (LogProvider.OpenMappedContext(CorrelationKeys.OperationId, operationId))
             {
                 LogRequest(executionContext, operationId);
 
@@ -61,9 +60,8 @@ namespace Albelli.CorrelationTracing.Amazon
 
         public override async Task<T> InvokeAsync<T>(IExecutionContext executionContext)
         {
-            var currentLogProvider = LogProvider.CurrentLogProvider;
             var operationId = Guid.NewGuid();
-            using (currentLogProvider?.OpenMappedContext(CorrelationKeys.OperationId, operationId))
+            using (LogProvider.OpenMappedContext(CorrelationKeys.OperationId, operationId))
             {
                 LogRequest(executionContext, operationId);
 

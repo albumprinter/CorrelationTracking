@@ -33,11 +33,9 @@ namespace Albelli.Correlation.Http.Client.Handlers
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            var currentLogProvider = LogProvider.CurrentLogProvider;
-
             var uri = request.RequestUri?.ToString() ?? "<null>";
             var operationId = Guid.NewGuid();
-            using (currentLogProvider?.OpenMappedContext(ContextKeys.Url, uri))
+            using (LogProvider.OpenMappedContext(ContextKeys.Url, uri))
             {
                 if (_config.LogRequest(request))
                 {
@@ -55,7 +53,7 @@ namespace Albelli.Correlation.Http.Client.Handlers
                         output.Append(request.Content == null ? "<null>" : await request.Content.ReadAsStringAsync().ConfigureAwait(false));
                     }
 
-                    using (currentLogProvider?.OpenMappedContext(CorrelationKeys.OperationId, operationId))
+                    using (LogProvider.OpenMappedContext(CorrelationKeys.OperationId, operationId))
                     {
                         _log.Log(LogLevel.Debug, () => output.ToString());
                     }
@@ -80,9 +78,9 @@ namespace Albelli.Correlation.Http.Client.Handlers
                         output.Append(response.Content == null ? "<null>" : await response.Content.ReadAsStringAsync().ConfigureAwait(false));
                     }
 
-                    using (currentLogProvider?.OpenMappedContext(CorrelationKeys.OperationId, operationId))
-                    using (currentLogProvider?.OpenMappedContext(ContextKeys.Duration, stopWatch.Elapsed))
-                    using (currentLogProvider?.OpenMappedContext(ContextKeys.StatusCode, response.StatusCode))
+                    using (LogProvider.OpenMappedContext(CorrelationKeys.OperationId, operationId))
+                    using (LogProvider.OpenMappedContext(ContextKeys.Duration, stopWatch.Elapsed))
+                    using (LogProvider.OpenMappedContext(ContextKeys.StatusCode, response.StatusCode))
                     {
                         _log.Log(ToLevel(response.StatusCode), () => output.ToString());
                     }
