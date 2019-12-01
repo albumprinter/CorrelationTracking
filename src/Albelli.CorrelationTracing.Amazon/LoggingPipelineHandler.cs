@@ -100,16 +100,14 @@ namespace Albelli.CorrelationTracing.Amazon
             var headers = (amEx.Response.GetHeaderNames() ?? new string[0]).ToDictionary(k => k, s => amEx.Response.GetHeaderValue(s));
             var errorResponse = new {amEx.Response.StatusCode, amEx.Response.ContentType, amEx.Response.ContentLength, Headers = headers, Content = content};
             var errorBody = JsonConvert.SerializeObject(errorResponse);
-
-            var body = $"{errorBody}{Environment.NewLine}{amEx}";
-            var requestName = executionContext.RequestContext.RequestName;
-            if (HasNotReachedMaxRetries(executionContext))
+           
+            if (executionContext.RequestContext.Retries < executionContext.RequestContext.ClientConfig.MaxErrorRetry)
             {
                 var warningLoggingEventArg = new WarningLoggingEventArg
                 {
-                    Body = body,
+                    Body = $"{errorBody}{Environment.NewLine}{amEx}",
                     OperationId = operationId,
-                    RequestName = requestName,
+                    RequestName = executionContext.RequestContext.RequestName,
                     Scope = CorrelationScope.Current,
                     Exception = amEx
                 };
@@ -119,9 +117,9 @@ namespace Albelli.CorrelationTracing.Amazon
             {
                 var errorEvent = new ErrorLoggingEventArg
                 {
-                    Body = body,
+                    Body = $"{errorBody}{Environment.NewLine}{amEx}",
                     OperationId = operationId,
-                    RequestName = requestName,
+                    RequestName = executionContext.RequestContext.RequestName,
                     Scope = CorrelationScope.Current,
                     Exception = amEx
                 };
@@ -135,15 +133,14 @@ namespace Albelli.CorrelationTracing.Amazon
                 ? JsonConvert.SerializeObject(executionContext.ResponseContext.Response)
                 : JsonConvert.SerializeObject(executionContext.ResponseContext.HttpResponse);
 
-            var body = $"Generic error of type {ex.GetType().Name} {errorBody}{Environment.NewLine}{ex}";
-            var requestName = executionContext.RequestContext.RequestName;
-            if (HasNotReachedMaxRetries(executionContext))
+            if (executionContext.RequestContext.Retries <
+                executionContext.RequestContext.ClientConfig.MaxErrorRetry)
             {
                 var warningLoggingEventArg = new WarningLoggingEventArg
                 {
-                    Body = body,
+                    Body = $"Generic error of type {ex.GetType().Name} {errorBody}{Environment.NewLine}{ex}",
                     OperationId = operationId,
-                    RequestName = requestName,
+                    RequestName = executionContext.RequestContext.RequestName,
                     Scope = CorrelationScope.Current,
                     Exception = ex
                 };
@@ -153,19 +150,14 @@ namespace Albelli.CorrelationTracing.Amazon
             {
                 var errorEvent = new ErrorLoggingEventArg
                 {
-                    Body = body,
+                    Body = $"Generic error of type {ex.GetType().Name} {errorBody}{Environment.NewLine}{ex}",
                     OperationId = operationId,
-                    RequestName = requestName,
+                    RequestName = executionContext.RequestContext.RequestName,
                     Scope = CorrelationScope.Current,
                     Exception = ex
                 };
                 _options.LogError(errorEvent);
             }
-        }
-
-        private static bool HasNotReachedMaxRetries(IExecutionContext executionContext)
-        {
-            return executionContext.RequestContext.Retries < executionContext.RequestContext.ClientConfig.MaxErrorRetry;
         }
 
         private void LogResponse(IExecutionContext executionContext, Guid operationId)
