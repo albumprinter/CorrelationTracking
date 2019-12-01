@@ -103,7 +103,7 @@ namespace Albelli.CorrelationTracing.Amazon
 
             var body = $"{errorBody}{Environment.NewLine}{amEx}";
             var requestName = executionContext.RequestContext.RequestName;
-            if (executionContext.RequestContext.Retries < executionContext.RequestContext.ClientConfig.MaxErrorRetry)
+            if (HasNotReachedMaxRetries(executionContext))
             {
                 var warningLoggingEventArg = new WarningLoggingEventArg
                 {
@@ -137,8 +137,7 @@ namespace Albelli.CorrelationTracing.Amazon
 
             var body = $"Generic error of type {ex.GetType().Name} {errorBody}{Environment.NewLine}{ex}";
             var requestName = executionContext.RequestContext.RequestName;
-            if (executionContext.RequestContext.Retries <
-                executionContext.RequestContext.ClientConfig.MaxErrorRetry)
+            if (HasNotReachedMaxRetries(executionContext))
             {
                 var warningLoggingEventArg = new WarningLoggingEventArg
                 {
@@ -162,6 +161,11 @@ namespace Albelli.CorrelationTracing.Amazon
                 };
                 _options.LogError(errorEvent);
             }
+        }
+
+        private static bool HasNotReachedMaxRetries(IExecutionContext executionContext)
+        {
+            return executionContext.RequestContext.Retries < executionContext.RequestContext.ClientConfig.MaxErrorRetry;
         }
 
         private void LogResponse(IExecutionContext executionContext, Guid operationId)
