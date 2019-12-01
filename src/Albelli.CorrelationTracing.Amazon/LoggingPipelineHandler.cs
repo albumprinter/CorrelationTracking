@@ -206,7 +206,7 @@ namespace Albelli.CorrelationTracing.Amazon
 
         private void LogWarning(WarningLoggingEventArg loggingEventArg)
         {
-            _log.Warn($"Post - {loggingEventArg.RequestName}: {loggingEventArg.Body ?? SkippedValue}", loggingEventArg.Exception);
+            _log.Warn($"Post - {loggingEventArg.RequestName}: {loggingEventArg.Body ?? SkippedValue} {loggingEventArg.Exception?.Message}");
         }
         
         private void LogError(ErrorLoggingEventArg loggingEventArg)
