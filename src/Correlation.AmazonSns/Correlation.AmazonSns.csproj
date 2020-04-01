@@ -1,16 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.3;netstandard2.0;net45</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <RootNamespace>Albumprinter.CorrelationTracking.Correlation.AmazonSns</RootNamespace>
     <PackageId>Albumprinter.CorrelationTracking.Correlation.AmazonSns</PackageId>
     <Authors>Albumprinter</Authors>
     <AssemblyName>Albumprinter.CorrelationTracking.Correlation.AmazonSns</AssemblyName>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
-    <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,11 +20,5 @@
   <ItemGroup>
     <ProjectReference Include="..\Correlation.Core\Correlation.Core.csproj" />
   </ItemGroup>
-
-  <Target Name="AddNetStdMinDefine" BeforeTargets="CoreCompile" Condition="('$(TargetFrameworkIdentifier)' == '.NETStandard' and '$(TargetFrameworkVersion.Substring(1))' &gt;= '1.3')">
-   <PropertyGroup>
-     <DefineConstants>$(DefineConstants);IS_MIN_NETSTANDARD1_3</DefineConstants>
-   </PropertyGroup>
-  </Target>
 
 </Project>
