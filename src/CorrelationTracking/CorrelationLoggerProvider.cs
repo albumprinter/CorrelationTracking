@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 
@@ -12,7 +13,9 @@ namespace Albumprinter.CorrelationTracking
         public CorrelationLoggerProvider([NotNull] ILoggerProvider loggerProvider)
         {
             _loggerProvider = loggerProvider ?? throw new ArgumentNullException(nameof(loggerProvider));
+            CorrelationProperties = new Dictionary<string, object>();
         }
+        public Dictionary<string, object> CorrelationProperties { get; }
 
         public void Dispose()
         {
@@ -22,7 +25,8 @@ namespace Albumprinter.CorrelationTracking
         public ILogger CreateLogger(string categoryName)
         {
             var logger = _loggerProvider.CreateLogger(categoryName);
-            logger.BeginScope()
+            logger.BeginScope(this.CorrelationProperties);
+            return logger;
         }
     }
 }

@@ -1,17 +1,17 @@
-﻿using Albelli.Correlation.Http.Server.Logging;
-using Albumprinter.CorrelationTracking.Correlation.Core;
+﻿using Albumprinter.CorrelationTracking.Correlation.Core;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
+using Microsoft.Extensions.Logging;
 
 namespace Albelli.Correlation.Http.Server.Middleware
 {
-    [SuppressMessage("ReSharper", "UnusedMember.Global")]
+    [PublicAPI]
     public class LogRequestMiddleware
     {
         private readonly RequestDelegate _next;
@@ -19,17 +19,22 @@ namespace Albelli.Correlation.Http.Server.Middleware
         private readonly Func<HttpContext, bool> _logBody;
         private readonly HashSet<string> _loggedHeaders;
 
-        public LogRequestMiddleware(RequestDelegate next) : this(next, new LoggingOptions<HttpDto>())
+        public LogRequestMiddleware(RequestDelegate next, [NotNull] ILogger<LogRequestMiddleware> logger)
+            : this(next, new LoggingOptions<HttpDto>(), logger)
         {
         }
 
-        public LogRequestMiddleware(RequestDelegate next, LoggingOptions<HttpDto> options)
+        public LogRequestMiddleware(RequestDelegate next, LoggingOptions<HttpDto> options, [NotNull] ILogger<LogRequestMiddleware> logger)
         {
+            if (logger == null) throw new ArgumentNullException(nameof(logger));
+
             _next = next;
-            _logAction = options.LogAction ?? DefaultLogger.LogWithLibLog;
+            _logAction = options.LogAction ?? new DefaultLogger(logger).Log;
             _logBody = options.LogBody ?? (_ => true);
             _loggedHeaders = new HashSet<string>(options.LoggedHeaders ?? new[] { CorrelationKeys.CorrelationId });
         }
+
+
 
         public async Task Invoke(HttpContext context)
         {
@@ -150,15 +155,25 @@ namespace Albelli.Correlation.Http.Server.Middleware
         public const string Duration = "Albelli.Correlation.Http.Server.Duration";
     }
 
-    public static class DefaultLogger
+    internal sealed class DefaultLogger
     {
-        private static readonly ILog _log = LogProvider.GetCurrentClassLogger();
-        public static void LogWithLibLog(HttpDto dto, HttpContext context)
+        private readonly ILogger _logger;
+
+        public DefaultLogger(ILogger logger)
         {
-            using (LogProvider.OpenMappedContext(CorrelationKeys.OperationId, dto.OperationId))
-            using (LogProvider.OpenMappedContext(ContextKeys.Url, dto.Url))
+            _logger = logger;
+        }
+
+        public void Log(HttpDto dto, HttpContext context)
+        {
+            var contextProperties = new Dictionary<string, object>
             {
-                _log.Info(() => $"{dto.Method} {dto.Url}\nHeaders:\n{InternalHttpHelper.FormatHeaders(dto.Headers)}\nContent:\n{dto.Body}");
+                [CorrelationKeys.OperationId] = dto.OperationId,
+                [ContextKeys.Url] = dto.Url
+            };
+            using (_logger.BeginScope(contextProperties))
+            {
+                _logger.LogInformation($"{dto.Method} {dto.Url}\nHeaders:\n{InternalHttpHelper.FormatHeaders(dto.Headers)}\nContent:\n{dto.Body}");
             }
         }
     }

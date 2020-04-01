@@ -1,16 +1,16 @@
-﻿using Albelli.Correlation.Http.Server.Logging;
-using Albumprinter.CorrelationTracking.Correlation.Core;
+﻿using Albumprinter.CorrelationTracking.Correlation.Core;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
+using Microsoft.Extensions.Logging;
 
 namespace Albelli.Correlation.Http.Server.Middleware
 {
-    [SuppressMessage("ReSharper", "UnusedMember.Global")]
+    [PublicAPI]
     public class LogResponseMiddleware
     {
         private readonly RequestDelegate _next;
@@ -18,14 +18,17 @@ namespace Albelli.Correlation.Http.Server.Middleware
         private readonly Func<HttpContext, bool> _logBody;
         private readonly HashSet<string> _loggedHeaders;
 
-        public LogResponseMiddleware(RequestDelegate next) : this(next, new LoggingOptions<HttpResponseDto>())
+        public LogResponseMiddleware(RequestDelegate next, [NotNull] ILogger<LogResponseMiddleware> logger)
+            : this(next, new LoggingOptions<HttpResponseDto>(), logger)
         {
         }
 
-        public LogResponseMiddleware(RequestDelegate next, LoggingOptions<HttpResponseDto> options)
+        public LogResponseMiddleware(RequestDelegate next, LoggingOptions<HttpResponseDto> options,
+            [NotNull] ILogger<LogResponseMiddleware> logger)
         {
+            if (logger == null) throw new ArgumentNullException(nameof(logger));
             _next = next;
-            _logAction = options.LogAction ?? DefaultResponseLogger.LogWithLibLog;
+            _logAction = options.LogAction ?? new DefaultResponseLogger(logger).Log;
             _logBody = options.LogBody ?? (_ => true);
             _loggedHeaders = new HashSet<string>(options.LoggedHeaders ?? new[]
             {
@@ -81,17 +84,30 @@ namespace Albelli.Correlation.Http.Server.Middleware
         }
     }
 
-    public static class DefaultResponseLogger
+    internal sealed class DefaultResponseLogger
     {
-        private static readonly ILog _log = LogProvider.GetCurrentClassLogger();
-        public static void LogWithLibLog(HttpResponseDto dto, HttpContext context)
+        private readonly ILogger _logger;
+
+        public DefaultResponseLogger(ILogger logger)
         {
-            using (LogProvider.OpenMappedContext(ContextKeys.StatusCode, dto.StatusCode))
-            using (LogProvider.OpenMappedContext(ContextKeys.Duration, (int)Math.Ceiling(dto.Duration.TotalMilliseconds)))
-            using (LogProvider.OpenMappedContext(CorrelationKeys.OperationId, dto.OperationId))
-            using (LogProvider.OpenMappedContext(ContextKeys.Url, dto.Url))
+            _logger = logger;
+        }
+
+        public void Log(HttpResponseDto dto, HttpContext context)
+        {
+            var contextProperties = new Dictionary<string, object>
             {
-                _log.Info(() => $"StatusCode: {dto.StatusCode}\nfor: {dto.Method} {dto.Url}\nHeaders:\n{InternalHttpHelper.FormatHeaders(dto.Headers)}\nContent:\n{dto.Body}");
+                [CorrelationKeys.OperationId] = dto.OperationId,
+                [ContextKeys.Url] = dto.Url,
+                [ContextKeys.StatusCode] = dto.StatusCode,
+                [ContextKeys.Duration] = (int)Math.Ceiling(dto.Duration.TotalMilliseconds),
+                [CorrelationKeys.OperationId] = dto.OperationId,
+                [ContextKeys.Url] = dto.Url
+            };
+
+            using (_logger.BeginScope(contextProperties))
+            {
+                _logger.LogInformation($"StatusCode: {dto.StatusCode}\nfor: {dto.Method} {dto.Url}\nHeaders:\n{InternalHttpHelper.FormatHeaders(dto.Headers)}\nContent:\n{dto.Body}");
             }
         }
     }
