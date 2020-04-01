@@ -16,6 +16,9 @@
   <ItemGroup>
     <PackageReference Include="AWSSDK.Core" Version="3.3.102.2" />
     <PackageReference Include="AWSSDK.SQS" Version="3.3.100.30" />
+    <PackageReference Include="JetBrains.Annotations" Version="2019.1.3">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>

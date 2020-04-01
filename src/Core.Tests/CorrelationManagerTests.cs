@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Albumprinter.CorrelationTracking.Correlation.Core;
 using Xunit;
 
-namespace Albumprinter.CorrelationTracking.Correlation.Core.Tests
+namespace Core.Tests
 {
     public sealed class CorrelationManagerTests
     {

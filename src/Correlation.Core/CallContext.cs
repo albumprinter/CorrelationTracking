@@ -1,5 +1,4 @@
-﻿#if IS_MIN_NETSTANDARD1_3
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Threading;
 
 // ReSharper disable once CheckNamespace
@@ -31,4 +30,3 @@ namespace System.Runtime.Remoting.Messaging
             state.TryGetValue(name, out AsyncLocal<object> data) ? data.Value : null;
     }
 }
-#endif

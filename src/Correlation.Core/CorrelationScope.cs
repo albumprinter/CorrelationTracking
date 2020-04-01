@@ -3,13 +3,9 @@ using System.Runtime.Remoting.Messaging;
 
 namespace Albumprinter.CorrelationTracking.Correlation.Core
 {
-
-#if !IS_MIN_NETSTANDARD1_3
-    [Serializable]
-#endif
     public sealed class CorrelationScope
     {
-        private static readonly string CorrelationScopeSlotName = typeof (CorrelationScope).FullName;
+        private static readonly string CorrelationScopeSlotName = typeof(CorrelationScope).FullName;
         public static readonly CorrelationScope Initial = new CorrelationScope(Guid.NewGuid(), Guid.Empty, Guid.Empty);
 
         public CorrelationScope() : this(Guid.Empty, Guid.Empty, Guid.Empty)

@@ -1,22 +1,30 @@
-﻿using Albelli.CorrelationTracing.Amazon.Logging;
-using Albumprinter.CorrelationTracking.Correlation.Core;
-using Amazon.Runtime;
+﻿using Amazon.Runtime;
 using Amazon.Runtime.Internal;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Albumprinter.CorrelationTracking.Correlation.Core;
+using JetBrains.Annotations;
+using Microsoft.Extensions.Logging;
 
 namespace Albelli.CorrelationTracing.Amazon
 {
-    public class LoggingPipelineHandler : PipelineHandler
+    public sealed class LoggingPipelineHandler : PipelineHandler
     {
         private const string SkippedValue = "[SKIPPED]";
         private readonly LoggingOptions _options;
-        private readonly ILog _log = LogProvider.GetCurrentClassLogger();
+        private readonly ILogger _logger;
 
-        public LoggingPipelineHandler(LoggingOptions options = null)
+        public LoggingPipelineHandler([NotNull] ILoggerFactory loggerFactory, LoggingOptions options = null)
         {
+            if (loggerFactory == null)
+            {
+                throw new ArgumentNullException(nameof(loggerFactory));
+            }
+
+            _logger = loggerFactory.CreateLogger<LoggingPipelineHandler>();
             _options = options ?? new LoggingOptions
             {
                 LogRequestBodyEnabled = true,
@@ -35,8 +43,9 @@ namespace Albelli.CorrelationTracing.Amazon
 
         public override void InvokeSync(IExecutionContext executionContext)
         {
+
             var operationId = Guid.NewGuid();
-            using (LogProvider.OpenMappedContext(CorrelationKeys.OperationId, operationId))
+            using (_logger.BeginScope(new Dictionary<string, object> { [CorrelationKeys.OperationId] = operationId }))
             {
                 LogRequest(executionContext, operationId);
 
@@ -63,7 +72,7 @@ namespace Albelli.CorrelationTracing.Amazon
         public override async Task<T> InvokeAsync<T>(IExecutionContext executionContext)
         {
             var operationId = Guid.NewGuid();
-            using (LogProvider.OpenMappedContext(CorrelationKeys.OperationId, operationId))
+            using (_logger.BeginScope(new Dictionary<string, object> { [CorrelationKeys.OperationId] = operationId }))
             {
                 LogRequest(executionContext, operationId);
 
@@ -98,7 +107,7 @@ namespace Albelli.CorrelationTracing.Amazon
             }
 
             var headers = (amEx.Response.GetHeaderNames() ?? new string[0]).ToDictionary(k => k, s => amEx.Response.GetHeaderValue(s));
-            var errorResponse = new {amEx.Response.StatusCode, amEx.Response.ContentType, amEx.Response.ContentLength, Headers = headers, Content = content};
+            var errorResponse = new { amEx.Response.StatusCode, amEx.Response.ContentType, amEx.Response.ContentLength, Headers = headers, Content = content };
             var errorBody = JsonConvert.SerializeObject(errorResponse);
 
             var body = $"{errorBody}{Environment.NewLine}{amEx}";
@@ -196,22 +205,22 @@ namespace Albelli.CorrelationTracing.Amazon
 
         private void LogRequest(LoggingEventArg loggingEventArg)
         {
-            _log.Info($"Pre - {loggingEventArg.RequestName}: {loggingEventArg.Body ?? SkippedValue}");
+            _logger.LogInformation($"Pre - {loggingEventArg.RequestName}: {loggingEventArg.Body ?? SkippedValue}");
         }
 
         private void LogResponse(LoggingEventArg loggingEventArg)
         {
-            _log.Info($"Post - {loggingEventArg.RequestName}: {loggingEventArg.Body ?? SkippedValue}");
+            _logger.LogInformation($"Post - {loggingEventArg.RequestName}: {loggingEventArg.Body ?? SkippedValue}");
         }
 
         private void LogWarning(WarningLoggingEventArg loggingEventArg)
         {
-            _log.Warn($"Post - {loggingEventArg.RequestName}: {loggingEventArg.Body ?? SkippedValue} {loggingEventArg.Exception?.Message}");
+            _logger.LogWarning($"Post - {loggingEventArg.RequestName}: {loggingEventArg.Body ?? SkippedValue} {loggingEventArg.Exception?.Message}");
         }
-        
+
         private void LogError(ErrorLoggingEventArg loggingEventArg)
         {
-            _log.Error($"Post - {loggingEventArg.RequestName}: {loggingEventArg.Body ?? SkippedValue}", loggingEventArg.Exception);
+            _logger.LogError($"Post - {loggingEventArg.RequestName}: {loggingEventArg.Body ?? SkippedValue}", loggingEventArg.Exception);
         }
     }
 }
