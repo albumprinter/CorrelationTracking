@@ -72,7 +72,7 @@ Task("SemVer").Does(() => {
 Task("Build").Does(() => {
     foreach(var sln in GetFiles(src.Path + "/*.sln")) {
         MSBuild(sln, settings => settings
-            .UseToolVersion(MSBuildToolVersion.VS2017)
+            .UseToolVersion(MSBuildToolVersion.VS2019)
             .SetVerbosity(Verbosity.Normal)
             .SetConfiguration(CONFIGURATION)
             .SetPlatformTarget(PlatformTarget.MSIL)
