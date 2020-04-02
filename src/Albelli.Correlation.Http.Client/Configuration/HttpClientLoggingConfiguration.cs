@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http;
+using JetBrains.Annotations;
 
 namespace Albelli.Correlation.Http.Client.Configuration
 {
+    [PublicAPI]
     public interface IHttpClientLoggingConfiguration
     {
         ICollection<string> AllowedHeaders { get; }
@@ -17,7 +19,7 @@ namespace Albelli.Correlation.Http.Client.Configuration
         ICollection<HttpStatusCode> WhiteListedCodes { get; }
     }
 
-    [SuppressMessage("ReSharper", "UnusedMember.Global")]
+    [PublicAPI]
     public class HttpClientLoggingConfiguration : IHttpClientLoggingConfiguration
     {
         public ICollection<string> AllowedHeaders { get; }

@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 namespace Albelli.Correlation.Http.Server.Middleware
 {
     [PublicAPI]
-    public class LogRequestMiddleware
+    public sealed class LogRequestMiddleware
     {
         private readonly RequestDelegate _next;
         private readonly Action<HttpDto, HttpContext> _logAction;
@@ -33,8 +33,6 @@ namespace Albelli.Correlation.Http.Server.Middleware
             _logBody = options.LogBody ?? (_ => true);
             _loggedHeaders = new HashSet<string>(options.LoggedHeaders ?? new[] { CorrelationKeys.CorrelationId });
         }
-
-
 
         public async Task Invoke(HttpContext context)
         {

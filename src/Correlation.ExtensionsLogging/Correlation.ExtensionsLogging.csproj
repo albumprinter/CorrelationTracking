@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <RootNamespace>Albumprinter.CorrelationTracking.Correlation.ExtensionsLogging</RootNamespace>
+    <PackageId>Albumprinter.CorrelationTracking.Correlation.ExtensionsLogging</PackageId>
+    <Authors>Albumprinter</Authors>
+    <AssemblyName>Albumprinter.CorrelationTracking.Correlation.ExtensionsLogging</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs" Link="CommonAssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="JetBrains.Annotations" Version="2019.1.3">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Correlation.Core\Correlation.Core.csproj" />
+  </ItemGroup>
+
+</Project>

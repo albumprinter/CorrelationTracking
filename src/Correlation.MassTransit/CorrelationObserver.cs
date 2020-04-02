@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Albumprinter.CorrelationTracking.Correlation.Core;
 using MassTransit;
-using MassTransit.Pipeline;
 
 namespace Albumprinter.CorrelationTracking.Correlation.MassTransit
 {

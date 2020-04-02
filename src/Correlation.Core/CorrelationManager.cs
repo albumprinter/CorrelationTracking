@@ -12,7 +12,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.Core
             ScopeInterceptors = new List<ICorrelationScopeInterceptor>();
         }
 
-        public List<ICorrelationScopeInterceptor> ScopeInterceptors { get; private set; }
+        public List<ICorrelationScopeInterceptor> ScopeInterceptors { get; }
 
         public IDisposable UseScope(Guid correlationId)
         {
@@ -45,20 +45,16 @@ namespace Albumprinter.CorrelationTracking.Correlation.Core
 
         private sealed class Disposable : IDisposable
         {
-            private readonly Action dispose;
+            private readonly Action _dispose;
 
             public Disposable(Action dispose)
             {
-                if (dispose == null)
-                {
-                    throw new ArgumentNullException("dispose");
-                }
-                this.dispose = dispose;
+                _dispose = dispose ?? throw new ArgumentNullException(nameof(dispose));
             }
 
             public void Dispose()
             {
-                dispose.Invoke();
+                _dispose.Invoke();
             }
         }
     }

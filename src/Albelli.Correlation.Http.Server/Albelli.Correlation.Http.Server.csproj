@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Correlation.Core\Correlation.Core.csproj" />
+    <ProjectReference Include="..\Correlation.ExtensionsLogging\Correlation.ExtensionsLogging.csproj" />
     <ProjectReference Include="..\CorrelationTracking\CorrelationTracking.csproj" />
   </ItemGroup>
 

@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 namespace Albelli.Correlation.Http.Server.Middleware
 {
     [PublicAPI]
-    public class LogResponseMiddleware
+    public sealed class LogResponseMiddleware
     {
         private readonly RequestDelegate _next;
         private readonly Action<HttpResponseDto, HttpContext> _logAction;
