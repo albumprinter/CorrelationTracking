@@ -136,17 +136,19 @@ namespace Albumprinter.CorrelationTracking.Correlation.MassTransit
                     ReceiveContextManager.Capture(context.ReceiveContext, CorrelationManager.Instance.UseScope(correlationId, requestId));
                 }
             }
-            return context.CompleteTask;
+
+            return context.ConsumeCompleted;
         }
 
         Task IConsumeObserver.PostConsume<T>(ConsumeContext<T> context)
         {
-            return context.CompleteTask;
+
+            return context.ConsumeCompleted;
         }
 
         Task IConsumeObserver.ConsumeFault<T>(ConsumeContext<T> context, Exception exception)
         {
-            return context.CompleteTask;
+            return context.ConsumeCompleted;
         }
     }
 }
