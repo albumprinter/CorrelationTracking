@@ -102,7 +102,7 @@ Task("Pack").Does(() => {
         Configuration = CONFIGURATION,
         OutputDirectory = packages,
         MSBuildSettings = msBuildSettings,
-        IncludeSymbols = true
+        ArgumentCustomization = args=>args.Append("--include-symbols").Append("-p:SymbolPackageFormat=snupkg")
     };
 
 	foreach(var file in GetProjectFiles().Where(file=>IsDotNetStandard(file))) {
