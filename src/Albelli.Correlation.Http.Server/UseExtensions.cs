@@ -12,7 +12,7 @@ namespace Albelli.Correlation.Http.Server
     [PublicAPI]
     public static class UseExtensions
     {
-        public static void AddCorrelation([NotNull] IServiceCollection services)
+        public static void AddCorrelation([NotNull] this IServiceCollection services)
         {
             services.Decorate<ILoggerFactory, CorrelationLoggerFactory>();
         }
