@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Albumprinter.CorrelationTracking.Correlation.Core;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
@@ -47,7 +48,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.Logging
                     [CorrelationKeys.ProcessId] = CorrelationScope.Current.ProcessId,
                     [CorrelationKeys.CorrelationId] = CorrelationScope.Current.CorrelationId,
                     [CorrelationKeys.RequestId] = CorrelationScope.Current.RequestId,
-                    [CorrelationKeys.ActivityId] = System.Diagnostics.Trace.CorrelationManager.ActivityId
+                    [CorrelationKeys.ActivityId] = Activity.Current.Id
                 };
 
                 using (_originalLogger.BeginScope(correlationProperties))
