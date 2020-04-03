@@ -3,10 +3,10 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <RootNamespace>Albumprinter.CorrelationTracking.Correlation.ExtensionsLogging</RootNamespace>
+    <RootNamespace>Albumprinter.CorrelationTracking.Correlation.Logging</RootNamespace>
     <PackageId>Albumprinter.CorrelationTracking.Correlation.ExtensionsLogging</PackageId>
     <Authors>Albumprinter</Authors>
-    <AssemblyName>Albumprinter.CorrelationTracking.Correlation.ExtensionsLogging</AssemblyName>
+    <AssemblyName>Albumprinter.CorrelationTracking.Correlation.Logging</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

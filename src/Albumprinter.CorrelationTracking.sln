@@ -43,7 +43,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Albelli.CorrelationTracing.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Tests", "Core.Tests\Core.Tests.csproj", "{30C71331-1155-4F1A-8A5F-82C171F31C67}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Correlation.ExtensionsLogging", "Correlation.ExtensionsLogging\Correlation.ExtensionsLogging.csproj", "{FFA61990-CA30-428D-B9BF-186A4CDE83A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Correlation.Logging", "Correlation.Logging\Correlation.Logging.csproj", "{0FF7CAEC-5F10-4C1D-93BF-E486E59448A0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -115,10 +115,10 @@ Global
 		{30C71331-1155-4F1A-8A5F-82C171F31C67}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30C71331-1155-4F1A-8A5F-82C171F31C67}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30C71331-1155-4F1A-8A5F-82C171F31C67}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FFA61990-CA30-428D-B9BF-186A4CDE83A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FFA61990-CA30-428D-B9BF-186A4CDE83A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FFA61990-CA30-428D-B9BF-186A4CDE83A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FFA61990-CA30-428D-B9BF-186A4CDE83A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0FF7CAEC-5F10-4C1D-93BF-E486E59448A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FF7CAEC-5F10-4C1D-93BF-E486E59448A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FF7CAEC-5F10-4C1D-93BF-E486E59448A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FF7CAEC-5F10-4C1D-93BF-E486E59448A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

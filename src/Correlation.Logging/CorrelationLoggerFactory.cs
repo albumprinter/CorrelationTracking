@@ -4,7 +4,7 @@ using Albumprinter.CorrelationTracking.Correlation.Core;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 
-namespace Albumprinter.CorrelationTracking.Correlation.ExtensionsLogging
+namespace Albumprinter.CorrelationTracking.Correlation.Logging
 {
     [PublicAPI]
     public sealed class CorrelationLoggerFactory : ILoggerFactory
