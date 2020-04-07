@@ -31,7 +31,9 @@ namespace Albumprinter.CorrelationTracking.Correlation.Core
             {
                 throw new ArgumentNullException(nameof(newScope));
             }
-            var correlationActivity = new Activity(nameof(CorrelationManager)).Start();
+            var correlationActivity = new Activity(nameof(CorrelationManager))
+                .SetParentId(newScope.CorrelationId.ToString())
+                .Start();
             ScopeInterceptors.ForEach(x => x.Enter(this, newScope));
             CorrelationScope.Current = newScope;
             return new Disposable(() => correlationActivity.Stop());
