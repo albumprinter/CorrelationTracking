@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using Albelli.Correlation.Http.Server.Middleware;
 using Albumprinter.CorrelationTracking.Correlation.Logging;
@@ -12,9 +13,19 @@ namespace Albelli.Correlation.Http.Server
     [PublicAPI]
     public static class UseExtensions
     {
-        public static void AddCorrelation([NotNull] this IServiceCollection services)
+        public static void AddCorrelationLoggerFactory([NotNull] this IServiceCollection services)
         {
+            if (services == null) throw new ArgumentNullException(nameof(services));
+
             services.Decorate<ILoggerFactory, CorrelationLoggerFactory>();
+        }
+
+        public static void UseCorrelationDiagnosticListenerSubscriber([NotNull] this IApplicationBuilder app)
+        {
+            if (app == null) throw new ArgumentNullException(nameof(app));
+
+            var listener = app.ApplicationServices.GetRequiredService<DiagnosticListener>();
+            listener.Subscribe(new CorrelationDiagnosticListenerSubscriber());
         }
 
         public static void UseCorrelation([NotNull] this IApplicationBuilder app)

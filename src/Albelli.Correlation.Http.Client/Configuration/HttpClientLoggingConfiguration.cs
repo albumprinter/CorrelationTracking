@@ -1,7 +1,6 @@
 ﻿using Albumprinter.CorrelationTracking.Correlation.Core;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http;
 using JetBrains.Annotations;
