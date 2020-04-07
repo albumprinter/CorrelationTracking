@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Albumprinter.CorrelationTracking.Correlation.Core;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
@@ -22,8 +23,16 @@ namespace Albelli.Correlation.Http.Server
         private void Start(HttpContext ctx)
         {
             if (ctx == null) return;
+
             var id = ResolveCorrelationId(ctx);
-            _ctxToDispose[ctx] = CorrelationManager.Instance.UseScope(id);
+            if (Activity.Current != null 
+                && Activity.Current.Parent == null
+                && id != null)
+            {
+                Activity.Current.SetParentId(id.Value.ToString());
+            }
+            _ctxToDispose[ctx] = CorrelationManager.Instance.UseScope(id ?? Guid.NewGuid());
+
         }
 
         private void Stop(HttpContext ctx)
@@ -47,7 +56,7 @@ namespace Albelli.Correlation.Http.Server
             }
         }
 
-        private Guid ResolveCorrelationId(HttpContext context)
+        private Guid? ResolveCorrelationId(HttpContext context)
         {
             if (context.Request.Headers.TryGetValue(CorrelationKeys.CorrelationId, out var headers)
                 && headers.Count >= 1
