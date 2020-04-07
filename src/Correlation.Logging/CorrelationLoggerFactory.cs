@@ -43,7 +43,8 @@ namespace Albumprinter.CorrelationTracking.Correlation.Logging
 
             public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
             {
-                if (CorrelationScope.Current == null)
+                var correlationScope = CorrelationScope.Current;
+                if (correlationScope == null)
                 {
                     _originalLogger.Log(logLevel, eventId, state, exception, formatter);
                     return;
@@ -51,9 +52,9 @@ namespace Albumprinter.CorrelationTracking.Correlation.Logging
 
                 var correlationProperties = new Dictionary<string, object>
                 {
-                    [CorrelationKeys.ProcessId] = CorrelationScope.Current.ProcessId,
-                    [CorrelationKeys.CorrelationId] = CorrelationScope.Current.CorrelationId,
-                    [CorrelationKeys.RequestId] = CorrelationScope.Current.RequestId,
+                    [CorrelationKeys.ProcessId] = correlationScope.ProcessId,
+                    [CorrelationKeys.CorrelationId] = correlationScope.CorrelationId,
+                    [CorrelationKeys.RequestId] = correlationScope.RequestId,
                     [CorrelationKeys.ActivityId] = Activity.Current.Id
                 };
 
