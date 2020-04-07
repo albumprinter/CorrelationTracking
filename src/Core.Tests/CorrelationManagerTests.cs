@@ -15,7 +15,7 @@ namespace Core.Tests
                 CorrelationManager = new CorrelationManager();
             }
 
-            public CorrelationManager CorrelationManager { get; private set; }
+            public CorrelationManager CorrelationManager { get; }
         }
 
         public sealed class Current
@@ -37,13 +37,14 @@ namespace Core.Tests
             public void Should_create_the_new_scope_and_restore_the_previous_one_on_dispose()
             {
                 // assert
-                Assert.Equal(CorrelationScope.Initial, CorrelationScope.Current);
+                Assert.Null(CorrelationScope.Current);
 
                 // act
                 var scopeId1 = Guid.NewGuid();
                 using (CorrelationManager.UseScope(scopeId1))
                 {
                     // assert
+                    Assert.NotNull(CorrelationScope.Current);
                     Assert.Equal(scopeId1, CorrelationScope.Current.CorrelationId);
 
                     // act
@@ -59,7 +60,7 @@ namespace Core.Tests
                 }
 
                 // assert
-                Assert.Equal(CorrelationScope.Initial, CorrelationScope.Current);
+                Assert.Null(CorrelationScope.Current);
             }
         }
 

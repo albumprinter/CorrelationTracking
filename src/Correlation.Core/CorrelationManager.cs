@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Albumprinter.CorrelationTracking.Correlation.Core
 {
@@ -16,12 +17,12 @@ namespace Albumprinter.CorrelationTracking.Correlation.Core
 
         public IDisposable UseScope(Guid correlationId)
         {
-            return UseScope(new CorrelationScope(CorrelationScope.Initial.ProcessId, correlationId, Guid.NewGuid()));
+            return UseScope(correlationId, Guid.NewGuid());
         }
 
         public IDisposable UseScope(Guid correlationId, Guid requestId)
         {
-            return UseScope(new CorrelationScope(CorrelationScope.Initial.ProcessId, correlationId, requestId));
+            return UseScope(new CorrelationScope(CorrelationScope.AutoProcessId, correlationId, requestId));
         }
 
         public IDisposable UseScope(CorrelationScope newScope)
@@ -30,17 +31,10 @@ namespace Albumprinter.CorrelationTracking.Correlation.Core
             {
                 throw new ArgumentNullException(nameof(newScope));
             }
-            var oldScope = CorrelationScope.Current;
-
+            var correlationActivity = new Activity(nameof(CorrelationManager)).Start();
             ScopeInterceptors.ForEach(x => x.Enter(this, newScope));
             CorrelationScope.Current = newScope;
-
-            return new Disposable(
-                delegate
-                {
-                    CorrelationScope.Current = oldScope;
-                    ScopeInterceptors.ForEach(x => x.Exit(this, oldScope));
-                });
+            return new Disposable(() => correlationActivity.Stop());
         }
 
         private sealed class Disposable : IDisposable

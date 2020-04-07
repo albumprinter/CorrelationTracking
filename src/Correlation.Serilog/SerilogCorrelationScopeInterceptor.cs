@@ -10,11 +10,6 @@ namespace Albumprinter.CorrelationTracking.Correlation.Serilog
             SetLogicalProperties(scope);
         }
 
-        public void Exit(CorrelationManager manager, CorrelationScope scope)
-        {
-            SetLogicalProperties(scope);
-        }
-
         private static void SetLogicalProperties(CorrelationScope scope)
         {
             LogContext.PushProperty(CorrelationKeys.ProcessId, scope.ProcessId);

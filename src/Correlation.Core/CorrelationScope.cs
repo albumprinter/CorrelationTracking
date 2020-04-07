@@ -1,12 +1,14 @@
 using System;
-using System.Runtime.Remoting.Messaging;
+using System.Diagnostics;
 
 namespace Albumprinter.CorrelationTracking.Correlation.Core
 {
+    [Serializable]
     public sealed class CorrelationScope
     {
+        internal static Guid AutoProcessId => Guid.NewGuid();
+
         private static readonly string CorrelationScopeSlotName = typeof(CorrelationScope).FullName;
-        public static readonly CorrelationScope Initial = new CorrelationScope(Guid.NewGuid(), Guid.Empty, Guid.Empty);
 
         public CorrelationScope() : this(Guid.Empty, Guid.Empty, Guid.Empty)
         {
@@ -21,8 +23,38 @@ namespace Albumprinter.CorrelationTracking.Correlation.Core
 
         public static CorrelationScope Current
         {
-            get { return CallContext.LogicalGetData(CorrelationScopeSlotName) as CorrelationScope ?? Initial; }
-            internal set { CallContext.LogicalSetData(CorrelationScopeSlotName, value); }
+            get
+            {
+                if (Activity.Current == null) return null;
+                var correlationIdX = GetBaggageItemByKnownName(CorrelationKeys.CorrelationId);
+                var processIdX = GetBaggageItemByKnownName(CorrelationKeys.ProcessId);
+                var requestIdX = GetBaggageItemByKnownName(CorrelationKeys.RequestId);
+                if (correlationIdX == null || !Guid.TryParse(correlationIdX, out var correlationIdGuid))
+                    return null;
+                if (processIdX == null || !Guid.TryParse(correlationIdX, out var processIdGuid))
+                    return null;
+                if (requestIdX == null || !Guid.TryParse(correlationIdX, out var requestIdGuid))
+                    return null;
+                return new CorrelationScope(processIdGuid, correlationIdGuid, requestIdGuid);
+            }
+            internal set
+            {
+                if (Activity.Current == null) return;
+                SetBaggageItemByKnownName(CorrelationKeys.CorrelationId, value.CorrelationId.ToString());
+                SetBaggageItemByKnownName(CorrelationKeys.ProcessId, value.ProcessId.ToString());
+                SetBaggageItemByKnownName(CorrelationKeys.RequestId, value.RequestId.ToString());
+            }
+        }
+
+        private static string GetBaggageItemByKnownName(string name)
+        {
+            return Activity.Current?.GetBaggageItem(CorrelationScopeSlotName + "-" + name);
+        }
+
+        private static void SetBaggageItemByKnownName(string name, string value)
+        {
+            if (Activity.Current == null) return;
+            Activity.Current.AddBaggage(CorrelationScopeSlotName + "-" + name, value);
         }
 
         /// <summary>
@@ -31,7 +63,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.Core
         /// <value>
         ///     The process identifier.
         /// </value>
-        public Guid ProcessId { get; private set; }
+        public Guid ProcessId { get; }
 
         /// <summary>
         ///     Gets the correlation identifier. An explicit correlation identifier for the business transaction.
@@ -39,7 +71,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.Core
         /// <value>
         ///     The correlation identifier.
         /// </value>
-        public Guid CorrelationId { get; private set; }
+        public Guid CorrelationId { get; }
 
         /// <summary>
         ///     Gets the request identifier. An explicit correlation identifier for the request.
@@ -47,7 +79,6 @@ namespace Albumprinter.CorrelationTracking.Correlation.Core
         /// <value>
         ///     The request identifier.
         /// </value>
-        public Guid RequestId { get; private set; }
-
+        public Guid RequestId { get; }
     }
 }
