@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Albumprinter.CorrelationTracking.Correlation.Core;
@@ -12,10 +11,12 @@ namespace Albumprinter.CorrelationTracking.Correlation.Logging
     public sealed class ActivityBagLoggerFactory : ILoggerFactory
     {
         private readonly ILoggerFactory _loggerFactory;
+        private readonly string _activityPrefix;
 
         public ActivityBagLoggerFactory([NotNull] ILoggerFactory loggerFactory)
         {
             _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
+            _activityPrefix = CorrelationKeys.ActivityPrefix;
         }
 
         public void Dispose()
@@ -25,7 +26,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.Logging
 
         public ILogger CreateLogger(string categoryName)
         {
-            return new DecorationLogger(_loggerFactory.CreateLogger(categoryName));
+            return new DecorationLogger(_loggerFactory.CreateLogger(categoryName), _activityPrefix);
         }
 
         public void AddProvider(ILoggerProvider provider)
@@ -35,11 +36,13 @@ namespace Albumprinter.CorrelationTracking.Correlation.Logging
 
         private sealed class DecorationLogger : ILogger
         {
-            private readonly ILogger _originalLogger;
+            [NotNull] private readonly ILogger _originalLogger;
+            [NotNull] private readonly string _activityPrefix;
 
-            public DecorationLogger([NotNull] ILogger originalLogger)
+            public DecorationLogger([NotNull] ILogger originalLogger, [NotNull] string activityPrefix)
             {
                 _originalLogger = originalLogger ?? throw new ArgumentNullException(nameof(originalLogger));
+                _activityPrefix = activityPrefix ?? throw new ArgumentNullException(nameof(activityPrefix));
             }
 
             public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
@@ -52,7 +55,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.Logging
                 }
 
                 var correlationProperties = Activity.Current.Baggage
-                    .Where(x => x.Key.StartsWith(CorrelationKeys.ActivityPrefix, StringComparison.InvariantCultureIgnoreCase))
+                    .Where(x => x.Key.StartsWith(_activityPrefix, StringComparison.InvariantCultureIgnoreCase))
                     .GroupBy(x => x.Key)
                     .Select(group => group.First() );
 
