@@ -59,7 +59,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.Logging
                     .Where(x => x.Key.StartsWith(_activityPrefix, StringComparison.InvariantCultureIgnoreCase))
                     .GroupBy(x => x.Key)
                     .Select(group => group.First())
-                    .ToDictionary(x => x.Key, x => (object)x.Value);
+                    .ToDictionary(x => x.Key.Substring(CorrelationKeys.ActivityPrefix.Length - 1), x => (object)x.Value);
 
                 using (_originalLogger.BeginScope(correlationProperties))
                 {
