@@ -13,11 +13,11 @@ namespace Albelli.Correlation.Http.Server
     [PublicAPI]
     public static class UseExtensions
     {
-        public static void AddCorrelationLoggerFactory([NotNull] this IServiceCollection services)
+        public static void AddActivityBagLoggerFactory([NotNull] this IServiceCollection services)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
 
-            services.Decorate<ILoggerFactory, CorrelationLoggerFactory>();
+            services.Decorate<ILoggerFactory, ActivityBagLoggerFactory>();
         }
 
         public static void UseCorrelationDiagnosticListenerSubscriber([NotNull] this IApplicationBuilder app)

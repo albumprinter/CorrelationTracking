@@ -9,8 +9,6 @@ namespace Albumprinter.CorrelationTracking.Correlation.Core
     {
         internal static Guid AutoProcessId => Guid.NewGuid();
 
-        private static readonly string CorrelationScopeSlotName = typeof(CorrelationScope).FullName;
-
         public CorrelationScope() : this(Guid.Empty, Guid.Empty, Guid.Empty)
         {
         }
@@ -51,12 +49,12 @@ namespace Albumprinter.CorrelationTracking.Correlation.Core
 
         private static string GetBaggageItemByKnownName(string name)
         {
-            return Activity.Current?.GetBaggageItem(CorrelationScopeSlotName + "-" + name);
+            return Activity.Current?.GetBaggageItem(CorrelationKeys.ActivityPrefix + name);
         }
 
         private static void SetBaggageItemByKnownName(string name, string value)
         {
-            Activity.Current?.AddBaggage(CorrelationScopeSlotName + "-" + name, value);
+            Activity.Current?.AddBaggage(CorrelationKeys.ActivityPrefix + name, value);
         }
 
         /// <summary>

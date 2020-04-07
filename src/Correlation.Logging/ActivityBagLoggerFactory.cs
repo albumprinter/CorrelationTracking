@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Albumprinter.CorrelationTracking.Correlation.Core;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
@@ -8,11 +9,11 @@ using Microsoft.Extensions.Logging;
 namespace Albumprinter.CorrelationTracking.Correlation.Logging
 {
     [PublicAPI]
-    public sealed class CorrelationLoggerFactory : ILoggerFactory
+    public sealed class ActivityBagLoggerFactory : ILoggerFactory
     {
         private readonly ILoggerFactory _loggerFactory;
 
-        public CorrelationLoggerFactory([NotNull] ILoggerFactory loggerFactory)
+        public ActivityBagLoggerFactory([NotNull] ILoggerFactory loggerFactory)
         {
             _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
         }
@@ -43,20 +44,17 @@ namespace Albumprinter.CorrelationTracking.Correlation.Logging
 
             public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
             {
-                var correlationScope = CorrelationScope.Current;
-                if (correlationScope == null)
+                var currentActivity = Activity.Current;
+                if (currentActivity == null)
                 {
                     _originalLogger.Log(logLevel, eventId, state, exception, formatter);
                     return;
                 }
 
-                var correlationProperties = new Dictionary<string, object>
-                {
-                    [CorrelationKeys.ProcessId] = correlationScope.ProcessId,
-                    [CorrelationKeys.CorrelationId] = correlationScope.CorrelationId,
-                    [CorrelationKeys.RequestId] = correlationScope.RequestId,
-                    [CorrelationKeys.ActivityId] = Activity.Current.Id
-                };
+                var correlationProperties = Activity.Current.Baggage
+                    .Where(x => x.Key.StartsWith(CorrelationKeys.ActivityPrefix, StringComparison.InvariantCultureIgnoreCase))
+                    .GroupBy(x => x.Key)
+                    .Select(group => group.First() );
 
                 using (_originalLogger.BeginScope(correlationProperties))
                 {
