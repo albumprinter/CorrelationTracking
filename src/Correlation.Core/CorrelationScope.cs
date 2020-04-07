@@ -42,6 +42,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.Core
             internal set
             {
                 if (Activity.Current == null) return;
+                if (value == null) return;
                 SetBaggageItemByKnownName(CorrelationKeys.CorrelationId, value.CorrelationId.ToString());
                 SetBaggageItemByKnownName(CorrelationKeys.ProcessId, value.ProcessId.ToString());
                 SetBaggageItemByKnownName(CorrelationKeys.RequestId, value.RequestId.ToString());
@@ -55,8 +56,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.Core
 
         private static void SetBaggageItemByKnownName(string name, string value)
         {
-            if (Activity.Current == null) return;
-            Activity.Current.AddBaggage(CorrelationScopeSlotName + "-" + name, value);
+            Activity.Current?.AddBaggage(CorrelationScopeSlotName + "-" + name, value);
         }
 
         /// <summary>
