@@ -116,7 +116,11 @@ Task("Pack").Does(() => {
         Properties = new Dictionary<string, string> {
             { "Configuration", CONFIGURATION }
         },
-        OutputDirectory = packages
+        OutputDirectory = packages,
+        Repository = new NuGetRepository {
+                Type = "git",
+                Url = "https://github.com/albumprinter/CorrelationTracking"
+            }
     };
 
     NuGetPack(GetProjectFiles().Where(file => !IsDotNetStandard(file)), settings);

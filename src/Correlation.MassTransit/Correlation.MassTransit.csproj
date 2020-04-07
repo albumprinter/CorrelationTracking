@@ -19,6 +19,10 @@
     </PackageReference>
     <PackageReference Include="MassTransit" Version="6.0.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
