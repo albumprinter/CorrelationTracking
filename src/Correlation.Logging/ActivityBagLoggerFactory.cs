@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Albumprinter.CorrelationTracking.Correlation.Core;
@@ -57,7 +58,8 @@ namespace Albumprinter.CorrelationTracking.Correlation.Logging
                 var correlationProperties = Activity.Current.Baggage
                     .Where(x => x.Key.StartsWith(_activityPrefix, StringComparison.InvariantCultureIgnoreCase))
                     .GroupBy(x => x.Key)
-                    .Select(group => group.First() );
+                    .Select(group => group.First())
+                    .ToDictionary(x => x.Key, x => (object)x.Value)
 
                 using (_originalLogger.BeginScope(correlationProperties))
                 {
