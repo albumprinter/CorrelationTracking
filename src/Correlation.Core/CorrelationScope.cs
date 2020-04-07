@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using JetBrains.Annotations;
 
 namespace Albumprinter.CorrelationTracking.Correlation.Core
 {
@@ -21,6 +22,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.Core
             RequestId = requestId;
         }
 
+        [CanBeNull]
         public static CorrelationScope Current
         {
             get
