@@ -29,11 +29,11 @@ namespace Albelli.Correlation.Http.Server
             // We are only going to set the Activity's correlation parent
             // if we don't have an existing parent already
             // and we have one that came from albelli's correlation.
-            if (Activity.Current != null 
+            if (Activity.Current != null
                 && Activity.Current.Parent == null
                 && id != null)
             {
-                Activity.Current.SetParentId(id.Value.ToString());
+                Activity.Current.SetParentId(ActivityTraceId.CreateFromString(id.Value.ToString().AsSpan()), ActivitySpanId.CreateRandom());
             }
             _ctxToDispose[ctx] = CorrelationManager.Instance.UseScope(id ?? Guid.NewGuid());
 
@@ -69,7 +69,7 @@ namespace Albelli.Correlation.Http.Server
                 return correlationId;
             }
 
-            return Guid.NewGuid();
+            return null;
         }
     }
 }
