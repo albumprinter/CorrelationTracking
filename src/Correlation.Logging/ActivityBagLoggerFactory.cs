@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Albumprinter.CorrelationTracking.Correlation.Core;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 
-namespace Albumprinter.CorrelationTracking.Correlation.Logging
+namespace Albelli.CorrelationTracking.Correlation.Logging
 {
     [PublicAPI]
     public sealed class ActivityBagLoggerFactory : ILoggerFactory
@@ -14,10 +12,15 @@ namespace Albumprinter.CorrelationTracking.Correlation.Logging
         private readonly ILoggerFactory _loggerFactory;
         private readonly string _activityPrefix;
 
-        public ActivityBagLoggerFactory([NotNull] ILoggerFactory loggerFactory)
+        public ActivityBagLoggerFactory([NotNull] ILoggerFactory loggerFactory, string activityPrefix)
         {
             _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
-            _activityPrefix = CorrelationKeys.ActivityPrefix;
+            _activityPrefix = activityPrefix;
+        }
+
+        public ActivityBagLoggerFactory([NotNull] ILoggerFactory loggerFactory)
+            : this(loggerFactory, "X-")
+        {
         }
 
         public void Dispose()
@@ -59,7 +62,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.Logging
                     .Where(x => x.Key.StartsWith(_activityPrefix, StringComparison.InvariantCultureIgnoreCase))
                     .GroupBy(x => x.Key)
                     .Select(group => group.First())
-                    .ToDictionary(x => x.Key.Substring(_activityPrefix.Length - 1), x => (object)x.Value);
+                    .ToDictionary(x => x.Key, x => (object)x.Value);
 
                 using (_originalLogger.BeginScope(correlationProperties))
                 {

@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using Albelli.Correlation.Http.Server.Middleware;
-using Albumprinter.CorrelationTracking.Correlation.Logging;
+using Albelli.CorrelationTracking.Correlation.Logging;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;

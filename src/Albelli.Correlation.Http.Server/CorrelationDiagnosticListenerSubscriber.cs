@@ -25,6 +25,10 @@ namespace Albelli.Correlation.Http.Server
             if (ctx == null) return;
 
             var id = ResolveCorrelationId(ctx);
+
+            // We are only going to set the Activity's correlation parent
+            // if we don't have an existing parent already
+            // and we have one that came from albelli's correlation.
             if (Activity.Current != null 
                 && Activity.Current.Parent == null
                 && id != null)

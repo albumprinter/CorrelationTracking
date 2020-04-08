@@ -9,7 +9,5 @@
         public const string RequestId = @"X-RequestId";
         public const string ActivityId = @"X-ActivityId";
         public const string ClientName = @"X-Client-Name";
-
-        public const string ActivityPrefix = "Correlation-Activity-";
     }
 }

@@ -26,9 +26,9 @@ namespace Albumprinter.CorrelationTracking.Correlation.Core
             get
             {
                 if (Activity.Current == null) return null;
-                var correlationIdX = GetBaggageItemByKnownName(CorrelationKeys.CorrelationId);
-                var processIdX = GetBaggageItemByKnownName(CorrelationKeys.ProcessId);
-                var requestIdX = GetBaggageItemByKnownName(CorrelationKeys.RequestId);
+                var correlationIdX = Activity.Current?.GetBaggageItem(CorrelationKeys.CorrelationId);
+                var processIdX = Activity.Current?.GetBaggageItem(CorrelationKeys.ProcessId);
+                var requestIdX = Activity.Current?.GetBaggageItem(CorrelationKeys.RequestId);
                 if (correlationIdX == null || !Guid.TryParse(correlationIdX, out var correlationIdGuid))
                     return null;
                 if (processIdX == null || !Guid.TryParse(correlationIdX, out var processIdGuid))
@@ -41,20 +41,10 @@ namespace Albumprinter.CorrelationTracking.Correlation.Core
             {
                 if (Activity.Current == null) return;
                 if (value == null) return;
-                SetBaggageItemByKnownName(CorrelationKeys.CorrelationId, value.CorrelationId.ToString());
-                SetBaggageItemByKnownName(CorrelationKeys.ProcessId, value.ProcessId.ToString());
-                SetBaggageItemByKnownName(CorrelationKeys.RequestId, value.RequestId.ToString());
+                Activity.Current?.AddBaggage(CorrelationKeys.CorrelationId, value.CorrelationId.ToString());
+                Activity.Current?.AddBaggage(CorrelationKeys.ProcessId, value.ProcessId.ToString());
+                Activity.Current?.AddBaggage(CorrelationKeys.RequestId, value.RequestId.ToString());
             }
-        }
-
-        private static string GetBaggageItemByKnownName(string name)
-        {
-            return Activity.Current?.GetBaggageItem(CorrelationKeys.ActivityPrefix + name);
-        }
-
-        private static void SetBaggageItemByKnownName(string name, string value)
-        {
-            Activity.Current?.AddBaggage(CorrelationKeys.ActivityPrefix + name, value);
         }
 
         /// <summary>
