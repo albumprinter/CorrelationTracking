@@ -12,15 +12,10 @@ namespace Albelli.CorrelationTracking.Correlation.Logging
         private readonly ILoggerFactory _loggerFactory;
         private readonly string _activityPrefix;
 
-        public ActivityBagLoggerFactory([NotNull] ILoggerFactory loggerFactory, string activityPrefix)
+        public ActivityBagLoggerFactory([NotNull] ILoggerFactory loggerFactory, string activityPrefix = null)
         {
             _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
-            _activityPrefix = activityPrefix;
-        }
-
-        public ActivityBagLoggerFactory([NotNull] ILoggerFactory loggerFactory)
-            : this(loggerFactory, "X-")
-        {
+            _activityPrefix = activityPrefix ?? "X-";
         }
 
         public void Dispose()

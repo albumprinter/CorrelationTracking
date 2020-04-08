@@ -13,6 +13,14 @@ namespace Albelli.Correlation.Http.Server
     [PublicAPI]
     public static class UseExtensions
     {
+        public static void AddActivityBagLoggerFactory([NotNull] this IServiceCollection services, [NotNull] string prefix)
+        {
+            if (services == null) throw new ArgumentNullException(nameof(services));
+            if (prefix == null || string.IsNullOrEmpty(prefix)) throw new ArgumentException(nameof(prefix));
+
+            services.Decorate<ILoggerFactory, ActivityBagLoggerFactory>(prefix);
+        }
+
         public static void AddActivityBagLoggerFactory([NotNull] this IServiceCollection services)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
@@ -40,6 +48,12 @@ namespace Albelli.Correlation.Http.Server
 
     internal static class ServiceCollectionExtensions
     {
+        public static IServiceCollection Decorate<TService, TDecorator>(this IServiceCollection services, params object[] additionalParameters)
+            where TDecorator : TService
+        {
+            return services.DecorateDescriptors(typeof(TService), x => x.Decorate(typeof(TDecorator), additionalParameters));
+        }
+
         public static IServiceCollection Decorate<TService, TDecorator>(this IServiceCollection services)
             where TDecorator : TService
         {
@@ -62,6 +76,11 @@ namespace Albelli.Correlation.Http.Server
 
             return services;
 
+        }
+
+        private static ServiceDescriptor Decorate(this ServiceDescriptor descriptor, Type decoratorType, object[] additionalParameters)
+        {
+            return descriptor.WithFactory(provider => provider.CreateInstance(decoratorType, provider.GetInstance(descriptor), additionalParameters));
         }
 
         private static ServiceDescriptor Decorate(this ServiceDescriptor descriptor, Type decoratorType)
