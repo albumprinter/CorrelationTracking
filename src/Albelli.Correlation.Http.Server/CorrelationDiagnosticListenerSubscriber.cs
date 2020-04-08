@@ -33,7 +33,7 @@ namespace Albelli.Correlation.Http.Server
                 && Activity.Current.Parent == null
                 && id != null)
             {
-                Activity.Current.SetParentId(ActivityTraceId.CreateFromString(id.Value.ToString().AsSpan()), ActivitySpanId.CreateRandom());
+                Activity.Current.SetParentId(ActivityTraceId.CreateFromString(id.Value.ToString("N").AsSpan()), ActivitySpanId.CreateRandom());
             }
             _ctxToDispose[ctx] = CorrelationManager.Instance.UseScope(id ?? Guid.NewGuid());
 
