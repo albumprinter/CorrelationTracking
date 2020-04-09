@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Albumprinter.CorrelationTracking.Correlation.Core;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
@@ -14,6 +15,7 @@ namespace Albelli.Correlation.Http.Server
     {
         const string HttpRequestInStart = "Microsoft.AspNetCore.Hosting.HttpRequestIn.Start";
         const string HttpRequestInStop = "Microsoft.AspNetCore.Hosting.HttpRequestIn.Stop";
+        private readonly ActivitySpanId EMPTY_SPAN = ActivitySpanId.CreateFromString("ffffffffffffffff".AsSpan());
         private readonly ConcurrentDictionary<HttpContext, IDisposable> _ctxToDispose = new ConcurrentDictionary<HttpContext, IDisposable>();
 
         public void OnCompleted() { }
@@ -33,7 +35,7 @@ namespace Albelli.Correlation.Http.Server
                 && Activity.Current.Parent == null
                 && id != null)
             {
-                Activity.Current.SetParentId(ActivityTraceId.CreateFromString(id.Value.ToString("N").AsSpan()), ActivitySpanId.CreateRandom());
+                Activity.Current.SetParentId(ActivityTraceId.CreateFromString(id.Value.ToString("N").AsSpan()), EMPTY_SPAN);
             }
             _ctxToDispose[ctx] = CorrelationManager.Instance.UseScope(id ?? Guid.NewGuid());
 
