@@ -100,7 +100,7 @@ namespace Albelli.Correlation.Http.Server
                 return true;
             }
 
-            id = Guid.Empty;
+            id = default;
             return false;
         }
     }
