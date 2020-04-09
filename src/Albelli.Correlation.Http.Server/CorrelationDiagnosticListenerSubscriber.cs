@@ -31,40 +31,35 @@ namespace Albelli.Correlation.Http.Server
         {
             if (ctx == null) return;
 
-            var resolvedBackwardsCompatibleId = TryResolveCorrelationId(ctx, out var correlationId);
+            Guid correlationId = default;
 
-            // We are only going to set the Activity's correlation parent
-            // if we don't have an existing parent already
-            // and we have one that came from albelli's correlation.
-            if (Activity.Current != null
-                && Activity.Current.Parent == null
-                && resolvedBackwardsCompatibleId)
+            // We can only manipulate the ids if they are in the W3C format
+            if (Activity.Current != null && Activity.DefaultIdFormat == ActivityIdFormat.W3C)
             {
-                Activity.Current.SetParentId(ActivityTraceId.CreateFromString(correlationId.ToString("N").AsSpan()), EMPTY_SPAN);
-            }
-
-            // We need to set some kind of id for the old system.
-            // So, we will try to use the trace-id from the W3C standard if we can use it
-            // Otherwise we will just generate a new guid instead
-            if (!resolvedBackwardsCompatibleId)
-            {
-                if (Activity.Current != null && Activity.DefaultIdFormat == ActivityIdFormat.W3C)
+                // We want to set the current Activity's parent if:
+                // 1) We don't have an existing parent already -- this means a request came in with no correlation tracking in the new format
+                // 2) If we have a correlation id in the old format that we can set as the current request's parent
+                var resolvedBackwardsCompatibleId = TryResolveCorrelationId(ctx, out var guidFromOldSystem);
+                if (Activity.Current.Parent == null && resolvedBackwardsCompatibleId)
                 {
+                    Activity.Current.SetParentId(ActivityTraceId.CreateFromString(guidFromOldSystem.ToString("N").AsSpan()), EMPTY_SPAN);
+                    correlationId = guidFromOldSystem;
+                }
+                else
+                {
+                    // If the new request does have a parent, we should not override it.
+                    // Instead we take the current trace-id, which happens to be something similar to our correlation id
+                    // and use it in our old X-CorrelationId's place
                     var currentTraceId = Activity.Current.TraceId.ToHexString();
                     if (Guid.TryParse(currentTraceId, out var w3CTraceIdAsGuid) && w3CTraceIdAsGuid != Guid.Empty)
                     {
                         correlationId = w3CTraceIdAsGuid;
                     }
-                    else
-                    {
-                        correlationId = Guid.NewGuid();
-                    }
-                }
-                else
-                {
-                    correlationId = Guid.NewGuid();
                 }
             }
+
+            if (correlationId == default)
+                correlationId = Guid.NewGuid();
 
             _ctxToDispose[ctx] = CorrelationManager.Instance.UseScope(correlationId);
         }
