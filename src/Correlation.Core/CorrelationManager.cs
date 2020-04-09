@@ -17,12 +17,12 @@ namespace Albumprinter.CorrelationTracking.Correlation.Core
 
         public IDisposable UseScope(Guid correlationId)
         {
-            return UseScope(correlationId, Guid.NewGuid());
+            return UseScope(correlationId, Guid.NewGuid().ToString());
         }
 
-        public IDisposable UseScope(Guid correlationId, Guid requestId)
+        public IDisposable UseScope(Guid correlationId, string requestId)
         {
-            return UseScope(new CorrelationScope(CorrelationScope.AutoProcessId, correlationId, requestId));
+            return UseScope(new CorrelationScope( correlationId, requestId));
         }
 
         public IDisposable UseScope(CorrelationScope newScope)

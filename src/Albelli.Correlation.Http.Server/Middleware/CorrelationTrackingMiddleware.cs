@@ -20,7 +20,7 @@ namespace Albelli.Correlation.Http.Server.Middleware
         {
             Guid correlationId = ResolveCorrelationId(context);
 
-            using (CorrelationManager.Instance.UseScope(correlationId, Guid.NewGuid()))
+            using (CorrelationManager.Instance.UseScope(correlationId, Guid.NewGuid().ToString()))
             {
                 await _next(context);
             }

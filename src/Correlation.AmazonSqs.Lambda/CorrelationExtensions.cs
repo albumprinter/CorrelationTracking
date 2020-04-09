@@ -20,7 +20,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.AmazonSqs.Lambda
 
         public static IDisposable TrackCorrelationId(this SQSEvent.SQSMessage sqsMessage)
         {
-            return CorrelationManager.Instance.UseScope(sqsMessage.ExtractCorrelationId() ?? Guid.NewGuid(), Guid.NewGuid());
+            return CorrelationManager.Instance.UseScope(sqsMessage.ExtractCorrelationId() ?? Guid.NewGuid(), Guid.NewGuid().ToString());
         }
     }
 }

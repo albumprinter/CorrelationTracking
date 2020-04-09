@@ -14,7 +14,7 @@ namespace Core.Tests
             public void Should_be_serialized_with_BinaryFormatter()
             {
                 // arrange
-                var expected = new CorrelationScope(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());
+                var expected = new CorrelationScope(Guid.NewGuid(), Guid.NewGuid().ToString());
 
                 var serializer = new BinaryFormatter();
 
@@ -26,7 +26,6 @@ namespace Core.Tests
                 var actual = (CorrelationScope)serializer.Deserialize(stream);
 
                 // assert
-                Assert.Equal(expected.ProcessId, actual.ProcessId);
                 Assert.Equal(expected.CorrelationId, actual.CorrelationId);
                 Assert.Equal(expected.RequestId, actual.RequestId);
             }

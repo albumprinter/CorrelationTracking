@@ -16,11 +16,15 @@ namespace Albumprinter.CorrelationTracking
                 throw new ArgumentNullException(nameof(interceptors));
             }
 
+            if (interceptors.Length == 0)
+            {
+                throw new ArgumentException("Value cannot be an empty collection.", nameof(interceptors));
+            }
+
             if (!initialized)
             {
                 initialized = true;
                 CorrelationManager.Instance.ScopeInterceptors.AddRange(interceptors);
-                CorrelationManager.Instance.UseScope(Guid.Empty, Guid.Empty);
             }
         }
     }

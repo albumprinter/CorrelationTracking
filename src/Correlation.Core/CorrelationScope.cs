@@ -9,13 +9,8 @@ namespace Albumprinter.CorrelationTracking.Correlation.Core
     {
         internal static Guid AutoProcessId => Guid.NewGuid();
 
-        public CorrelationScope() : this(Guid.Empty, Guid.Empty, Guid.Empty)
+        internal CorrelationScope(Guid correlationId, string requestId)
         {
-        }
-
-        internal CorrelationScope(Guid processId, Guid correlationId, Guid requestId)
-        {
-            ProcessId = processId;
             CorrelationId = correlationId;
             RequestId = requestId;
         }
@@ -27,23 +22,17 @@ namespace Albumprinter.CorrelationTracking.Correlation.Core
             {
                 if (Activity.Current == null) return null;
                 var correlationIdX = Activity.Current?.GetBaggageItem(CorrelationKeys.CorrelationId);
-                var processIdX = Activity.Current?.GetBaggageItem(CorrelationKeys.ProcessId);
                 var requestIdX = Activity.Current?.GetBaggageItem(CorrelationKeys.RequestId);
                 if (correlationIdX == null || !Guid.TryParse(correlationIdX, out var correlationIdGuid))
                     return null;
-                if (processIdX == null || !Guid.TryParse(correlationIdX, out var processIdGuid))
-                    return null;
-                if (requestIdX == null || !Guid.TryParse(correlationIdX, out var requestIdGuid))
-                    return null;
-                return new CorrelationScope(processIdGuid, correlationIdGuid, requestIdGuid);
+                return new CorrelationScope(correlationIdGuid, requestIdX);
             }
             internal set
             {
                 if (Activity.Current == null) return;
                 if (value == null) return;
                 Activity.Current?.AddBaggage(CorrelationKeys.CorrelationId, value.CorrelationId.ToString());
-                Activity.Current?.AddBaggage(CorrelationKeys.ProcessId, value.ProcessId.ToString());
-                Activity.Current?.AddBaggage(CorrelationKeys.RequestId, value.RequestId.ToString());
+                Activity.Current?.AddBaggage(CorrelationKeys.RequestId, value.RequestId);
             }
         }
 
@@ -53,7 +42,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.Core
         /// <value>
         ///     The process identifier.
         /// </value>
-        public Guid ProcessId { get; }
+        public Guid ProcessId => AutoProcessId;
 
         /// <summary>
         ///     Gets the correlation identifier. An explicit correlation identifier for the business transaction.
@@ -69,6 +58,6 @@ namespace Albumprinter.CorrelationTracking.Correlation.Core
         /// <value>
         ///     The request identifier.
         /// </value>
-        public Guid RequestId { get; }
+        public String RequestId { get; }
     }
 }

@@ -21,6 +21,7 @@ namespace Albelli.Correlation.Http.Server
         {
             // We want to use the W3C format so we can be compatible with the standard as much as possible.
             Activity.DefaultIdFormat = ActivityIdFormat.W3C;
+            Activity.ForceDefaultIdFormat = true;
         }
 
         public void OnCompleted() { }
@@ -34,26 +35,45 @@ namespace Albelli.Correlation.Http.Server
             Guid correlationId = default;
 
             // We can only manipulate the ids if they are in the W3C format
-            if (Activity.Current != null && Activity.DefaultIdFormat == ActivityIdFormat.W3C)
+            if (Activity.Current != null)
             {
-                // We want to set the current Activity's parent if:
-                // 1) We don't have an existing parent already -- this means a request came in with no correlation tracking in the new format
-                // 2) If we have a correlation id in the old format that we can set as the current request's parent
                 var resolvedBackwardsCompatibleId = TryResolveCorrelationId(ctx, out var guidFromOldSystem);
-                if (Activity.Current.Parent == null && resolvedBackwardsCompatibleId)
+                if (Activity.Current.IdFormat == ActivityIdFormat.W3C)
                 {
-                    Activity.Current.SetParentId(ActivityTraceId.CreateFromString(guidFromOldSystem.ToString("N").AsSpan()), EMPTY_SPAN);
-                    correlationId = guidFromOldSystem;
-                }
-                else
-                {
-                    // If the new request does have a parent, we should not override it.
-                    // Instead we take the current trace-id, which happens to be something similar to our correlation id
-                    // and use it in our old X-CorrelationId's place
-                    var currentTraceId = Activity.Current.TraceId.ToHexString();
-                    if (Guid.TryParse(currentTraceId, out var w3CTraceIdAsGuid) && w3CTraceIdAsGuid != Guid.Empty)
+                    // We want to set the current Activity's parent if:
+                    // 1) We don't have an existing parent already -- this means a request came in with no correlation tracking in the new format
+                    // 2) If we have a correlation id in the old format that we can set as the current request's parent
+                    if (Activity.Current.Parent == null && resolvedBackwardsCompatibleId)
                     {
-                        correlationId = w3CTraceIdAsGuid;
+                        Activity.Current.SetParentId(
+                            ActivityTraceId.CreateFromString(guidFromOldSystem.ToString("N").AsSpan()), EMPTY_SPAN);
+                        correlationId = guidFromOldSystem;
+                    }
+                    else
+                    {
+                        // If the new request does have a parent, we should not override it.
+                        // Instead we take the current trace-id, which happens to be something similar to our correlation id
+                        // and use it in our old X-CorrelationId's place
+                        var currentTraceId = Activity.Current.TraceId.ToHexString();
+                        if (Guid.TryParse(currentTraceId, out var w3CTraceIdAsGuid) && w3CTraceIdAsGuid != Guid.Empty)
+                        {
+                            correlationId = w3CTraceIdAsGuid;
+                        }
+                    }
+                }
+                else if (Activity.Current.IdFormat == ActivityIdFormat.Hierarchical)
+                {
+                    correlationId = resolvedBackwardsCompatibleId ? guidFromOldSystem : Guid.NewGuid();
+                    var parentTrace = ActivityTraceId.CreateFromString(correlationId.ToString("N").AsSpan());
+                    // For whatever reason we received an id that we can't work with,
+                    // we will try to override the parent anyway
+                    try
+                    {
+                        Activity.Current.SetParentId(parentTrace, EMPTY_SPAN);
+                    }
+                    catch
+                    {
+                        // If it fails, ignore it: there's no way we can restore the correlation
                     }
                 }
             }
