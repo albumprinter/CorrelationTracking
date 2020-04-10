@@ -105,7 +105,6 @@ namespace Albelli.Correlation.Http.Server
             }
 
             return services;
-
         }
 
         private static ServiceDescriptor Decorate(this ServiceDescriptor descriptor, Type decoratorType, object[] additionalParameters)
@@ -114,7 +113,7 @@ namespace Albelli.Correlation.Http.Server
             {
                 var parameters = new object[additionalParameters.Length + 1];
                 parameters[0] = provider.GetInstance(descriptor);
-                for (int i = 0; i < parameters.Length; i++)
+                for (int i = 0; i < additionalParameters.Length; i++)
                     parameters[i + 1] = additionalParameters[i];
                 return provider.CreateInstance(decoratorType, parameters);
             });
