@@ -114,8 +114,8 @@ namespace Albelli.Correlation.Http.Server
             {
                 var parameters = new object[additionalParameters.Length + 1];
                 parameters[0] = provider.GetInstance(descriptor);
-                for (int i = 1; i < parameters.Length; i++)
-                    parameters[i] = additionalParameters[i - 1];
+                for (int i = 0; i < parameters.Length; i++)
+                    parameters[i + 1] = additionalParameters[i];
                 return provider.CreateInstance(decoratorType, parameters);
             });
         }
