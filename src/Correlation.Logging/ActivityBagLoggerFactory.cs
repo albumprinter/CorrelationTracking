@@ -54,7 +54,7 @@ namespace Albelli.CorrelationTracking.Correlation.Logging
                 }
 
                 var correlationProperties = Activity.Current.Baggage
-                    .Where(x => x.Key.StartsWith(_activityPrefix, StringComparison.InvariantCultureIgnoreCase))
+                    .Where(x => x.Key.StartsWith(_activityPrefix, StringComparison.OrdinalIgnoreCase))
                     .GroupBy(x => x.Key)
                     .Select(group => group.First())
                     .ToDictionary(x => x.Key, x => (object)x.Value);
