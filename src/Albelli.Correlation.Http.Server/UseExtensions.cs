@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Albelli.Correlation.Http.Server.Middleware;
 using Albelli.CorrelationTracking.Correlation.Logging;
 using JetBrains.Annotations;
@@ -13,6 +14,20 @@ namespace Albelli.Correlation.Http.Server
     [PublicAPI]
     public static class UseExtensions
     {
+        /// <summary>
+        /// Adds a decorator for ILoggerFactory that can decorate log messages
+        /// with values from Activity.Current.Baggage and Activity.Current.Tags.
+        ///
+        /// It will log:
+        /// 1) All the tag values
+        /// 2) Values from the baggage that start with "X-"
+        /// </summary>
+        /// <param name="services">The service collection from the IoC container</param>
+        public static void AddDefaultActivityBagTagLoggerFactory([NotNull] this IServiceCollection services)
+        {
+            services.AddActivityBagTagLoggerFactory(s => s.StartsWith("X-", StringComparison.OrdinalIgnoreCase), _ => true);
+        }
+
         /// <summary>
         /// Adds a decorator for ILoggerFactory that can decorate log messages
         /// with values from Activity.Current.Baggage and Activity.Current.Tags.
