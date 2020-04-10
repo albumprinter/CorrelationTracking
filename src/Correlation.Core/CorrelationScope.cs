@@ -20,19 +20,21 @@ namespace Albumprinter.CorrelationTracking.Correlation.Core
         {
             get
             {
-                if (Activity.Current == null) return null;
-                var correlationIdX = Activity.Current?.GetBaggageItem(CorrelationKeys.CorrelationId);
-                var requestIdX = Activity.Current?.GetBaggageItem(CorrelationKeys.RequestId);
+                var currentActivity = Activity.Current;
+                if (currentActivity == null) return null;
+                var correlationIdX = currentActivity.GetTagItem(CorrelationKeys.CorrelationId);
+                var requestIdX = currentActivity.GetTagItem(CorrelationKeys.RequestId);
                 if (correlationIdX == null || !Guid.TryParse(correlationIdX, out var correlationIdGuid))
                     return null;
                 return new CorrelationScope(correlationIdGuid, requestIdX);
             }
             internal set
             {
-                if (Activity.Current == null) return;
+                var currentActivity = Activity.Current;
+                if (currentActivity == null) return;
                 if (value == null) return;
-                Activity.Current?.AddBaggage(CorrelationKeys.CorrelationId, value.CorrelationId.ToString());
-                Activity.Current?.AddBaggage(CorrelationKeys.RequestId, value.RequestId);
+                currentActivity.AddTag(CorrelationKeys.CorrelationId, value.CorrelationId.ToString());
+                currentActivity.AddTag(CorrelationKeys.RequestId, value.RequestId);
             }
         }
 

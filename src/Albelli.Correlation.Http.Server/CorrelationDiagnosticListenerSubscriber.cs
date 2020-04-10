@@ -33,18 +33,19 @@ namespace Albelli.Correlation.Http.Server
 
             Guid correlationId = default;
 
+            var currentActivity = Activity.Current;
             // We can only manipulate the ids if they are in the W3C format
-            if (Activity.Current != null)
+            if (currentActivity != null)
             {
                 var resolvedBackwardsCompatibleId = TryResolveCorrelationId(ctx, out var guidFromOldSystem);
-                if (Activity.Current.IdFormat == ActivityIdFormat.W3C)
+                if (currentActivity.IdFormat == ActivityIdFormat.W3C)
                 {
                     // We want to set the current Activity's parent if:
                     // 1) We don't have an existing parent already -- this means a request came in with no correlation tracking in the new format
                     // 2) If we have a correlation id in the old format that we can set as the current request's parent
-                    if (Activity.Current.Parent == null && resolvedBackwardsCompatibleId)
+                    if (currentActivity.Parent == null && resolvedBackwardsCompatibleId)
                     {
-                        Activity.Current.SetParentId(
+                        currentActivity.SetParentId(
                             ActivityTraceId.CreateFromString(guidFromOldSystem.ToString("N").AsSpan()), EMPTY_SPAN);
                         correlationId = guidFromOldSystem;
                     }
@@ -53,14 +54,14 @@ namespace Albelli.Correlation.Http.Server
                         // If the new request does have a parent, we should not override it.
                         // Instead we take the current trace-id, which happens to be something similar to our correlation id
                         // and use it in our old X-CorrelationId's place
-                        var currentTraceId = Activity.Current.TraceId.ToHexString();
+                        var currentTraceId = currentActivity.TraceId.ToHexString();
                         if (Guid.TryParse(currentTraceId, out var w3CTraceIdAsGuid) && w3CTraceIdAsGuid != Guid.Empty)
                         {
                             correlationId = w3CTraceIdAsGuid;
                         }
                     }
                 }
-                else if (Activity.Current.IdFormat == ActivityIdFormat.Hierarchical)
+                else if (currentActivity.IdFormat == ActivityIdFormat.Hierarchical)
                 {
                     correlationId = resolvedBackwardsCompatibleId ? guidFromOldSystem : Guid.NewGuid();
                     var parentTrace = ActivityTraceId.CreateFromString(correlationId.ToString("N").AsSpan());
@@ -68,7 +69,7 @@ namespace Albelli.Correlation.Http.Server
                     // we will try to override the parent anyway
                     try
                     {
-                        Activity.Current.SetParentId(parentTrace, EMPTY_SPAN);
+                        currentActivity.SetParentId(parentTrace, EMPTY_SPAN);
                     }
                     catch
                     {

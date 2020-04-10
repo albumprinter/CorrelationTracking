@@ -13,19 +13,28 @@ namespace Albelli.Correlation.Http.Server
     [PublicAPI]
     public static class UseExtensions
     {
-        public static void AddActivityBagLoggerFactory([NotNull] this IServiceCollection services, [NotNull] string prefix)
+        /// <summary>
+        /// Adds a decorator for ILoggerFactory that can decorate log messages
+        /// with values from Activity.Current.Baggage and Activity.Current.Tags.
+        ///
+        /// At least one predicate must be specified.
+        /// </summary>
+        /// <param name="services">The service collection from the IoC container</param>
+        /// <param name="shouldLogBag">
+        /// A predicate which checks whether this baggage should be logged or not.
+        /// `null` means it's not going to be logged.
+        /// </param>
+        /// <param name="shouldLogTag">
+        /// A predicate which checks whether this tag should be logged or not.
+        /// `null` means it's not going to be logged.
+        /// </param>
+        public static void AddActivityBagTagLoggerFactory([NotNull] this IServiceCollection services, Predicate<string> shouldLogBag = null, Predicate<string> shouldLogTag = null)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
-            if (prefix == null || string.IsNullOrEmpty(prefix)) throw new ArgumentException(nameof(prefix));
+            if (shouldLogBag == null && shouldLogTag == null)
+                throw new ArgumentException("At least one predicate should be specified");
 
-            services.Decorate<ILoggerFactory, ActivityBagLoggerFactory>(prefix);
-        }
-
-        public static void AddActivityBagLoggerFactory([NotNull] this IServiceCollection services)
-        {
-            if (services == null) throw new ArgumentNullException(nameof(services));
-
-            services.Decorate<ILoggerFactory, ActivityBagLoggerFactory>();
+            services.Decorate<ILoggerFactory, ActivityBagTagLoggerFactory>(shouldLogBag, shouldLogTag);
         }
 
         public static void UseCorrelationDiagnosticListenerSubscriber([NotNull] this IApplicationBuilder app)
