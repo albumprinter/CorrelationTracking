@@ -52,6 +52,11 @@ namespace Albelli.Correlation.Http.Server
             services.Decorate<ILoggerFactory, ActivityBagTagLoggerFactory>(shouldLogBag, shouldLogTag);
         }
 
+        /// <summary>
+        /// Adds a DiagnosticListener that intercepts all the incoming requests and tries
+        /// To get the X-CorrelationId value for the backward compatibility with the W3C
+        /// tracing standard.
+        /// </summary>
         public static void UseCorrelationDiagnosticListenerSubscriber([NotNull] this IApplicationBuilder app)
         {
             if (app == null) throw new ArgumentNullException(nameof(app));
