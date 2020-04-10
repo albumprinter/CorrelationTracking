@@ -12,10 +12,10 @@ namespace Albelli.Correlation.Http.Server
     [PublicAPI]
     public sealed class CorrelationDiagnosticListenerSubscriber : IObserver<KeyValuePair<string, object>>
     {
-        const string HttpRequestInStart = "Microsoft.AspNetCore.Hosting.HttpRequestIn.Start";
-        const string HttpRequestInStop = "Microsoft.AspNetCore.Hosting.HttpRequestIn.Stop";
+        private const string HttpRequestInStart = "Microsoft.AspNetCore.Hosting.HttpRequestIn.Start";
+        private const string HttpRequestInStop = "Microsoft.AspNetCore.Hosting.HttpRequestIn.Stop";
+        private const string ContextCorrelationScopeDisposables = nameof(ContextCorrelationScopeDisposables);
         private readonly ActivitySpanId EMPTY_SPAN = ActivitySpanId.CreateFromString("ffffffffffffffff".AsSpan());
-        private readonly ConcurrentDictionary<HttpContext, IDisposable> _ctxToDispose = new ConcurrentDictionary<HttpContext, IDisposable>();
 
         public CorrelationDiagnosticListenerSubscriber()
         {
@@ -80,16 +80,17 @@ namespace Albelli.Correlation.Http.Server
 
             if (correlationId == default)
                 correlationId = Guid.NewGuid();
-
-            _ctxToDispose[ctx] = CorrelationManager.Instance.UseScope(correlationId);
+            ctx.Items[ContextCorrelationScopeDisposables] = CorrelationManager.Instance.UseScope(correlationId);
         }
 
         private void Stop(HttpContext ctx)
         {
             if (ctx == null) return;
-            if (_ctxToDispose.TryRemove(ctx, out var disposable))
+            if (ctx.Items.TryGetValue(ContextCorrelationScopeDisposables, out var disposeScope))
             {
-                disposable.Dispose();
+                var disposable = disposeScope as IDisposable;
+                disposable?.Dispose();
+                ctx.Items.Remove(ContextCorrelationScopeDisposables);
             }
         }
 
