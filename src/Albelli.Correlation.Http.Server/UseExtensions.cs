@@ -8,6 +8,7 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.ObjectPool;
 
 namespace Albelli.Correlation.Http.Server
 {
@@ -109,7 +110,14 @@ namespace Albelli.Correlation.Http.Server
 
         private static ServiceDescriptor Decorate(this ServiceDescriptor descriptor, Type decoratorType, object[] additionalParameters)
         {
-            return descriptor.WithFactory(provider => provider.CreateInstance(decoratorType, provider.GetInstance(descriptor), additionalParameters));
+            return descriptor.WithFactory(provider =>
+            {
+                var parameters = new object[additionalParameters.Length + 1];
+                parameters[0] = provider.GetInstance(descriptor);
+                for (int i = 1; i < parameters.Length; i++)
+                    parameters[i] = additionalParameters[i - 1];
+                return provider.CreateInstance(decoratorType, parameters);
+            });
         }
 
         private static ServiceDescriptor Decorate(this ServiceDescriptor descriptor, Type decoratorType)
