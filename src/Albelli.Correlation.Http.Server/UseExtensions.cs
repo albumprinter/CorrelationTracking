@@ -23,7 +23,7 @@ namespace Albelli.Correlation.Http.Server
         /// 2) Values from the baggage that start with "X-"
         /// </summary>
         /// <param name="services">The service collection from the IoC container</param>
-        public static void AddDefaultActivityBagTagLogger([NotNull] this IServiceCollection services)
+        public static void AddDefaultActivityBagTagLoggerFactory([NotNull] this IServiceCollection services)
         {
             services.AddActivityBagTagLogger(s => s.StartsWith("X-", StringComparison.OrdinalIgnoreCase), _ => true);
         }
