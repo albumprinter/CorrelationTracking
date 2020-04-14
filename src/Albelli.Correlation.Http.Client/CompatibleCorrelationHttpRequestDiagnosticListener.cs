@@ -15,6 +15,7 @@ namespace Albelli.Correlation.Http.Client
     [PublicAPI]
     public class CompatibleCorrelationHttpRequestDiagnosticListener : IObserver<DiagnosticListener>, IObserver<KeyValuePair<string, object>>
     {
+        private const string HttpRequestOutEvent = "System.Net.Http.HttpRequestOut";
         private const string HttpRequestOutStartEvent = "System.Net.Http.HttpRequestOut.Start";
         private const string DiagnosticListenerName = "HttpHandlerDiagnosticListener";
         private readonly List<IDisposable> _subscriptions;
@@ -57,6 +58,15 @@ namespace Albelli.Correlation.Http.Client
                 if (Guid.TryParse(currentActivity.TraceId.ToHexString(), out var guidTraceId))
                     request.Headers.Add(CorrelationKeys.CorrelationId, guidTraceId.ToString());
             }
+        }
+
+        [UsedImplicitly]
+        [DiagnosticName(HttpRequestOutEvent)]
+        public virtual void OnHttpRequestOut(System.Net.Http.HttpRequestMessage request)
+        {
+            // Do not do anything with this event. The only reason we are receiving it
+            // Is because the listener won't send any other child events if we are not expecting a parent event
+            // if (s_diagnosticListener.IsEnabled(DiagnosticsHandlerLoggingStrings.ActivityName, request))
         }
     }
 }
