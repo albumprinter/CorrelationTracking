@@ -72,7 +72,7 @@ Task("SemVer").Does(() => {
 Task("Build").Does(() => {
     foreach(var sln in GetFiles(src.Path + "/*.sln")) {
         MSBuild(sln, settings => settings
-            .UseToolVersion(MSBuildToolVersion.VS2017)
+            .UseToolVersion(MSBuildToolVersion.VS2019)
             .SetVerbosity(Verbosity.Normal)
             .SetConfiguration(CONFIGURATION)
             .SetPlatformTarget(PlatformTarget.MSIL)
@@ -102,7 +102,7 @@ Task("Pack").Does(() => {
         Configuration = CONFIGURATION,
         OutputDirectory = packages,
         MSBuildSettings = msBuildSettings,
-        IncludeSymbols = true
+        ArgumentCustomization = args=>args.Append("--include-symbols").Append("-p:SymbolPackageFormat=snupkg")
     };
 
 	foreach(var file in GetProjectFiles().Where(file=>IsDotNetStandard(file))) {
@@ -116,7 +116,11 @@ Task("Pack").Does(() => {
         Properties = new Dictionary<string, string> {
             { "Configuration", CONFIGURATION }
         },
-        OutputDirectory = packages
+        OutputDirectory = packages,
+        Repository = new NuGetRepository {
+                Type = "git",
+                Url = "https://github.com/albumprinter/CorrelationTracking"
+            }
     };
 
     NuGetPack(GetProjectFiles().Where(file => !IsDotNetStandard(file)), settings);

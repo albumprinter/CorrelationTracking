@@ -1,32 +1,41 @@
 using System;
-using System.Runtime.Remoting.Messaging;
+using System.Diagnostics;
+using JetBrains.Annotations;
 
 namespace Albumprinter.CorrelationTracking.Correlation.Core
 {
-
-#if !IS_MIN_NETSTANDARD1_3
     [Serializable]
-#endif
     public sealed class CorrelationScope
     {
-        private static readonly string CorrelationScopeSlotName = typeof (CorrelationScope).FullName;
-        public static readonly CorrelationScope Initial = new CorrelationScope(Guid.NewGuid(), Guid.Empty, Guid.Empty);
+        internal static Guid AutoProcessId => Guid.NewGuid();
 
-        public CorrelationScope() : this(Guid.Empty, Guid.Empty, Guid.Empty)
+        internal CorrelationScope(Guid correlationId, string requestId)
         {
-        }
-
-        internal CorrelationScope(Guid processId, Guid correlationId, Guid requestId)
-        {
-            ProcessId = processId;
             CorrelationId = correlationId;
             RequestId = requestId;
         }
 
+        [CanBeNull]
         public static CorrelationScope Current
         {
-            get { return CallContext.LogicalGetData(CorrelationScopeSlotName) as CorrelationScope ?? Initial; }
-            internal set { CallContext.LogicalSetData(CorrelationScopeSlotName, value); }
+            get
+            {
+                var currentActivity = Activity.Current;
+                if (currentActivity == null) return null;
+                var correlationIdX = currentActivity.GetTagItem(CorrelationKeys.CorrelationId);
+                var requestIdX = currentActivity.GetTagItem(CorrelationKeys.RequestId);
+                if (correlationIdX == null || !Guid.TryParse(correlationIdX, out var correlationIdGuid))
+                    return null;
+                return new CorrelationScope(correlationIdGuid, requestIdX);
+            }
+            internal set
+            {
+                var currentActivity = Activity.Current;
+                if (currentActivity == null) return;
+                if (value == null) return;
+                currentActivity.AddTag(CorrelationKeys.CorrelationId, value.CorrelationId.ToString());
+                currentActivity.AddTag(CorrelationKeys.RequestId, value.RequestId);
+            }
         }
 
         /// <summary>
@@ -35,7 +44,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.Core
         /// <value>
         ///     The process identifier.
         /// </value>
-        public Guid ProcessId { get; private set; }
+        public Guid ProcessId => AutoProcessId;
 
         /// <summary>
         ///     Gets the correlation identifier. An explicit correlation identifier for the business transaction.
@@ -43,7 +52,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.Core
         /// <value>
         ///     The correlation identifier.
         /// </value>
-        public Guid CorrelationId { get; private set; }
+        public Guid CorrelationId { get; }
 
         /// <summary>
         ///     Gets the request identifier. An explicit correlation identifier for the request.
@@ -51,7 +60,6 @@ namespace Albumprinter.CorrelationTracking.Correlation.Core
         /// <value>
         ///     The request identifier.
         /// </value>
-        public Guid RequestId { get; private set; }
-
+        public String RequestId { get; }
     }
 }

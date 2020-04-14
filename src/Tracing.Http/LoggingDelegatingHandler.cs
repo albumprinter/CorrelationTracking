@@ -6,16 +6,19 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Albumprinter.CorrelationTracking.Tracing.Http.Logging;
+using JetBrains.Annotations;
+using Microsoft.Extensions.Logging;
 
 namespace Albumprinter.CorrelationTracking.Tracing.Http
 {
-    public class LoggingDelegatingHandler : DelegatingHandler
+    public sealed class LoggingDelegatingHandler : DelegatingHandler
     {
-        private static readonly ILog Log = LogProvider.GetLogger(typeof(LoggingDelegatingHandler));
+        private readonly ILogger _logger;
 
-        public LoggingDelegatingHandler(bool logAll = true)
+        public LoggingDelegatingHandler([NotNull] ILoggerFactory loggerFactory, bool logAll = true)
         {
+            _logger = loggerFactory.CreateLogger<LoggingDelegatingHandler>();
+
             LogRequest = LogRequestContent = LogResponse = LogResponseContent = logAll;
             AllowedHeaders = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
             {
@@ -49,7 +52,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.Http
                     output.Append(", Content: ");
                     output.Append(request.Content == null ? "<null>" : await request.Content.ReadAsStringAsync().ConfigureAwait(false));
                 }
-                Log.Debug(output.ToString());
+                _logger.LogDebug(output.ToString());
             }
             var response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
             if (LogResponse)
@@ -67,7 +70,7 @@ namespace Albumprinter.CorrelationTracking.Tracing.Http
                     output.Append(", Content: ");
                     output.Append(response.Content == null ? "<null>" : await response.Content.ReadAsStringAsync().ConfigureAwait(false));
                 }
-                Log.Debug(output.ToString());
+                _logger.LogDebug(output.ToString());
             }
             return response;
         }

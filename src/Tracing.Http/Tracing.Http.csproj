@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.3;netstandard2.0;net45</TargetFrameworks>
+    <TargetFrameworks>netstandard2.1</TargetFrameworks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <RootNamespace>Albumprinter.CorrelationTracking.Tracing.Http</RootNamespace>
     <PackageId>Albumprinter.CorrelationTracking.Tracing.Http</PackageId>
@@ -9,26 +9,20 @@
     <AssemblyName>Albumprinter.CorrelationTracking.Tracing.Http</AssemblyName>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
-    <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
-  </PropertyGroup>
-
   <ItemGroup>
     <Compile Include="..\CommonAssemblyInfo.cs" Link="CommonAssemblyInfo.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="LibLog" Version="4.2.6">
+    <PackageReference Include="JetBrains.Annotations" Version="2020.1.0">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.CSharp" Version="4.3.0" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.3" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="System.Net.Http" Version="4.3.3" />
   </ItemGroup>
-
-  <Target Name="AddNetStdMinDefine" BeforeTargets="CoreCompile" Condition="('$(TargetFrameworkIdentifier)' == '.NETStandard' and '$(TargetFrameworkVersion.Substring(1))' &gt;= '1.3')">
-    <PropertyGroup>
-      <DefineConstants>$(DefineConstants);IS_MIN_NETSTANDARD1_3</DefineConstants>
-    </PropertyGroup>
-  </Target>
-
 </Project>

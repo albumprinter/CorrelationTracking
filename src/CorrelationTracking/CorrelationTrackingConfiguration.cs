@@ -1,17 +1,13 @@
 ﻿using System;
 using Albumprinter.CorrelationTracking.Correlation.Core;
-using Albumprinter.CorrelationTracking.Correlation.LibLog;
+using JetBrains.Annotations;
 
 namespace Albumprinter.CorrelationTracking
 {
+    [PublicAPI]
     public static class CorrelationTrackingConfiguration
     {
         private static bool initialized;
-
-        public static void Initialize()
-        {
-            Initialize(new LibLogCorrelationScopeInterceptor());
-        }
 
         public static void Initialize(params ICorrelationScopeInterceptor[] interceptors)
         {
@@ -22,14 +18,13 @@ namespace Albumprinter.CorrelationTracking
 
             if (interceptors.Length == 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(interceptors), "Should contain at least one interceptor");
+                throw new ArgumentException("Value cannot be an empty collection.", nameof(interceptors));
             }
 
             if (!initialized)
             {
                 initialized = true;
                 CorrelationManager.Instance.ScopeInterceptors.AddRange(interceptors);
-                CorrelationManager.Instance.UseScope(Guid.Empty, Guid.Empty);
             }
         }
     }

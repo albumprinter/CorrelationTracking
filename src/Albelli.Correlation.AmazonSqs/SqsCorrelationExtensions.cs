@@ -2,9 +2,11 @@
 using Albumprinter.CorrelationTracking.Correlation.Core;
 using Amazon.Runtime.Internal;
 using Amazon.SQS.Model;
+using JetBrains.Annotations;
 
 namespace Albelli.Correlation.AmazonSqs
 {
+    [PublicAPI]
     public static class SqsCorrelationExtensions
     {
         public static void ConfigureHandlers()

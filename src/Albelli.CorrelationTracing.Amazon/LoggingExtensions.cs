@@ -1,12 +1,17 @@
-﻿using Amazon.Runtime.Internal;
+﻿using System;
+using Amazon.Runtime.Internal;
+using JetBrains.Annotations;
+using Microsoft.Extensions.Logging;
 
 namespace Albelli.CorrelationTracing.Amazon
 {
+    [PublicAPI]
     public static class LoggingExtensions
     {
-        public static void ConfigureHandlers(LoggingOptions options = null)
+        public static void ConfigureHandlers([NotNull] ILoggerFactory loggerFactory, LoggingOptions options = null)
         {
-            RuntimePipelineCustomizerRegistry.Instance.Register(new LoggingPipelineCustomizer(options));
+            if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
+            RuntimePipelineCustomizerRegistry.Instance.Register(new LoggingPipelineCustomizer(loggerFactory, options));
         }
     }
 }

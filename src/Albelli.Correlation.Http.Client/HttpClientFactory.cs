@@ -1,17 +1,18 @@
 ﻿using Albelli.Correlation.Http.Client.Configuration;
 using Albelli.Correlation.Http.Client.Handlers;
+using JetBrains.Annotations;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
+using Microsoft.Extensions.Logging;
 
 namespace Albelli.Correlation.Http.Client
 {
-    [SuppressMessage("ReSharper", "UnusedMember.Global")]
-    public class HttpClientFactory
+    [PublicAPI]
+    public sealed class HttpClientFactory
     {
-        public static HttpClient Create(IHttpClientLoggingConfiguration loggingConfiguration = null)
+        public static HttpClient Create(ILoggerFactory loggerFactory, IHttpClientLoggingConfiguration loggingConfiguration = null)
         {
-            var handler = BuildHttpMessageHandler(loggingConfiguration);
+            var handler = BuildHttpMessageHandler(loggerFactory, loggingConfiguration);
 
             return new HttpClient(handler);
         }
@@ -34,13 +35,14 @@ namespace Albelli.Correlation.Http.Client
             return new HttpClient(correlationHandler);
         }
 
-        public static HttpMessageHandler BuildHttpMessageHandler(IHttpClientLoggingConfiguration _loggingConfiguration = null)
+        public static HttpMessageHandler BuildHttpMessageHandler([NotNull] ILoggerFactory loggerFactory, IHttpClientLoggingConfiguration loggingConfiguration = null)
         {
+            if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
             var httpHandler = new HttpClientHandler(); // the most internal
 
-            HttpMessageHandler loggingHandler = _loggingConfiguration == null
+            HttpMessageHandler loggingHandler = loggingConfiguration == null
                 ? null
-                : new LoggingDelegatingHandler(_loggingConfiguration)
+                : new LoggingDelegatingHandler(loggerFactory, loggingConfiguration)
                 {
                     InnerHandler = httpHandler
                 };

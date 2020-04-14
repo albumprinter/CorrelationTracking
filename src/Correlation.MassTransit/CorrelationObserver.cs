@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Albumprinter.CorrelationTracking.Correlation.Core;
 using MassTransit;
-using MassTransit.Pipeline;
 
 namespace Albumprinter.CorrelationTracking.Correlation.MassTransit
 {
@@ -34,7 +33,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.MassTransit
 
         public Task PrePublish<T>(PublishContext<T> context) where T : class
         {
-            if (InjectOnPrePublish)
+            if (InjectOnPrePublish && CorrelationScope.Current != null)
             {
                 context.Headers.Set(CorrelationKeys.CorrelationId, CorrelationScope.Current.CorrelationId.ToString());
             }
@@ -87,8 +86,7 @@ namespace Albumprinter.CorrelationTracking.Correlation.MassTransit
         {
             if (RestoreOnPreReceive)
             {
-                object value;
-                var correlationId = context.TransportHeaders.TryGetHeader(CorrelationKeys.CorrelationId, out value) ? Guid.Parse((string)value) : Guid.NewGuid();
+                var correlationId = context.TransportHeaders.TryGetHeader(CorrelationKeys.CorrelationId, out var value) ? Guid.Parse((string)value) : Guid.NewGuid();
                 ReceiveContextManager.Capture(context, CorrelationManager.Instance.UseScope(correlationId));
             }
             return Done;
@@ -121,32 +119,31 @@ namespace Albumprinter.CorrelationTracking.Correlation.MassTransit
             if (RestoreOnPreConsume)
             {
                 // NOTE: The last chance to restore CorrelationId from the headers of message.
-                object value;
-                var correlationScope = CorrelationScope.Current;
+
                 var correlationId =
-                        context.Headers.TryGetHeader(CorrelationKeys.CorrelationId, out value) ||
+                        context.Headers.TryGetHeader(CorrelationKeys.CorrelationId, out var value) ||
                         context.ReceiveContext.TransportHeaders.TryGetHeader(CorrelationKeys.CorrelationId, out value)
                             ? Guid.Parse((string) value)
                             : Guid.NewGuid();
-                if (correlationId != correlationScope.CorrelationId)
+                var correlationScope = CorrelationScope.Current;
+                if (correlationScope != null && correlationId != correlationScope.CorrelationId)
                 {
                     ReceiveContextManager.Release(context.ReceiveContext);
-                    // NOTE: RequestId to link all related logs before reassigning the scope.
-                    var requestId = correlationScope.RequestId != Guid.Empty ? correlationScope.RequestId : Guid.NewGuid();
-                    ReceiveContextManager.Capture(context.ReceiveContext, CorrelationManager.Instance.UseScope(correlationId, requestId));
+                    ReceiveContextManager.Capture(context.ReceiveContext, CorrelationManager.Instance.UseScope(correlationId));
                 }
             }
-            return context.CompleteTask;
+
+            return context.ConsumeCompleted;
         }
 
         Task IConsumeObserver.PostConsume<T>(ConsumeContext<T> context)
         {
-            return context.CompleteTask;
+            return context.ConsumeCompleted;
         }
 
         Task IConsumeObserver.ConsumeFault<T>(ConsumeContext<T> context, Exception exception)
         {
-            return context.CompleteTask;
+            return context.ConsumeCompleted;
         }
     }
 }

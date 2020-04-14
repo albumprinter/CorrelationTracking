@@ -1,5 +1,4 @@
 ﻿using Albelli.Correlation.Http.Client.Configuration;
-using Albelli.Correlation.Http.Client.Logging;
 using Albumprinter.CorrelationTracking.Correlation.Core;
 using System;
 using System.Collections.Generic;
@@ -11,10 +10,12 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
+using Microsoft.Extensions.Logging;
 
 namespace Albelli.Correlation.Http.Client.Handlers
 {
-    public class LoggingDelegatingHandler : DelegatingHandler
+    public sealed class LoggingDelegatingHandler : DelegatingHandler
     {
         public static class ContextKeys
         {
@@ -24,10 +25,12 @@ namespace Albelli.Correlation.Http.Client.Handlers
         }
 
         private readonly IHttpClientLoggingConfiguration _config;
-        private static readonly ILog _log = LogProvider.GetCurrentClassLogger();
+        private readonly ILogger _logger;
 
-        public LoggingDelegatingHandler(IHttpClientLoggingConfiguration config)
+        public LoggingDelegatingHandler([NotNull] ILoggerFactory loggerFactory, IHttpClientLoggingConfiguration config)
         {
+            if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
+            _logger = loggerFactory.CreateLogger<LoggingDelegatingHandler>();
             _config = config;
         }
 
@@ -35,7 +38,7 @@ namespace Albelli.Correlation.Http.Client.Handlers
         {
             var uri = request.RequestUri?.ToString() ?? "<null>";
             var operationId = Guid.NewGuid();
-            using (LogProvider.OpenMappedContext(ContextKeys.Url, uri))
+            using (_logger.BeginScope(new Dictionary<string, object> { [ContextKeys.Url] = uri }))
             {
                 if (_config.LogRequest(request))
                 {
@@ -53,9 +56,9 @@ namespace Albelli.Correlation.Http.Client.Handlers
                         output.Append(request.Content == null ? "<null>" : await request.Content.ReadAsStringAsync().ConfigureAwait(false));
                     }
 
-                    using (LogProvider.OpenMappedContext(CorrelationKeys.OperationId, operationId))
+                    using (_logger.BeginScope(new Dictionary<string, object> { [CorrelationKeys.OperationId] = operationId }))
                     {
-                        _log.Log(LogLevel.Debug, () => output.ToString());
+                        _logger.Log(LogLevel.Debug, output.ToString());
                     }
                 }
 
@@ -78,11 +81,14 @@ namespace Albelli.Correlation.Http.Client.Handlers
                         output.Append(response.Content == null ? "<null>" : await response.Content.ReadAsStringAsync().ConfigureAwait(false));
                     }
 
-                    using (LogProvider.OpenMappedContext(CorrelationKeys.OperationId, operationId))
-                    using (LogProvider.OpenMappedContext(ContextKeys.Duration, (int)Math.Ceiling(stopWatch.Elapsed.TotalMilliseconds)))
-                    using (LogProvider.OpenMappedContext(ContextKeys.StatusCode, (int)response.StatusCode))
+                    using (_logger.BeginScope(new Dictionary<string, object>
                     {
-                        _log.Log(ToLevel(response.StatusCode), () => output.ToString());
+                        [CorrelationKeys.OperationId] = operationId,
+                        [ContextKeys.Duration] = (int)Math.Ceiling(stopWatch.Elapsed.TotalMilliseconds),
+                        [ContextKeys.StatusCode] = (int)response.StatusCode
+                    }))
+                    {
+                        _logger.Log(ToLevel(response.StatusCode), output.ToString());
                     }
                 }
 
@@ -114,14 +120,14 @@ namespace Albelli.Correlation.Http.Client.Handlers
 
             if (_config.WhiteListedCodes.Contains(status.Value))
             {
-                return LogLevel.Info;
+                return LogLevel.Information;
             }
 
             var code = (int)status.Value;
 
             if (code >= 200 && code < 300)
             {
-                return LogLevel.Info;
+                return LogLevel.Information;
             }
 
             if (code >= 400 && code < 600)
@@ -129,7 +135,7 @@ namespace Albelli.Correlation.Http.Client.Handlers
                 return LogLevel.Error;
             }
 
-            return LogLevel.Warn; // 1xx, 3xx, >=600
+            return LogLevel.Warning; // 1xx, 3xx, >=600
         }
     }
 }

@@ -1,13 +1,13 @@
 ﻿using Albumprinter.CorrelationTracking.Correlation.Core;
 using Microsoft.AspNetCore.Http;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace Albelli.Correlation.Http.Server.Middleware
 {
-    [SuppressMessage("ReSharper", "UnusedMember.Global")]
-    public class CorrelationTrackingMiddleware
+    [PublicAPI]
+    public sealed class CorrelationTrackingMiddleware
     {
         private readonly RequestDelegate _next;
 
@@ -20,7 +20,7 @@ namespace Albelli.Correlation.Http.Server.Middleware
         {
             Guid correlationId = ResolveCorrelationId(context);
 
-            using (CorrelationManager.Instance.UseScope(correlationId, Guid.NewGuid()))
+            using (CorrelationManager.Instance.UseScope(correlationId, Guid.NewGuid().ToString()))
             {
                 await _next(context);
             }

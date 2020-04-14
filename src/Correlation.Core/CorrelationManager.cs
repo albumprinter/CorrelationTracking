@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Albumprinter.CorrelationTracking.Correlation.Core
 {
@@ -12,53 +13,44 @@ namespace Albumprinter.CorrelationTracking.Correlation.Core
             ScopeInterceptors = new List<ICorrelationScopeInterceptor>();
         }
 
-        public List<ICorrelationScopeInterceptor> ScopeInterceptors { get; private set; }
+        public List<ICorrelationScopeInterceptor> ScopeInterceptors { get; }
 
         public IDisposable UseScope(Guid correlationId)
         {
-            return UseScope(new CorrelationScope(CorrelationScope.Initial.ProcessId, correlationId, Guid.NewGuid()));
+            return UseScope(correlationId, Guid.NewGuid().ToString());
         }
 
-        public IDisposable UseScope(Guid correlationId, Guid requestId)
+        public IDisposable UseScope(Guid correlationId, string requestId)
         {
-            return UseScope(new CorrelationScope(CorrelationScope.Initial.ProcessId, correlationId, requestId));
+            return UseScope(new CorrelationScope( correlationId, requestId));
         }
 
         public IDisposable UseScope(CorrelationScope newScope)
         {
             if (newScope == null)
             {
-                throw new ArgumentNullException("newScope");
+                throw new ArgumentNullException(nameof(newScope));
             }
-            var oldScope = CorrelationScope.Current;
 
+            var correlationActivity = new Activity(nameof(CorrelationManager))
+                .Start();
             ScopeInterceptors.ForEach(x => x.Enter(this, newScope));
             CorrelationScope.Current = newScope;
-
-            return new Disposable(
-                delegate
-                {
-                    CorrelationScope.Current = oldScope;
-                    ScopeInterceptors.ForEach(x => x.Exit(this, oldScope));
-                });
+            return new Disposable(() => correlationActivity.Stop());
         }
 
         private sealed class Disposable : IDisposable
         {
-            private readonly Action dispose;
+            private readonly Action _dispose;
 
             public Disposable(Action dispose)
             {
-                if (dispose == null)
-                {
-                    throw new ArgumentNullException("dispose");
-                }
-                this.dispose = dispose;
+                _dispose = dispose ?? throw new ArgumentNullException(nameof(dispose));
             }
 
             public void Dispose()
             {
-                dispose.Invoke();
+                _dispose.Invoke();
             }
         }
     }
