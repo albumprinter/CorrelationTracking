@@ -101,15 +101,12 @@ namespace Albelli.Correlation.Http.Server
             foreach (var descriptor in descriptors)
             {
                 var index = services.IndexOf(descriptor);
+                // Since the default DI can resolve the services that were not explicitly registered,
+                // we need to take the original "target" registration and register it pointing to itself
+                // with the same lifetime as the original registration.
+                var originalTypeDescriptor = new ServiceDescriptor(descriptor.ImplementationType, descriptor.ImplementationType, descriptor.Lifetime);
+                services.Insert(index, originalTypeDescriptor);
                 services[index] = decorator(descriptor);
-            }
-
-            // Since the default DI can resolve the services that were not explicitly registered,
-            // we need to take the original "target" registration and register it pointing to itself
-            // with the same lifetime as the original registration.
-            foreach (var serviceDescriptor in descriptors)
-            {
-                services.Add(new ServiceDescriptor(serviceDescriptor.ImplementationType, serviceDescriptor.ImplementationType, serviceDescriptor.Lifetime));
             }
 
             return services;
