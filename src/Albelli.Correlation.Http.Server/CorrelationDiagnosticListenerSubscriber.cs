@@ -96,11 +96,11 @@ namespace Albelli.Correlation.Http.Server
 
         public void OnNext(KeyValuePair<string, object> value)
         {
-            if (string.Equals(value.Key, HttpRequestInStart, StringComparison.InvariantCultureIgnoreCase))
+            if (string.Equals(value.Key, HttpRequestInStart, StringComparison.OrdinalIgnoreCase))
             {
                 Start(value.Value as HttpContext);
             }
-            else if (string.Equals(value.Key, HttpRequestInStop, StringComparison.InvariantCultureIgnoreCase))
+            else if (string.Equals(value.Key, HttpRequestInStop, StringComparison.OrdinalIgnoreCase))
             {
                 Stop(value.Value as HttpContext);
             }
