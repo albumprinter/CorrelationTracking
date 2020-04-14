@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Albelli.Correlation.Http.Server.Middleware;
 using Albelli.CorrelationTracking.Correlation.Logging;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.ObjectPool;
 
 namespace Albelli.Correlation.Http.Server
 {
