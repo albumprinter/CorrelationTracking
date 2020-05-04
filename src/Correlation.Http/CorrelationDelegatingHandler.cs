@@ -11,7 +11,12 @@ namespace Albumprinter.CorrelationTracking.Correlation.Http
     {
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            request?.Headers.Add(CorrelationKeys.CorrelationId, CorrelationScope.Current.CorrelationId.ToString());
+            var currentScope = CorrelationScope.Current;
+            if (currentScope != null)
+            {
+                request?.Headers.Add(CorrelationKeys.CorrelationId, currentScope.CorrelationId.ToString());
+            }
+
             return base.SendAsync(request, cancellationToken);
         }
     }
