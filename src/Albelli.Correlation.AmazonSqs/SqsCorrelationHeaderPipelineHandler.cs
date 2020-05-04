@@ -23,10 +23,15 @@ namespace Albelli.Correlation.AmazonSqs
         private static void AddCorrelationAttributeIfAbsent(IRequestContext requestContext)
         {
             //that piece of code works only *after* Marshaller
-            var awsRequest = requestContext.Request;
+            var awsRequest = requestContext?.Request;
+
             if (awsRequest != null && !awsRequest.Headers.ContainsKey(CorrelationKeys.CorrelationId))
             {
-                awsRequest.Headers[CorrelationKeys.CorrelationId] = CorrelationScope.Current.CorrelationId.ToString();
+                var currentScope = CorrelationScope.Current;
+                if (currentScope != null)
+                {
+                    awsRequest.Headers[CorrelationKeys.CorrelationId] = currentScope.CorrelationId.ToString();
+                }
             }
         }
     }
