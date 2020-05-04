@@ -30,6 +30,7 @@ namespace Albelli.Correlation.AmazonSqs
                 return;
             }
 
+            var currentScope = CorrelationScope.Current;
             switch (requestContext.OriginalRequest)
             {
                 case ReceiveMessageRequest receiveMessageRequest:
@@ -51,12 +52,12 @@ namespace Albelli.Correlation.AmazonSqs
                         sendMessageRequest.MessageAttributes = new Dictionary<string, MessageAttributeValue>();
                     }
 
-                    if (!sendMessageRequest.MessageAttributes.ContainsKey(CorrelationKeys.CorrelationId))
+                    if (currentScope != null && !sendMessageRequest.MessageAttributes.ContainsKey(CorrelationKeys.CorrelationId))
                     {
                         sendMessageRequest.MessageAttributes[CorrelationKeys.CorrelationId] = new MessageAttributeValue
                         {
                             DataType = "String",
-                            StringValue = CorrelationScope.Current.CorrelationId.ToString()
+                            StringValue = currentScope.CorrelationId.ToString()
                         };
                     }
 
@@ -69,12 +70,12 @@ namespace Albelli.Correlation.AmazonSqs
                             sendMessageBatchRequestEntry.MessageAttributes = new Dictionary<string, MessageAttributeValue>();
                         }
 
-                        if (!sendMessageBatchRequestEntry.MessageAttributes.ContainsKey(CorrelationKeys.CorrelationId))
+                        if (currentScope != null && !sendMessageBatchRequestEntry.MessageAttributes.ContainsKey(CorrelationKeys.CorrelationId))
                         {
                             sendMessageBatchRequestEntry.MessageAttributes[CorrelationKeys.CorrelationId] = new MessageAttributeValue
                             {
                                 DataType = "String",
-                                StringValue = CorrelationScope.Current.CorrelationId.ToString()
+                                StringValue = currentScope.CorrelationId.ToString()
                             };
                         }
                     }

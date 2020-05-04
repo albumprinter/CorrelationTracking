@@ -70,22 +70,24 @@ namespace Albumprinter.CorrelationTracking.Correlation.AmazonSqs
         private static void AddCorrelationAttributeIfAbsent(SendMessageRequest request)
         {
             MessageAttributeValue value;
-            if (request.MessageAttributes.TryGetValue(CorrelationKeys.CorrelationId, out value) == false)
+            var currentScope = CorrelationScope.Current;
+            if (currentScope != null && request.MessageAttributes.TryGetValue(CorrelationKeys.CorrelationId, out value) == false)
             {
                 request.MessageAttributes.Add(CorrelationKeys.CorrelationId,
                     new MessageAttributeValue
-                        {DataType = "String", StringValue = CorrelationScope.Current.CorrelationId.ToString()});
+                        {DataType = "String", StringValue = currentScope.CorrelationId.ToString()});
             }
         }
 
         private static void AddCorrelationAttributeIfAbsent(SendMessageBatchRequestEntry request)
         {
             MessageAttributeValue value;
-            if (request.MessageAttributes.TryGetValue(CorrelationKeys.CorrelationId, out value) == false)
+            var currentScope = CorrelationScope.Current;
+            if (currentScope != null && request.MessageAttributes.TryGetValue(CorrelationKeys.CorrelationId, out value) == false)
             {
                 request.MessageAttributes.Add(CorrelationKeys.CorrelationId,
                     new MessageAttributeValue
-                        {DataType = "String", StringValue = CorrelationScope.Current.CorrelationId.ToString()});
+                        {DataType = "String", StringValue = currentScope.CorrelationId.ToString()});
             }
         }
 
