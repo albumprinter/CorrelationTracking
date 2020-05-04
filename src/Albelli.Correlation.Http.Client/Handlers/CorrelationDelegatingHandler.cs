@@ -11,7 +11,11 @@ namespace Albelli.Correlation.Http.Client.Handlers
         {
             if (request != null)
             {
-                request.Headers.Add(CorrelationKeys.CorrelationId, CorrelationScope.Current.CorrelationId.ToString());
+                var currentScope = CorrelationScope.Current;
+                if (currentScope != null)
+                {
+                    request.Headers.Add(CorrelationKeys.CorrelationId, currentScope.CorrelationId.ToString());
+                }
             }
             return base.SendAsync(request, cancellationToken);
         }
