@@ -26,7 +26,10 @@ namespace Albelli.Correlation.AmazonSns
             var awsRequest = requestContext?.Request;
             if (awsRequest != null && !awsRequest.Headers.ContainsKey(CorrelationKeys.CorrelationId))
             {
-                awsRequest.Headers[CorrelationKeys.CorrelationId] = CorrelationScope.Current.CorrelationId.ToString();
+                if (CorrelationScope.Current != null)
+                {
+                    awsRequest.Headers[CorrelationKeys.CorrelationId] = CorrelationScope.Current.CorrelationId.ToString();
+                }
             }
         }
     }
