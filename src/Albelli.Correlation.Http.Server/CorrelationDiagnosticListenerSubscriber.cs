@@ -110,7 +110,10 @@ namespace Albelli.Correlation.Http.Server
         {
             if (context.Request.Headers.TryGetValue(CorrelationKeys.CorrelationId, out var headers)
                 && headers.Count >= 1
-                && Guid.TryParse(headers[0], out var correlationId))
+                && Guid.TryParse(headers[0], out var correlationId)
+                // all zeroes is not a valid argument to ActivityTraceId.CreateFrom where it would be fed
+                // so while in the older system it was wrong but technically valid, we have to discard it now
+                && correlationId != Guid.Empty)
             {
                 id = correlationId;
                 return true;
