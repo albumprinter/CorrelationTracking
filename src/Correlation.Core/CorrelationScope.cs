@@ -22,8 +22,8 @@ namespace Albumprinter.CorrelationTracking.Correlation.Core
             {
                 var currentActivity = Activity.Current;
                 if (currentActivity == null) return null;
-                var correlationIdX = currentActivity.GetTagItem(CorrelationKeys.CorrelationId);
-                var requestIdX = currentActivity.GetTagItem(CorrelationKeys.RequestId);
+                var correlationIdX = currentActivity.GetBaggageItem(CorrelationKeys.CorrelationId);
+                var requestIdX = currentActivity.GetBaggageItem(CorrelationKeys.RequestId);
                 if (correlationIdX == null || !Guid.TryParse(correlationIdX, out var correlationIdGuid))
                     return null;
                 return new CorrelationScope(correlationIdGuid, requestIdX);
@@ -33,8 +33,8 @@ namespace Albumprinter.CorrelationTracking.Correlation.Core
                 var currentActivity = Activity.Current;
                 if (currentActivity == null) return;
                 if (value == null) return;
-                currentActivity.AddTag(CorrelationKeys.CorrelationId, value.CorrelationId.ToString());
-                currentActivity.AddTag(CorrelationKeys.RequestId, value.RequestId);
+                currentActivity.AddBaggage(CorrelationKeys.CorrelationId, value.CorrelationId.ToString());
+                currentActivity.AddBaggage(CorrelationKeys.RequestId, value.RequestId);
             }
         }
 
