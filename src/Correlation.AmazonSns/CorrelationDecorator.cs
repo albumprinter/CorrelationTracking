@@ -405,6 +405,8 @@ namespace Albumprinter.CorrelationTracking.Correlation.AmazonSns
             return _client.UntagResourceAsync(request, cancellationToken);
         }
 
+        public ISimpleNotificationServicePaginatorFactory Paginators => _client.Paginators;
+
         #endregion
 
         public IClientConfig Config => _client.Config;

@@ -321,6 +321,8 @@ namespace Albumprinter.CorrelationTracking.Correlation.AmazonSqs
             return _client.UntagQueueAsync(request, cancellationToken);
         }
 
+        public ISQSPaginatorFactory Paginators => _client.Paginators;
+
         public void Dispose()
         {
             _client.Dispose();
