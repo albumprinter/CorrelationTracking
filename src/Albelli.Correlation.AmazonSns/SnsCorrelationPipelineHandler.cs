@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Albumprinter.CorrelationTracking.Correlation.Core;
 using Amazon.Runtime;
@@ -30,17 +31,26 @@ namespace Albelli.Correlation.AmazonSns
                 return;
             }
 
-            if (request.MessageAttributes == null)
-            {
-                request.MessageAttributes = new Dictionary<string, MessageAttributeValue>();
-            }
-            else if (request.MessageAttributes.ContainsKey(CorrelationKeys.CorrelationId))
+            var activity = Activity.Current;
+
+            TrySetAttribute(request, CorrelationKeys.CorrelationId, CorrelationScope.Current?.CorrelationId.ToString());
+            TrySetAttribute(request, CorrelationKeys.TraceParent, activity?.Id);
+            TrySetAttribute(request, CorrelationKeys.TraceState, activity?.TraceStateString);
+        }
+
+        private static void TrySetAttribute(PublishRequest request, string key, string value)
+        {
+            if (request == null || string.IsNullOrWhiteSpace(value))
             {
                 return;
             }
 
-            request.MessageAttributes[CorrelationKeys.CorrelationId] =
-                new MessageAttributeValue { DataType = "String", StringValue = CorrelationScope.Current.CorrelationId.ToString() };
+            request.MessageAttributes ??= new Dictionary<string, MessageAttributeValue>();
+            request.MessageAttributes[key] = new MessageAttributeValue
+            {
+                DataType = "String",
+                StringValue = value
+            };
         }
     }
 }

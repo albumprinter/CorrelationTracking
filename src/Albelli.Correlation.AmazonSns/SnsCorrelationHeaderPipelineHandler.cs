@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Diagnostics;
+using System.Threading.Tasks;
 using Albumprinter.CorrelationTracking.Correlation.Core;
 using Amazon.Runtime;
 using Amazon.Runtime.Internal;
@@ -23,15 +24,22 @@ namespace Albelli.Correlation.AmazonSns
         private static void AddCorrelationAttributeIfAbsent(IRequestContext requestContext)
         {
             //that piece of code works only *after* Marshaller
-            var awsRequest = requestContext?.Request;
-            if (awsRequest != null && !awsRequest.Headers.ContainsKey(CorrelationKeys.CorrelationId))
+            var request = requestContext?.Request;
+            var activity = Activity.Current;
+
+            TrySetHeader(request, CorrelationKeys.CorrelationId, CorrelationScope.Current?.CorrelationId.ToString());
+            TrySetHeader(request, CorrelationKeys.TraceParent, activity?.Id);
+            TrySetHeader(request, CorrelationKeys.TraceState, activity?.TraceStateString);
+        }
+
+        private static void TrySetHeader(IRequest request, string key, string value)
+        {
+            if (request == null || string.IsNullOrWhiteSpace(value))
             {
-                var currentScope = CorrelationScope.Current;
-                if (currentScope != null)
-                {
-                    awsRequest.Headers[CorrelationKeys.CorrelationId] = currentScope.CorrelationId.ToString();
-                }
+                return;
             }
+
+            request.Headers[key] = value;
         }
     }
 }

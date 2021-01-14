@@ -9,5 +9,7 @@
         public const string RequestId = @"X-RequestId";
         public const string ActivityId = @"X-ActivityId";
         public const string ClientName = @"X-Client-Name";
+        public const string TraceParent = @"traceparent";
+        public const string TraceState = @"tracestate";
     }
 }
