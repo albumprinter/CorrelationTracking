@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Albumprinter.CorrelationTracking.Correlation.Core;
 using Amazon.Runtime;
 using Amazon.Runtime.Internal;
+using Amazon.SimpleNotificationService.Model;
 
 namespace Albelli.Correlation.AmazonSns
 {
@@ -24,7 +25,12 @@ namespace Albelli.Correlation.AmazonSns
         private static void AddCorrelationAttributeIfAbsent(IRequestContext requestContext)
         {
             //that piece of code works only *after* Marshaller
-            var request = requestContext?.Request;
+            if (!(requestContext?.OriginalRequest is PublishRequest))
+            {
+                return;
+            }
+
+            var request = requestContext.Request;
             var activity = Activity.Current;
 
             TrySetHeader(request, CorrelationKeys.CorrelationId, CorrelationScope.Current?.CorrelationId.ToString());
