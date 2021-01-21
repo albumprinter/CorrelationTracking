@@ -56,6 +56,7 @@ namespace Albelli.Correlation.Http.Server
         /// To get the X-CorrelationId value for the backward compatibility with the W3C
         /// tracing standard.
         /// </summary>
+        [Obsolete("Use DiagnosticListener.AllListeners.Subscribe(new CorrelationDiagnosticListenerSubscriber()) instead")]
         public static void UseCorrelationDiagnosticListenerSubscriber([NotNull] this IApplicationBuilder app)
         {
             if (app == null) throw new ArgumentNullException(nameof(app));
