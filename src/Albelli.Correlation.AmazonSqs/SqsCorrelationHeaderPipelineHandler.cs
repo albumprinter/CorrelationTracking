@@ -29,7 +29,6 @@ namespace Albelli.Correlation.AmazonSqs
             }
 
             var awsRequest = requestContext.Request;
-
             if (awsRequest != null && !awsRequest.Headers.ContainsKey(CorrelationKeys.CorrelationId))
             {
                 var currentScope = CorrelationScope.Current;
