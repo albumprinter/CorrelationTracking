@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using Albumprinter.CorrelationTracking.Correlation.Core;
 using Amazon.Runtime;
@@ -31,11 +30,7 @@ namespace Albelli.Correlation.AmazonSns
                 return;
             }
 
-            var activity = Activity.Current;
-
             TrySetAttribute(request, CorrelationKeys.CorrelationId, CorrelationScope.Current?.CorrelationId.ToString());
-            TrySetAttribute(request, CorrelationKeys.TraceParent, activity?.Id);
-            TrySetAttribute(request, CorrelationKeys.TraceState, activity?.TraceStateString);
         }
 
         private static void TrySetAttribute(PublishRequest request, string key, string value)

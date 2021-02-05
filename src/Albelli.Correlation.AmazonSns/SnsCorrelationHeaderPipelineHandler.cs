@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Albumprinter.CorrelationTracking.Correlation.Core;
 using Amazon.Runtime;
 using Amazon.Runtime.Internal;
@@ -31,11 +30,8 @@ namespace Albelli.Correlation.AmazonSns
             }
 
             var request = requestContext.Request;
-            var activity = Activity.Current;
 
             TrySetHeader(request, CorrelationKeys.CorrelationId, CorrelationScope.Current?.CorrelationId.ToString());
-            TrySetHeader(request, CorrelationKeys.TraceParent, activity?.Id);
-            TrySetHeader(request, CorrelationKeys.TraceState, activity?.TraceStateString);
         }
 
         private static void TrySetHeader(IRequest request, string key, string value)
