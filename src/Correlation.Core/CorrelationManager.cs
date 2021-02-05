@@ -32,8 +32,11 @@ namespace Albumprinter.CorrelationTracking.Correlation.Core
                 throw new ArgumentNullException(nameof(newScope));
             }
 
-            var correlationActivity = new Activity(nameof(CorrelationManager))
-                .Start();
+            //StartActivity can return null if there are no activity listeners only
+            //if there are no activity listeners we no need activity source and can create activity standalone
+            var correlationActivity =
+                CorrelationActivityProvider.Source.StartActivity(nameof(CorrelationManager))
+                ?? new Activity(nameof(CorrelationManager)).Start();
             ScopeInterceptors.ForEach(x => x.Enter(this, newScope));
             CorrelationScope.Current = newScope;
             return new Disposable(() => correlationActivity.Stop());

@@ -42,7 +42,7 @@ namespace Albelli.Correlation.AmazonSqs
                     if (!receiveMessageRequest.MessageAttributeNames.Contains(CorrelationKeys.CorrelationId) &&
                         !receiveMessageRequest.MessageAttributeNames.Contains("All"))
                     {
-                        receiveMessageRequest.MessageAttributeNames.Add("All");
+                        receiveMessageRequest.MessageAttributeNames.Add(CorrelationKeys.CorrelationId);
                     }
 
                     break;

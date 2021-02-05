@@ -9,18 +9,37 @@ using CorrelationManager = Albumprinter.CorrelationTracking.Correlation.Core.Cor
 namespace Albelli.Correlation.Http.Server
 {
     [PublicAPI]
-    public sealed class CorrelationDiagnosticListenerSubscriber : IObserver<KeyValuePair<string, object>>
+    public sealed class CorrelationDiagnosticListenerSubscriber : IObserver<KeyValuePair<string, object>>, IObserver<DiagnosticListener>
     {
+        private const string DiagnosticListenerName = "Microsoft.AspNetCore";
         private const string HttpRequestInStart = "Microsoft.AspNetCore.Hosting.HttpRequestIn.Start";
         private const string HttpRequestInStop = "Microsoft.AspNetCore.Hosting.HttpRequestIn.Stop";
         private const string ContextCorrelationScopeDisposables = nameof(ContextCorrelationScopeDisposables);
         private readonly ActivitySpanId EMPTY_SPAN = ActivitySpanId.CreateFromString("ffffffffffffffff".AsSpan());
+        private readonly List<IDisposable> _subscriptions = new List<IDisposable>();
 
         public CorrelationDiagnosticListenerSubscriber()
         {
             // We want to use the W3C format so we can be compatible with the standard as much as possible.
             Activity.DefaultIdFormat = ActivityIdFormat.W3C;
             Activity.ForceDefaultIdFormat = true;
+        }
+
+        void IObserver<DiagnosticListener>.OnNext(DiagnosticListener diagnosticListener)
+        {
+            if (diagnosticListener.Name.Equals(DiagnosticListenerName, StringComparison.OrdinalIgnoreCase))
+            {
+                var subscription = diagnosticListener.SubscribeWithAdapter(this);
+                _subscriptions.Add(subscription);
+            }
+        }
+
+        void IObserver<DiagnosticListener>.OnError(Exception error) { }
+
+        void IObserver<DiagnosticListener>.OnCompleted()
+        {
+            _subscriptions.ForEach(x => x.Dispose());
+            _subscriptions.Clear();
         }
 
         public void OnCompleted() { }

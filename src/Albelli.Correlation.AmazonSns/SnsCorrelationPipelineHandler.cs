@@ -30,17 +30,22 @@ namespace Albelli.Correlation.AmazonSns
                 return;
             }
 
-            if (request.MessageAttributes == null)
-            {
-                request.MessageAttributes = new Dictionary<string, MessageAttributeValue>();
-            }
-            else if (request.MessageAttributes.ContainsKey(CorrelationKeys.CorrelationId))
+            TrySetAttribute(request, CorrelationKeys.CorrelationId, CorrelationScope.Current?.CorrelationId.ToString());
+        }
+
+        private static void TrySetAttribute(PublishRequest request, string key, string value)
+        {
+            if (request == null || string.IsNullOrWhiteSpace(value))
             {
                 return;
             }
 
-            request.MessageAttributes[CorrelationKeys.CorrelationId] =
-                new MessageAttributeValue { DataType = "String", StringValue = CorrelationScope.Current.CorrelationId.ToString() };
+            request.MessageAttributes ??= new Dictionary<string, MessageAttributeValue>();
+            request.MessageAttributes[key] = new MessageAttributeValue
+            {
+                DataType = "String",
+                StringValue = value
+            };
         }
     }
 }
